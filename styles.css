@@ -102,6 +102,7 @@ footer p {
 #additional-nav nav ul li {
     margin: 5px;
 }
+
 .about-content {
     display: flex;
     align-items: flex-start;
@@ -112,7 +113,7 @@ footer p {
 }
 
 .image {
-    flex: 0 0 250px; /* Adjusted to a visually appealing size */
+    flex: 0 0 200px; /* Adjusted to make the image smaller */
     margin-left: 20px;
 }
 
@@ -120,19 +121,6 @@ footer p {
     max-width: 100%;
     height: auto;
     border-radius: 10px; /* Optional: adds rounded corners */
-}
-
-@media (max-width: 768px) {
-    .about-content {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .image {
-        margin-left: 0;
-        margin-top: 20px;
-        flex: 0 0 auto; /* Reset the flex size for mobile */
-    }
 }
 
 .contact-buttons {
@@ -154,4 +142,17 @@ footer p {
 
 .contact-buttons .button:hover {
     background: #555;
+}
+
+@media (max-width: 768px) {
+    .about-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image {
+        margin-left: 0;
+        margin-top: 20px;
+        flex: 0 0 auto; /* Reset the flex size for mobile */
+    }
 }
