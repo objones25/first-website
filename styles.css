@@ -22,7 +22,7 @@ header {
     color: #fff;
     padding-top: 30px;
     min-height: 70px;
-    border-bottom: #77aaff 3px solid;
+    border-bottom: #dda0dd 3px solid;
 }
 
 header a {
@@ -35,6 +35,7 @@ header a {
 header ul {
     padding: 0;
     list-style: none;
+    text-align: center;
 }
 
 header li {
@@ -43,12 +44,11 @@ header li {
 }
 
 header nav {
-    float: right;
     margin-top: 10px;
 }
 
 header h1 {
-    float: left;
+    text-align: center;
 }
 
 main {
@@ -101,4 +101,36 @@ footer p {
 
 #additional-nav nav ul li {
     margin: 5px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    header nav ul {
+        display: block;
+        text-align: center;
+    }
+
+    header li {
+        display: block;
+        padding: 10px 0;
+    }
+
+    .button {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 24px;
+    }
+
+    .button {
+        font-size: 14px;
+    }
 }
