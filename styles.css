@@ -22,7 +22,7 @@ header {
     color: #fff;
     padding-top: 30px;
     min-height: 70px;
-    border-bottom: #dda0dd 3px solid; /* Changed to light purple */
+    border-bottom: #dda0dd 3px solid;
 }
 
 header a {
@@ -102,35 +102,56 @@ footer p {
 #additional-nav nav ul li {
     margin: 5px;
 }
+.about-content {
+    display: flex;
+    align-items: flex-start;
+}
+
+.text {
+    flex: 1;
+}
+
+.image {
+    flex: 0 0 250px; /* Adjusted to a visually appealing size */
+    margin-left: 20px;
+}
+
+.image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px; /* Optional: adds rounded corners */
+}
 
 @media (max-width: 768px) {
-    .container {
-        width: 95%;
+    .about-content {
+        flex-direction: column;
+        align-items: center;
     }
 
-    header nav ul {
-        display: block;
-        text-align: center;
-    }
-
-    header li {
-        display: block;
-        padding: 10px 0;
-    }
-
-    .button {
-        display: block;
-        width: 100%;
-        text-align: center;
+    .image {
+        margin-left: 0;
+        margin-top: 20px;
+        flex: 0 0 auto; /* Reset the flex size for mobile */
     }
 }
 
-@media (max-width: 480px) {
-    header h1 {
-        font-size: 24px;
-    }
+.contact-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
 
-    .button {
-        font-size: 14px;
-    }
+.contact-buttons .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.contact-buttons .button:hover {
+    background: #555;
 }
