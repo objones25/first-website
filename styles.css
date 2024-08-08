@@ -1,4 +1,82 @@
-/* General Button Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding-top: 30px;
+    min-height: 70px;
+    border-bottom: #dda0dd 3px solid; /* Changed to light purple */
+}
+
+header a {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+header ul {
+    padding: 0;
+    list-style: none;
+    text-align: center;
+}
+
+header li {
+    display: inline;
+    padding: 0 20px 0 20px;
+}
+
+header nav {
+    margin-top: 10px;
+}
+
+header h1 {
+    text-align: center;
+}
+
+main {
+    padding: 20px;
+    background: #fff;
+    margin-bottom: 20px;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+footer p {
+    margin: 0;
+}
+
+#latest-project p {
+    margin: 10px 0;
+}
+
 .button {
     display: inline-block;
     padding: 10px 20px;
@@ -10,7 +88,21 @@
     text-align: center;
 }
 
-/* Responsive Design Adjustments */
+.button:hover {
+    background: #555;
+}
+
+#additional-nav nav ul {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    list-style: none;
+}
+
+#additional-nav nav ul li {
+    margin: 5px;
+}
+
 @media (max-width: 768px) {
     .container {
         width: 95%;
@@ -19,22 +111,17 @@
     header nav ul {
         display: block;
         text-align: center;
-        padding: 0;
     }
 
     header li {
         display: block;
         padding: 10px 0;
-        width: 100%;
     }
 
     .button {
         display: block;
-        width: 90%; /* Ensure buttons have some space on either side */
-        margin: 0 auto 10px auto; /* Center the buttons */
+        width: 100%;
         text-align: center;
-        padding: 15px 0;
-        font-size: 16px;
     }
 }
 
@@ -45,8 +132,5 @@
 
     .button {
         font-size: 14px;
-        padding: 12px 0;
-        width: 90%; /* Keep width at 90% for smaller screens */
-        margin: 0 auto 10px auto; /* Center the buttons */
     }
 }
