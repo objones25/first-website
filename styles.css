@@ -174,7 +174,7 @@ footer p {
     }
 }
 
-/* Mobile Styles for "Explore More" Section as Footer Links */
+/* Mobile Styles for "Explore More" Section as Simple Text Links */
 @media (max-width: 768px) {
     #additional-nav nav ul {
         flex-direction: column;
@@ -183,13 +183,16 @@ footer p {
     }
 
     #additional-nav nav ul li {
-        margin-bottom: 10px;
+        margin-bottom: 5px; /* Minimal space between links */
     }
 
     #additional-nav nav ul li a {
-        width: auto; /* Ensure links are not stretched */
-        display: block; /* Make sure links appear as block elements */
-        padding: 5px 0; /* Add some padding for better touch interaction */
+        color: #000; /* Black text color */
+        text-decoration: underline; /* Underlined links */
+        background: none; /* Remove background color */
+        padding: 0; /* Remove padding */
+        border-radius: 0; /* Remove border radius */
+        display: block; /* Ensure links are displayed as block elements */
     }
 }
 
