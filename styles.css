@@ -174,14 +174,22 @@ footer p {
     }
 }
 
+/* Mobile Styles for "Explore More" Section as Footer Links */
 @media (max-width: 768px) {
     #additional-nav nav ul {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
+        padding-left: 20px; /* Optional: add padding for alignment */
     }
 
     #additional-nav nav ul li {
         margin-bottom: 10px;
+    }
+
+    #additional-nav nav ul li a {
+        width: auto; /* Ensure links are not stretched */
+        display: block; /* Make sure links appear as block elements */
+        padding: 5px 0; /* Add some padding for better touch interaction */
     }
 }
 
