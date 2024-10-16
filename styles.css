@@ -86,6 +86,7 @@ footer p {
     border-radius: 5px;
     margin-top: 10px;
     text-align: center;
+    transition: background-color 0.3s ease;
 }
 
 .button:hover {
@@ -113,14 +114,14 @@ footer p {
 }
 
 .image {
-    flex: 0 0 200px; /* Adjusted to make the image smaller */
+    flex: 0 0 200px;
     margin-left: 20px;
 }
 
 .image img {
     max-width: 100%;
     height: auto;
-    border-radius: 10px; /* Optional: adds rounded corners */
+    border-radius: 10px;
 }
 
 .contact-buttons {
@@ -144,6 +145,50 @@ footer p {
     background: #555;
 }
 
+/* New styles for the projects page */
+.project {
+    margin-bottom: 40px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.project h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.project-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.project-description {
+    flex: 1;
+    min-width: 300px;
+    margin-right: 20px;
+}
+
+.neural-network-diagram {
+    flex: 1;
+    min-width: 300px;
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+}
+
+.neural-network-diagram svg {
+    width: 100%;
+    height: auto;
+    background-color: #333;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
     .about-content {
         flex-direction: column;
@@ -153,12 +198,9 @@ footer p {
     .image {
         margin-left: 0;
         margin-top: 20px;
-        flex: 0 0 auto; /* Reset the flex size for mobile */
+        flex: 0 0 auto;
     }
-}
 
-/* Mobile Styles for Index Page */
-@media (max-width: 768px) {
     #latest-project {
         text-align: center;
     }
@@ -172,77 +214,41 @@ footer p {
         width: 100%;
         margin-bottom: 10px;
     }
-}
 
-/* Mobile Styles for "Explore More" Section as Simple Text Links */
-@media (max-width: 768px) {
     #additional-nav nav ul {
         flex-direction: column;
         align-items: flex-start;
-        padding-left: 20px; /* Optional: add padding for alignment */
+        padding-left: 20px;
     }
 
     #additional-nav nav ul li {
-        margin-bottom: 5px; /* Minimal space between links */
+        margin-bottom: 5px;
     }
 
     #additional-nav nav ul li a {
-        color: #000; /* Black text color */
-        text-decoration: underline; /* Underlined links */
-        background: none; /* Remove background color */
-        padding: 0; /* Remove padding */
-        border-radius: 0; /* Remove border radius */
-        display: block; /* Ensure links are displayed as block elements */
+        color: #000;
+        text-decoration: underline;
+        background: none;
+        padding: 0;
+        border-radius: 0;
+        display: block;
     }
-}
 
-/* Mobile Styles for About Page */
-@media (max-width: 768px) {
-    .about-content {
+    .project-content {
         flex-direction: column;
-        align-items: center;
     }
 
-    .image {
-        margin: 20px 0;
+    .project-description, .neural-network-diagram {
         width: 100%;
-        text-align: center;
+        margin-right: 0;
     }
 
-    .text {
-        width: 100%;
-    }
-
-    .text p {
-        padding: 0 10px;
-    }
-}
-
-/* Mobile Styles for Projects Page */
-@media (max-width: 768px) {
-    #projects {
-        text-align: center;
-    }
-
-    header ul {
-        flex-direction: column;
-        padding-top: 10px;
-    }
-
-    .button {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-}
-
-/* Mobile Styles for Contact Page */
-@media (max-width: 768px) {
     .contact-buttons {
         flex-direction: column;
         align-items: center;
     }
 
-    .button {
+    .contact-buttons .button {
         width: 100%;
         margin-bottom: 10px;
     }

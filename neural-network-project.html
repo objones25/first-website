@@ -1,0 +1,102 @@
+<div>
+
+    <div class="container">
+    <h1>Owen Jones's Blog</h1>
+    
+    <nav>
+      <ul>
+        <li><a href="index.html" class="button">Home</a></li>
+        <li><a href="about.html" class="button">About</a></li>
+        <li><a href="projects.html" class="button">Projects</a></li>
+        <li><a href="contact.html" class="button">Contact</a></li>
+      </ul>
+    </nav>
+    </div>
+    
+    <main role="main">
+    <section id="neural-network-project" class="section container">
+      <h2>Neural Network Library Project</h2>
+    
+      <h3>Inspiration</h3>
+      <p>
+        My inspiration for creating this neural network library stems from my fascination with machine learning and a desire to build on the work I did for my Math 156 Project (available <a href="https://objones25.github.io/resume_files/Math_156_Project.pdf">here</a>). In that project, I explored various machine learning methods for credit card fraud detection. This experience sparked my interest in developing a more efficient neural network implementation that could handle large datasets quickly. I saw this as an opportunity to deepen my understanding of both C++ and machine learning principles.
+      </p>
+    
+      <h3>Project Overview</h3>
+      <p>
+        This project is an attempt to create a flexible and efficient neural network library that can be used for various machine learning tasks. The core implementation is in C++ for performance, with Python bindings to make it easily accessible to data scientists and machine learning practitioners.
+      </p>
+    
+      <section id="current-features">
+        <h3>Current Features</h3>
+        <ul>
+          <li>Flexible Layer class implementation:
+            <ul>
+              <li>Modular design allowing for easy addition of new layer types</li>
+              <li>Encapsulates feedforward and backpropagation logic for each layer</li>
+              <li>Supports dynamic creation of complex network architectures</li>
+              <li>Enables efficient memory management and computation</li>
+            </ul>
+          </li>
+          <li>Efficient feedforward and backpropagation:
+            <ul>
+              <li>Utilizes the Layer class structure for streamlined data flow</li>
+              <li>Implements optimized matrix operations for fast computations</li>
+              <li>Supports batch processing for improved training efficiency</li>
+            </ul>
+          </li>
+          <li>Comprehensive training pipeline:
+            <ul>
+              <li>Leverages the Layer class for modular and extensible training process</li>
+              <li>Implements various optimization algorithms (SGD, Adam, RMSprop)</li>
+              <li>Supports customizable training parameters and callbacks</li>
+            </ul>
+          </li>
+          <li>Robust debugging and logging system:
+            <ul>
+              <li>Detailed logging of network architecture, forward pass, and backward pass</li>
+              <li>Configurable log levels for granular control over output verbosity</li>
+              <li>Runtime performance metrics and memory usage tracking</li>
+              <li>Gradient checking functionality for validating backpropagation</li>
+            </ul>
+          </li>
+          <li>Support for various activation functions (ReLU, Sigmoid, Tanh, Softmax)</li>
+          <li>Multiple loss functions (Mean Squared Error, Cross Entropy)</li>
+          <li>Weight initialization techniques (Xavier, He, LeCun)</li>
+          <li>Batch normalization for improved training stability</li>
+          <li>Python bindings for seamless integration with Python projects</li>
+        </ul>
+      </section>
+    
+      <h3>Challenges Faced</h3>
+      <p>Developing this library has come with its share of challenges:</p>
+      <ul>
+        <li>Implementing backpropagation correctly, especially for complex network architectures with features like batch normalization</li>
+        <li>Optimizing performance to handle large datasets efficiently, which involved careful memory management and parallelization considerations</li>
+        <li>Dealing with numerical stability issues, particularly in the implementation of activation functions, loss calculations, and gradient computations</li>
+        <li>Creating a user-friendly API that is both flexible and intuitive, while bridging the gap between C++ and Python</li>
+        <li>Ensuring compatibility between the C++ core and Python bindings, which required a deep understanding of both languages and their interoperability</li>
+        <li>Implementing and debugging various optimization algorithms like Adam and RMSprop</li>
+        <li>Resolving compilation and linking errors, especially when working with external libraries and different operating systems</li>
+        <li>Troubleshooting segmentation faults and memory-related issues in the C++ implementation</li>
+        <li>Fine-tuning hyperparameters and addressing issues like exploding gradients during training</li>
+      </ul>
+    
+      <h3>Future Plans</h3>
+      <p>As I continue to work on this project, I plan to focus on two key areas:</p>
+      <ul>
+        <li>Implementing parallelization to improve performance and handle larger datasets more efficiently. This will involve leveraging multi-threading and potentially GPU acceleration to speed up computations.</li>
+        <li>Developing a robust save/load feature for model persistence. This has proven to be more challenging than initially anticipated due to the complex interplay between C++ objects and Python bindings. The main challenges involve serializing the complex C++ objects that represent the neural network architecture and weights, and ensuring that this serialized data can be correctly deserialized and reconstructed in both C++ and Python environments.</li>
+      </ul>
+    
+      <p>
+        This project has been an incredible learning experience, allowing me to apply theoretical knowledge to practical implementation. I'm excited to continue developing and improving this library.
+      </p>
+    </section>
+    </main>
+    
+    <footer class="container">
+      <p>&copy; 2024 Owen Jones's Blog. All rights reserved.</p>
+    </footer>
+    
+    </div>
