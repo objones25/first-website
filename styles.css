@@ -13,6 +13,7 @@ body {
 
 .container {
     width: 80%;
+    max-width: 1200px;
     margin: auto;
     overflow: hidden;
 }
@@ -52,15 +53,13 @@ header h1 {
 }
 
 main {
-    padding: 20px;
-    background: #fff;
-    margin-bottom: 20px;
+    padding: 20px 0;
 }
 
 .section {
-    margin-bottom: 20px;
     background-color: #fff;
     padding: 20px;
+    margin-bottom: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
@@ -68,12 +67,6 @@ main {
 .section h2 {
     color: #333;
     margin-bottom: 15px;
-}
-
-.section h3 {
-    color: #555;
-    margin-top: 20px;
-    margin-bottom: 10px;
 }
 
 footer {
@@ -100,36 +93,26 @@ footer {
     background: #555;
 }
 
-.explore-more {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.explore-more .button {
-    flex: 1;
-    margin: 5px;
-    min-width: 120px;
-}
-
 .about-content {
     display: flex;
     align-items: flex-start;
+    gap: 20px;
 }
 
 .about-content .text {
     flex: 1;
-    padding-right: 20px;
 }
 
 .about-content .image {
-    flex: 0 0 200px;
+    flex: 0 0 auto;
+    width: 200px;
 }
 
 .profile-image {
-    max-width: 100%;
+    width: 100%;
     height: auto;
-    border-radius: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 @media (max-width: 768px) {
@@ -146,16 +129,8 @@ footer {
     }
 
     .about-content .image {
-        margin-top: 20px;
-        text-align: center;
-    }
-
-    .explore-more {
-        flex-direction: column;
-    }
-
-    .explore-more .button {
         width: 100%;
-        margin-bottom: 10px;
+        max-width: 200px;
+        margin: 0 auto;
     }
 }
