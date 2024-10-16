@@ -100,29 +100,38 @@ footer {
     background: #555;
 }
 
-.project {
-    margin-bottom: 40px;
+.explore-more {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
-.project-links {
-    margin-top: 15px;
+.explore-more .button {
+    flex: 1;
+    margin: 5px;
+    min-width: 120px;
 }
 
-.project-links .button {
-    margin-right: 10px;
+.about-content {
+    display: flex;
+    align-items: flex-start;
 }
 
-.neural-network-diagram {
-    max-width: 400px;
-    margin: 20px auto;
+.about-content .text {
+    flex: 1;
+    padding-right: 20px;
 }
 
-.neural-network-diagram svg {
-    width: 100%;
+.about-content .image {
+    flex: 0 0 200px;
+}
+
+.profile-image {
+    max-width: 100%;
     height: auto;
+    border-radius: 10px;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
     .container {
         width: 95%;
@@ -132,7 +141,20 @@ footer {
         padding-top: 10px;
     }
 
-    .button {
+    .about-content {
+        flex-direction: column;
+    }
+
+    .about-content .image {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .explore-more {
+        flex-direction: column;
+    }
+
+    .explore-more .button {
         width: 100%;
         margin-bottom: 10px;
     }
