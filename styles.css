@@ -57,8 +57,23 @@ main {
     margin-bottom: 20px;
 }
 
-section {
+.section {
     margin-bottom: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.section h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.section h3 {
+    color: #555;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 footer {
@@ -67,14 +82,6 @@ footer {
     text-align: center;
     padding: 20px;
     margin-top: 20px;
-}
-
-footer p {
-    margin: 0;
-}
-
-#latest-project p {
-    margin: 10px 0;
 }
 
 .button {
@@ -93,164 +100,39 @@ footer p {
     background: #555;
 }
 
-#additional-nav nav ul {
-    display: flex;
-    justify-content: center;
-    padding: 0;
-    list-style: none;
-}
-
-#additional-nav nav ul li {
-    margin: 5px;
-}
-
-.about-content {
-    display: flex;
-    align-items: flex-start;
-}
-
-.text {
-    flex: 1;
-}
-
-.image {
-    flex: 0 0 200px;
-    margin-left: 20px;
-}
-
-.image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-.contact-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.contact-buttons .button {
-    display: inline-block;
-    padding: 10px 20px;
-    background: #333;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    text-align: center;
-}
-
-.contact-buttons .button:hover {
-    background: #555;
-}
-
-/* Styles for the projects page */
 .project {
     margin-bottom: 40px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.project h3 {
-    color: #333;
-    margin-bottom: 15px;
-}
-
-.project-content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.project-description {
-    flex: 1;
-    min-width: 300px;
-    margin-right: 20px;
-}
-
-.neural-network-diagram {
-    flex: 1;
-    min-width: 300px;
-    max-width: 100%;
-    height: auto;
-    margin-top: 20px;
-}
-
-.neural-network-diagram svg {
-    max-width: 400px;
-    margin: 20px auto;
-    display: block;
+.project-links {
+    margin-top: 15px;
 }
 
 .project-links .button {
     margin-right: 10px;
 }
 
+.neural-network-diagram {
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.neural-network-diagram svg {
+    width: 100%;
+    height: auto;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
-    .about-content {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .image {
-        margin-left: 0;
-        margin-top: 20px;
-        flex: 0 0 auto;
-    }
-
-    #latest-project {
-        text-align: center;
+    .container {
+        width: 95%;
     }
 
     header ul {
-        flex-direction: column;
         padding-top: 10px;
     }
 
     .button {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    #additional-nav nav ul {
-        flex-direction: column;
-        align-items: flex-start;
-        padding-left: 20px;
-    }
-
-    #additional-nav nav ul li {
-        margin-bottom: 5px;
-    }
-
-    #additional-nav nav ul li a {
-        color: #000;
-        text-decoration: underline;
-        background: none;
-        padding: 0;
-        border-radius: 0;
-        display: block;
-    }
-
-    .project-content {
-        flex-direction: column;
-    }
-
-    .project-description, .neural-network-diagram {
-        width: 100%;
-        margin-right: 0;
-    }
-
-    .contact-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .contact-buttons .button {
         width: 100%;
         margin-bottom: 10px;
     }
