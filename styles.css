@@ -190,26 +190,6 @@ footer p {
     margin-right: 10px;
 }
 
-/* Consistent section styling */
-.section {
-    margin-bottom: 20px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.section h2 {
-    color: #333;
-    margin-bottom: 15px;
-}
-
-.section h3 {
-    color: #555;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
 /* Responsive design */
 @media (max-width: 768px) {
     .about-content {
