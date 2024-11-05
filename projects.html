@@ -3,52 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - Owen Jones's Blog</title>
+    <title>Projects - Owen Jones</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">Owen Jones</a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="projects.html">Projects</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
 
-        <div class="container">
-            <h1>Owen Jones's Blog</h1>
-        
-            <ul>
-                <li><a href="index.html" class="button">Home</a></li>
-                <li><a href="about.html" class="button">About</a></li>
-                <li><a href="projects.html" class="button">Projects</a></li>
-                <li><a href="contact.html" class="button">Contact</a></li>
-            </ul>
-        </div>
-        
-        <main role="main">
-            <section id="projects" class="section container">
-                <h2>Projects</h2>
-                
-                <div class="project-item">
+        <main>
+            <h1>Projects</h1>
+            <div class="project-grid">
+                <div class="project-card">
                     <h3>Snake Game with AI</h3>
-                    <p>A modern implementation of the classic Snake game, featuring multiple AI algorithms that can play autonomously. Built with Python and Pygame, this project showcases different pathfinding approaches and game development techniques.</p>
-                    <a href="snake-game-project.html" class="button">Learn more</a>
+                    <p>A modern implementation of the classic Snake game featuring multiple AI algorithms that can play autonomously.</p>
+                    <a href="snake-game-project.html" class="project-link">View Project →</a>
                 </div>
-        
-                <div class="project-item">
-                    <h3>Cryptographic Library (In Progress)</h3>
-                    <p>Currently developing a comprehensive C++ cryptographic library. Features modern encryption standards including AES with hardware acceleration, classical ciphers, and robust mathematical utilities. Building this library has deepened my understanding of cryptographic principles and reinforced my passion for cybersecurity.</p>
-                    <a href="crypto-library-project.html" class="button">Learn more</a>
+
+                <div class="project-card">
+                    <h3>Cryptographic Library</h3>
+                    <p>A comprehensive C++ cryptographic library implementing modern encryption standards including AES with hardware acceleration.</p>
+                    <a href="crypto-library-project.html" class="project-link">View Project →</a>
                 </div>
-        
-                <div class="project-item">
+
+                <div class="project-card">
                     <h3>Neural Network Library</h3>
-                    <p>I'm currently working on developing a neural network library implemented in C++ with Python bindings. This project aims to provide a flexible and efficient framework for creating and training neural networks.</p>
-                    <a href="neural-network-project.html" class="button">Learn more</a>
+                    <p>A flexible neural network library implemented in C++ with Python bindings, focused on performance and usability.</p>
+                    <a href="neural-network-project.html" class="project-link">View Project →</a>
                 </div>
-            </section>
+            </div>
         </main>
-        
-        <div class="container">
-            © 2024 Owen Jones's Blog. All rights reserved.
-        </div>
-        
-        </div>
+
+        <footer>
+            <p>&copy; 2024 Owen Jones. All rights reserved.</p>
+        </footer>
     </div>
 </body>
 </html>

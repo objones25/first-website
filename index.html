@@ -3,45 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owen Jones's Blog</title>
+    <title>Owen Jones - Professional Nerd</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="header">
-        <nav class="nav container">
+    <div class="container">
+        <header>
             <a href="index.html" class="logo">Owen Jones</a>
-            <ul class="nav-links">
-                <li><a href="index.html" class="nav-link">Home</a></li>
-                <li><a href="about.html" class="nav-link">About</a></li>
-                <li><a href="projects.html" class="nav-link">Projects</a></li>
-                <li><a href="contact.html" class="nav-link">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="projects.html">Projects</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
 
-    <main class="main">
-        <div class="container">
-            <section class="section fade-in">
-                <h1 class="section-title">Welcome to My Blog</h1>
-                <p>This blog showcases my latest projects and adventures in software development.</p>
+        <main>
+            <section class="hero">
+                <h1>Professional<br>Nerd.</h1>
+                <p>Applied Mathematics graduate exploring the intersections of machine learning, cryptography, and software development.</p>
             </section>
 
-            <section class="section fade-in">
-                <h2 class="section-title">Latest Project</h2>
-                <div class="card">
+            <section class="latest-project">
+                <h2>Latest Work</h2>
+                <div class="project-card">
                     <h3>Snake Game with AI</h3>
-                    <p>A modern implementation of the classic Snake game, featuring multiple AI algorithms that can play autonomously. Built with Python and Pygame, this project showcases different pathfinding approaches including A* Pathfinding, Hamiltonian Cycle, and Greedy Algorithm implementations.</p>
-                    <a href="snake-game-project.html" class="button">Read More</a>
+                    <p>A modern implementation of the classic Snake game featuring multiple AI algorithms including A* Pathfinding, Hamiltonian Cycle, and Greedy Algorithm implementations.</p>
+                    <a href="snake-game-project.html" class="project-link">View Project →</a>
                 </div>
             </section>
-        </div>
-    </main>
+        </main>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Owen Jones's Blog. All rights reserved.</p>
-        </div>
-    </footer>
+        <footer>
+            <p>&copy; 2024 Owen Jones. All rights reserved.</p>
+        </footer>
+    </div>
 </body>
 </html>

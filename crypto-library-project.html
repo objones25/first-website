@@ -3,91 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cryptographic Library Project - Owen Jones's Blog</title>
+    <title>Cryptographic Library - Owen Jones</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div>
-        <div class="container">
-            <h1>Owen Jones's Blog</h1>
-            <a href="index.html" class="button">Home</a>
-            <a href="about.html" class="button">About</a>
-            <a href="projects.html" class="button">Projects</a>
-            <a href="contact.html" class="button">Contact</a>
-        </div>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">Owen Jones</a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="projects.html">Projects</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
 
-        <main role="main">
-            <section id="crypto-library-project" class="section section container">
-                <h2>Cryptographic Library Project</h2>
+        <main>
+            <article class="project-detail">
+                <h1>Cryptographic Library</h1>
+                
+                <div class="status-badge">In Development</div>
 
-                <div class="project-content">
-                    <h3>Inspiration</h3>
-                    <p>My passion for cryptography was ignited during Math 116 at UCLA, where I studied both classical and modern encryption methods. This project represents an effort to deepen my understanding of cryptographic principles while creating a practical, educational library. The work also aligns with my goal of transitioning into cybersecurity.</p>
+                <section class="project-section">
+                    <h2>Overview</h2>
+                    <p>A comprehensive C++ cryptographic library implementing both modern and classical encryption methods. This project combines theoretical cryptographic principles with practical implementation challenges, focusing on security, performance, and educational value.</p>
+                </section>
 
-                    <h3>Project Overview</h3>
-                    <p>This C++ cryptographic library, currently in active development, aims to provide a comprehensive suite of cryptographic tools. The project emphasizes security, performance, and educational value by implementing both historical and modern cryptographic algorithms.</p>
-
-                    <h3>Current Features</h3>
-                    <ul>
-                        <li><strong>Modern Symmetric Encryption</strong>
-                            <ul>
-                                <li>AES implementation (128/192/256-bit) with hardware acceleration (AES-NI)</li>
-                                <li>Multiple block cipher modes (ECB, CBC, CFB, OFB)</li>
-                                <li>PKCS7 padding scheme</li>
-                            </ul>
-                        </li>
-                        <li><strong>Hash Functions</strong>
-                            <ul>
-                                <li>SHA-256 implementation</li>
-                                <li>HMAC functionality</li>
-                            </ul>
-                        </li>
-                        <li><strong>Classical Ciphers</strong> (for educational purposes)
-                            <ul>
-                                <li>Caesar Cipher</li>
-                                <li>Vigenère Cipher</li>
-                            </ul>
-                        </li>
+                <section class="project-section">
+                    <h2>Current Features</h2>
+                    <ul class="feature-list">
+                        <li>Modern Symmetric Encryption (AES implementation with hardware acceleration)</li>
+                        <li>Multiple block cipher modes (ECB, CBC, CFB, OFB)</li>
+                        <li>Hash Functions (SHA-256)</li>
+                        <li>Classical Ciphers for educational purposes</li>
+                        <li>PKCS7 padding scheme</li>
                     </ul>
+                </section>
 
-                    <h3>Development Status</h3>
-                    <p>Currently working on resolving several key issues:</p>
-                    <ul>
+                <section class="project-section">
+                    <h2>Development Status</h2>
+                    <p>Currently working on resolving several key challenges:</p>
+                    <ul class="status-list">
                         <li>Fixing decryption round key transformation in AES-NI implementation</li>
                         <li>Correcting round key copy mismatches in key schedule</li>
                         <li>Debugging the AES-128 key schedule, particularly for decryption keys</li>
                         <li>Optimizing overall performance and memory usage</li>
                         <li>Enhancing test coverage</li>
                     </ul>
+                </section>
 
-                    <h3>Planned Features</h3>
-                    <ul>
+                <section class="project-section">
+                    <h2>Planned Features</h2>
+                    <ul class="feature-list">
                         <li>RSA implementation for asymmetric encryption</li>
                         <li>Digital signature functionality</li>
                         <li>Secure key management system</li>
                         <li>Additional hash functions (SHA-3)</li>
                         <li>Elliptic curve cryptography support</li>
-                        <li>Advanced mathematical utilities for cryptographic operations</li>
                     </ul>
+                </section>
 
-                    <h3>Technical Details</h3>
-                    <p>The library leverages modern C++ features while maintaining high security standards:</p>
-                    <ul>
-                        <li>Written in C++17</li>
-                        <li>Hardware acceleration using AES-NI where available</li>
-                        <li>Extensive unit testing and benchmarking</li>
-                        <li>Memory-safe implementations</li>
-                        <li>Thread-safe operations</li>
-                    </ul>
-
-                    <p>This project has been an incredible learning experience, allowing me to apply theoretical cryptographic knowledge to practical implementation challenges. I'm excited to continue expanding its capabilities and making it a valuable tool for both educational and practical purposes.</p>
-                </div>
-            </section>
+                <section class="project-section">
+                    <h2>Technical Implementation</h2>
+                    <p>Written in C++17, the library leverages hardware acceleration using AES-NI where available. The project emphasizes memory-safe implementations and thread-safe operations, with extensive unit testing and benchmarking.</p>
+                </section>
+            </article>
         </main>
 
-        <div class="container">
-            <footer>© 2024 Owen Jones's Blog. All rights reserved.</footer>
-        </div>
+        <footer>
+            <p>&copy; 2024 Owen Jones. All rights reserved.</p>
+        </footer>
     </div>
 </body>
 </html>

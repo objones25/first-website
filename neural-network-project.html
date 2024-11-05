@@ -3,61 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neural Network Project - Owen Jones's Blog</title>
+    <title>Neural Network Library - Owen Jones</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Owen Jones's Blog</h1>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">Owen Jones</a>
             <nav>
-                <ul>
-                    <li><a href="index.html" class="button">Home</a></li>
-                    <li><a href="about.html" class="button">About</a></li>
-                    <li><a href="projects.html" class="button">Projects</a></li>
-                    <li><a href="contact.html" class="button">Contact</a></li>
-                </ul>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="projects.html">Projects</a>
+                <a href="contact.html">Contact</a>
             </nav>
-        </div>
-    </header>
+        </header>
 
-    <main role="main">
-        <section id="neural-network-project" class="section container">
-            <h2>Neural Network Library Project</h2>
+        <main>
+            <article class="project-detail">
+                <h1>Neural Network Library</h1>
+                
+                <div class="status-badge">In Development</div>
 
-            <h3>Inspiration</h3>
-            <p>My inspiration for creating this neural network library stems from my fascination with machine learning and a desire to build on the work I did for my Math 156 Project (available <a href="https://objones25.github.io/resume_files/Math_156_Project.pdf">here</a>). In that project, I explored various machine learning methods for credit card fraud detection. This experience sparked my interest in developing a more efficient neural network implementation that could handle large datasets quickly. I saw this as an opportunity to deepen my understanding of both C++ and machine learning principles.</p>
+                <section class="project-section">
+                    <h2>Overview</h2>
+                    <p>A flexible and efficient neural network library implemented in C++ with Python bindings. This project builds on my experience from UCLA's Math 156 course on machine learning, aiming to create a high-performance framework for various machine learning tasks.</p>
+                </section>
 
-            <h3>Project Overview</h3>
-            <p>This project is an attempt to create a flexible and efficient neural network library that can be used for various machine learning tasks. The core implementation is in C++ for performance, with Python bindings to make it easily accessible to data scientists and machine learning practitioners.</p>
+                <section class="project-section">
+                    <h2>Current Features</h2>
+                    <ul class="feature-list">
+                        <li>Flexible Layer class implementation</li>
+                        <li>Efficient feedforward and backpropagation</li>
+                        <li>Comprehensive training pipeline</li>
+                        <li>Multiple loss functions and activation functions</li>
+                        <li>Weight initialization techniques</li>
+                        <li>Batch normalization</li>
+                        <li>Python bindings for accessibility</li>
+                    </ul>
+                </section>
 
-            <h3>Current Features</h3>
-            <ul>
-                <li>Flexible Layer class implementation</li>
-                <li>Efficient feedforward and backpropagation</li>
-                <li>Comprehensive training pipeline</li>
-                <li>Robust debugging and logging system</li>
-                <li>Support for various activation functions</li>
-                <li>Multiple loss functions</li>
-                <li>Weight initialization techniques</li>
-                <li>Batch normalization</li>
-                <li>Python bindings</li>
-            </ul>
+                <section class="project-section">
+                    <h2>Development Challenges</h2>
+                    <ul class="status-list">
+                        <li>Implementing backpropagation correctly across complex architectures</li>
+                        <li>Optimizing memory usage for large datasets</li>
+                        <li>Ensuring numerical stability in various network configurations</li>
+                        <li>Managing compatibility between C++ implementation and Python bindings</li>
+                        <li>Balancing flexibility with performance in the API design</li>
+                    </ul>
+                </section>
 
-            <h3>Challenges Faced</h3>
-            <p>Developing this library has come with its share of challenges, including implementing backpropagation correctly, optimizing performance, dealing with numerical stability issues, and ensuring compatibility between C++ and Python.</p>
+                <section class="project-section">
+                    <h2>Current Focus</h2>
+                    <p>Active development is centered on:</p>
+                    <ul class="status-list">
+                        <li>Implementing efficient parallelization for training</li>
+                        <li>Developing robust model serialization for save/load functionality</li>
+                        <li>Expanding the range of available layer types</li>
+                        <li>Improving documentation and examples</li>
+                        <li>Adding comprehensive unit tests</li>
+                    </ul>
+                </section>
 
-            <h3>Future Plans</h3>
-            <p>As I continue to work on this project, I plan to focus on implementing parallelization and developing a robust save/load feature for model persistence.</p>
+                <a href="https://github.com/objones25/neural_net" class="github-link" target="_blank">View on GitHub →</a>
+            </article>
+        </main>
 
-            <a href="https://github.com/objones25/neural_net" target="_blank" class="button">View on GitHub</a>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Owen Jones's Blog. All rights reserved.</p>
-        </div>
-    </footer>
+        <footer>
+            <p>&copy; 2024 Owen Jones. All rights reserved.</p>
+        </footer>
+    </div>
 </body>
 </html>
