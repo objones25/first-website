@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <header>
+        <div>
             <a href="index.html" class="logo">Owen Jones</a>
             <nav>
                 <a href="index.html">Home</a>
@@ -16,40 +16,82 @@
                 <a href="projects.html">Projects</a>
                 <a href="contact.html">Contact</a>
             </nav>
-        </header>
-
-        <main>
-            <article class="project-detail">
-                <h1>Snake Game with AI</h1>
+        </div>
+    
+        <main role="main">
+            <h1>Snake Game with AI</h1>
+    
+            <div class="status-badge">Updated - November 2024</div>
+    
+            <section class="project-section">
+                <h2>Overview</h2>
+                <p>A Python-based implementation of the classic Snake game featuring multiple AI algorithms that can play autonomously. This project combines game development with artificial intelligence, showcasing different approaches to solving the Snake game challenge, from traditional pathfinding to modern reinforcement learning.</p>
+            </section>
+    
+            <section class="project-section">
+                <h2>Key Features</h2>
+                <ul class="feature-list">
+                    <li>Multiple AI implementations:
+                        <ul>
+                            <li>Deep Q-Learning with prioritized experience replay</li>
+                            <li>A* Pathfinding with safety checks</li>
+                            <li>Hamiltonian Cycle for guaranteed completion</li>
+                            <li>Hybrid approach combining multiple strategies</li>
+                        </ul>
+                    </li>
+                    <li>Comprehensive training visualization and metrics</li>
+                    <li>Multiple visual themes (Classic, Desert, Forest, Neon)</li>
+                    <li>Performance tracking and analysis</li>
+                    <li>Adjustable game speed and difficulty settings</li>
+                </ul>
+            </section>
+    
+            <section class="project-section">
+                <h2>Technical Implementation</h2>
                 
-                <section class="project-section">
-                    <h2>Overview</h2>
-                    <p>A Python-based implementation of the classic Snake game featuring multiple AI algorithms that can play autonomously. This project combines game development with artificial intelligence, showcasing different approaches to solving the Snake game challenge.</p>
-                </section>
-
-                <section class="project-section">
-                    <h2>Key Features</h2>
-                    <ul class="feature-list">
-                        <li>Multiple AI algorithms including A* Pathfinding, Hamiltonian Cycle, and Greedy Algorithm</li>
-                        <li>Classic snake gameplay mechanics</li>
-                        <li>Multiple visual themes (Classic, Desert, Forest, Neon)</li>
-                        <li>Adjustable game speed</li>
-                        <li>Pause and resume functionality</li>
-                    </ul>
-                </section>
-
-                <section class="project-section">
-                    <h2>Technical Details</h2>
-                    <p>Built using Python and Pygame, the project emphasizes object-oriented design with separate classes handling different aspects of the game. The AI implementations showcase various approaches to pathfinding and decision-making in a constrained environment.</p>
-                </section>
-
-                <a href="https://github.com/objones25/hundred_days/tree/master/snake_game" class="github-link" target="_blank">View on GitHub →</a>
-            </article>
+                <h3>Reinforcement Learning Agent</h3>
+                <p>The Q-learning implementation features:</p>
+                <ul class="feature-list">
+                    <li>Neural network architecture: 11 input nodes, 256 hidden nodes, 3 output nodes</li>
+                    <li>PyTorch-based deep learning implementation</li>
+                    <li>Prioritized Experience Replay Memory</li>
+                    <li>Epsilon-greedy exploration with dynamic decay</li>
+                </ul>
+    
+                <h3>Training Metrics Visualization</h3>
+                <img src="Figure_2.png" alt="Training Metrics Dashboard showing Score Progress, Exploration Rate, Rewards per Episode, and Experience Memory" style="max-width: 100%; margin: 2rem 0;">
+                <p>The visualization shows the AI's learning progress across multiple metrics:</p>
+                <ul class="feature-list">
+                    <li>Training Progress: Shows increasing average score over time</li>
+                    <li>Exploration Rate: Demonstrates the epsilon decay strategy</li>
+                    <li>Rewards per Episode: Indicates improving performance</li>
+                    <li>Experience Memory: Shows the growing knowledge base</li>
+                </ul>
+    
+                <h3>Pathfinding Implementations</h3>
+                <ul class="feature-list">
+                    <li>A* algorithm with Manhattan distance heuristic</li>
+                    <li>Hamiltonian cycle generation for guaranteed completion</li>
+                    <li>Hybrid approach with dynamic strategy switching</li>
+                    <li>Collision avoidance and safety systems</li>
+                </ul>
+            </section>
+    
+            <section class="project-section">
+                <h2>Development Status</h2>
+                <p>Currently focusing on:</p>
+                <ul class="status-list">
+                    <li>Optimizing the reinforcement learning model's performance</li>
+                    <li>Implementing advanced hybrid strategies</li>
+                    <li>Expanding the visualization toolkit</li>
+                    <li>Enhancing the performance metrics system</li>
+                </ul>
+            </section>
+    
+            <a href="https://github.com/objones25/hundred_days/tree/master/snake_game" class="github-link" target="_blank">View on GitHub →</a>
         </main>
-
-        <footer>
-            <p>&copy; 2024 Owen Jones. All rights reserved.</p>
-        </footer>
+    
+        <footer>© 2024 Owen Jones. All rights reserved.</footer>
     </div>
 </body>
 </html>
