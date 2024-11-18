@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <div>
+        <header>
             <a href="index.html" class="logo">Owen Jones</a>
             <nav>
                 <a href="index.html">Home</a>
@@ -16,27 +16,30 @@
                 <a href="projects.html">Projects</a>
                 <a href="contact.html">Contact</a>
             </nav>
-        </div>
-    
-        <main role="main">
+        </header>
+
+        <main>
             <h1>Projects</h1>
-    
+
             <div class="project-grid">
                 <div class="project-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h3>Snake Game with AI</h3>
-                        <span style="padding: 0.5rem 1rem; border: 1px solid black; font-size: 0.875rem;">Updated</span>
-                    </div>
-                    <p>A modern implementation of the classic Snake game featuring multiple AI algorithms including Reinforcement Learning, A* Pathfinding, and Hamiltonian Cycle approaches.</p>
+                    <h3>Snake Game with AI</h3>
+                    <p>A modern implementation of the classic Snake game featuring multiple AI algorithms that can play autonomously.</p>
                     <a href="snake-game-project.html" class="project-link">View Project →</a>
                 </div>
-    
+
+                <div class="project-card">
+                    <h3>Malware Classification</h3>
+                    <p>A deep learning-based system for classifying malware into 31 different families, achieving 93.97% accuracy using convolutional neural networks.</p>
+                    <a href="malware-classification-project.html" class="project-link">View Project →</a>
+                </div>
+
                 <div class="project-card">
                     <h3>Cryptographic Library</h3>
                     <p>A comprehensive C++ cryptographic library implementing modern encryption standards including AES with hardware acceleration.</p>
                     <a href="crypto-library-project.html" class="project-link">View Project →</a>
                 </div>
-    
+
                 <div class="project-card">
                     <h3>Neural Network Library</h3>
                     <p>A flexible neural network library implemented in C++ with Python bindings, focused on performance and usability.</p>
@@ -44,8 +47,10 @@
                 </div>
             </div>
         </main>
-    
-        <footer>© 2024 Owen Jones. All rights reserved.</footer>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
     </div>
 </body>
 </html>
