@@ -33,58 +33,155 @@
             <section class="project-section">
                 <h2>Key Features</h2>
                 <ul class="feature-list">
-                    <li>Production-ready transformer-based text embeddings</li>
-                    <li>MacOS Metal/CoreML hardware acceleration with ANE support</li>
-                    <li>Multi-model support with dynamic loading</li>
-                    <li>Optimized batch processing with auto-tuning</li>
-                    <li>Two-level caching system (memory + disk) with LRU eviction</li>
-                    <li>Prometheus metrics integration</li>
-                    <li>Support for both sync and async operations</li>
-                    <li>Chunking support for long documents</li>
-                    <li>Parallel processing with worker pools</li>
+                    <li>Production-ready transformer-based text embeddings with comprehensive error handling and logging</li>
+                    <li>MacOS Metal/CoreML hardware acceleration with ANE support, delivering optimized performance on Apple Silicon</li>
+                    <li>Multi-model support with dynamic loading and efficient model management</li>
+                    <li>Optimized batch processing with auto-tuning based on input characteristics</li>
+                    <li>Two-level caching system (memory + disk) with LRU eviction for improved performance</li>
+                    <li>Prometheus metrics integration for comprehensive monitoring</li>
+                    <li>Support for both synchronous and asynchronous operations with worker pools</li>
+                    <li>Intelligent chunking support for processing long documents</li>
+                    <li>Thread-safe implementation with graceful shutdown capabilities</li>
                 </ul>
             </section>
 
             <section class="project-section">
-                <h2>Technical Implementation</h2>
-                
-                <h3>Hardware Acceleration</h3>
-                <p>The library leverages CoreML acceleration on Apple Silicon, providing significant performance benefits:</p>
-                <ul class="feature-list">
-                    <li>Configurable CoreML integration with caching support</li>
-                    <li>Optional Apple Neural Engine (ANE) utilization</li>
-                    <li>Intelligent resource management</li>
-                    <li>Dynamic compilation caching</li>
-                </ul>
+                <h2>Example Usage</h2>
+                <h3>Basic Implementation</h3>
+                <p>The library can be used both as a standalone service and integrated into existing Go applications. Here's a basic example:</p>
+                <pre class="code-block">
+package main
 
-                <h3>Performance Characteristics</h3>
+import (
+    "context"
+    "fmt"
+    "log"
+    "time"
+
+    "github.com/objones25/go-embeddings/pkg/embedding"
+)
+
+func main() {
+    // Initialize configuration
+    config := &embedding.Config{
+        ModelPath:         "./models/all-MiniLM-L6-v2",
+        MaxSequenceLength: 512,
+        Dimension:        384,  // 384 for MiniLM-L6
+        BatchSize:        32,
+        EnableMetal:      true,  // Enable CoreML
+        CoreMLConfig: &embedding.CoreMLConfig{
+            EnableCaching: true,
+            RequireANE:    false,
+        },
+        Options: embedding.Options{
+            CacheEnabled:   true,
+            Normalize:      true,
+            PadToMaxLength: false,
+        },
+    }
+
+    // Create service with timeout
+    ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+    defer cancel()
+
+    service, err := embedding.NewService(ctx, config)
+    if err != nil {
+        log.Fatalf("Failed to create service: %v", err)
+    }
+    defer service.Close()
+
+    // Generate single embedding
+    text := "Hello, world!"
+    vector, err := service.Embed(ctx, text)
+    if err != nil {
+        log.Fatalf("Failed to generate embedding: %v", err)
+    }
+    fmt.Printf("Single embedding (len=%d): %v\n", len(vector), vector[:5])
+}</pre>
+            </section>
+
+            <section class="project-section">
+                <h2>Advanced Features</h2>
+                
+                <h3>Asynchronous Batch Processing</h3>
+                <p>For handling large volumes of text, the library provides asynchronous batch processing capabilities:</p>
+                <pre class="code-block">
+// Initialize channels for results and errors
+results := make(chan embedding.Result)
+errors := make(chan error)
+
+// Process texts asynchronously
+texts := []string{
+    "First text to embed",
+    "Second text to embed",
+    "Third text to embed",
+}
+
+err := service.BatchEmbedAsync(ctx, texts, results, errors)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Process results as they arrive
+for i := 0; i < len(texts); i++ {
+    select {
+    case result := <-results:
+        fmt.Printf("Embedding: %v\n", result.Embedding[:5])
+    case err := <-errors:
+        fmt.Printf("Error: %v\n", err)
+    case <-ctx.Done():
+        fmt.Println("Operation timed out")
+        return
+    }
+}</pre>
+
+                <h3>Document Chunking</h3>
+                <p>For processing longer documents, the library includes intelligent chunking capabilities:</p>
+                <pre class="code-block">
+// Initialize tokenizer
+tokConfig := embedding.TokenizerConfig{
+    ModelID:        "all-MiniLM-L6-v2",
+    SequenceLength: 512,
+}
+tokenizer, _ := embedding.NewTokenizer(tokConfig)
+
+// Configure chunking
+opts := embedding.DefaultChunkingOptions()
+opts.Strategy = embedding.ChunkByParagraph
+opts.MaxTokens = 256
+
+// Process long document
+longText := `First paragraph with content.
+
+Second paragraph with different content.
+This is still part of the second paragraph.
+
+Third paragraph here.`
+
+chunks, err := tokenizer.ChunkDocument(longText, opts)
+if err != nil {
+    log.Fatal(err)
+}</pre>
+            </section>
+
+            <section class="project-section">
+                <h2>Performance Characteristics</h2>
                 <p>The library demonstrates impressive performance metrics across different operation modes:</p>
                 <ul class="feature-list">
-                    <li>Single embedding operations complete in ~1.85μs</li>
-                    <li>Batch processing of 32 inputs in ~88ms</li>
-                    <li>Memory-efficient with minimal allocations</li>
-                    <li>Cached operations showing consistent sub-2μs latency</li>
-                </ul>
-
-                <h3>Advanced Features</h3>
-                <p>The implementation includes sophisticated performance optimizations:</p>
-                <ul class="feature-list">
-                    <li>Dynamic batch size optimization based on input characteristics</li>
-                    <li>Auto-tuning systems for optimal resource utilization</li>
-                    <li>Zero-copy optimizations where possible</li>
-                    <li>Comprehensive monitoring and metrics collection</li>
+                    <li>Single embedding operations complete in ~1.85μs with minimal memory allocation (1.5 KB per operation)</li>
+                    <li>Batch processing of 32 inputs achieves ~88ms latency with optimized memory usage</li>
+                    <li>CoreML acceleration provides consistent performance improvements on Apple Silicon</li>
+                    <li>Cached operations show consistent sub-2μs latency with minimal resource usage</li>
                 </ul>
             </section>
 
             <section class="project-section">
                 <h2>Development Status</h2>
-                <p>Currently focused on:</p>
                 <ul class="status-list">
-                    <li>Enhancing CoreML integration for improved benchmark statistics</li>
-                    <li>Optimizing batch processing performance</li>
-                    <li>Expanding model support</li>
-                    <li>Implementing additional caching strategies</li>
-                    <li>Improving documentation and examples</li>
+                    <li>Currently optimizing CoreML integration for improved performance metrics and working on expanding model support</li>
+                    <li>Implementing advanced caching strategies for better resource utilization</li>
+                    <li>Developing comprehensive documentation and usage examples</li>
+                    <li>Fine-tuning batch processing performance for various input scenarios</li>
                 </ul>
             </section>
 
