@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Embeddings Library - Owen Jones</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">Owen Jones</a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="projects.html">Projects</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+            <h1>Go Embeddings Library</h1>
+
+            <div class="status-badge">
+                In Development
+            </div>
+
+            <section class="project-section">
+                <h2>Overview</h2>
+                <p>A high-performance, production-ready embedding service written in Go, supporting multiple transformer models with MacOS Metal acceleration. The library combines efficient memory management, optimized batch processing, and hardware acceleration to deliver fast, reliable text embeddings for production environments.</p>
+            </section>
+
+            <section class="project-section">
+                <h2>Key Features</h2>
+                <ul class="feature-list">
+                    <li>Production-ready transformer-based text embeddings</li>
+                    <li>MacOS Metal/CoreML hardware acceleration with ANE support</li>
+                    <li>Multi-model support with dynamic loading</li>
+                    <li>Optimized batch processing with auto-tuning</li>
+                    <li>Two-level caching system (memory + disk) with LRU eviction</li>
+                    <li>Prometheus metrics integration</li>
+                    <li>Support for both sync and async operations</li>
+                    <li>Chunking support for long documents</li>
+                    <li>Parallel processing with worker pools</li>
+                </ul>
+            </section>
+
+            <section class="project-section">
+                <h2>Technical Implementation</h2>
+                
+                <h3>Hardware Acceleration</h3>
+                <p>The library leverages CoreML acceleration on Apple Silicon, providing significant performance benefits:</p>
+                <ul class="feature-list">
+                    <li>Configurable CoreML integration with caching support</li>
+                    <li>Optional Apple Neural Engine (ANE) utilization</li>
+                    <li>Intelligent resource management</li>
+                    <li>Dynamic compilation caching</li>
+                </ul>
+
+                <h3>Performance Characteristics</h3>
+                <p>The library demonstrates impressive performance metrics across different operation modes:</p>
+                <ul class="feature-list">
+                    <li>Single embedding operations complete in ~1.85μs</li>
+                    <li>Batch processing of 32 inputs in ~88ms</li>
+                    <li>Memory-efficient with minimal allocations</li>
+                    <li>Cached operations showing consistent sub-2μs latency</li>
+                </ul>
+
+                <h3>Advanced Features</h3>
+                <p>The implementation includes sophisticated performance optimizations:</p>
+                <ul class="feature-list">
+                    <li>Dynamic batch size optimization based on input characteristics</li>
+                    <li>Auto-tuning systems for optimal resource utilization</li>
+                    <li>Zero-copy optimizations where possible</li>
+                    <li>Comprehensive monitoring and metrics collection</li>
+                </ul>
+            </section>
+
+            <section class="project-section">
+                <h2>Development Status</h2>
+                <p>Currently focused on:</p>
+                <ul class="status-list">
+                    <li>Enhancing CoreML integration for improved benchmark statistics</li>
+                    <li>Optimizing batch processing performance</li>
+                    <li>Expanding model support</li>
+                    <li>Implementing additional caching strategies</li>
+                    <li>Improving documentation and examples</li>
+                </ul>
+            </section>
+
+            <a href="https://github.com/objones25/go-embeddings/tree/main" class="github-link" target="_blank">View on GitHub →</a>
+        </main>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
+    </div>
+</body>
+</html>
