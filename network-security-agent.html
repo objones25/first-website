@@ -5,6 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Network Security Agent - Owen Jones</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                'fontFamily': 'var(--font-main)',
+                'fontSize': '14px'
+            }
+        });
+    </script>
+    <style>
+        .architecture-diagram {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .architecture-diagram h3 {
+            margin-bottom: 2rem;
+            color: var(--text-color);
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -43,6 +75,44 @@
                 <section class="project-section">
                     <h2>Technical Architecture</h2>
                     
+                    <div class="architecture-diagram">
+                        <h3>System Architecture</h3>
+                        <div class="mermaid">
+                            flowchart TB
+                                subgraph Input ["Packet Capture Layer"]
+                                    A[Raw Network Traffic] --> B[Packet Processor]
+                                    B --> C[Protocol Analyzer]
+                                end
+
+                                subgraph Core ["Analysis Engine"]
+                                    D[Anomaly Detection] --> E[Threat Classification]
+                                    E --> F[Alert Generation]
+                                    
+                                    subgraph ML ["Machine Learning Pipeline"]
+                                        G[Feature Extraction] --> H[Pattern Recognition]
+                                        H --> I[Behavioral Analysis]
+                                    end
+                                    
+                                    C --> D
+                                    F --> J[Alert Manager]
+                                end
+
+                                subgraph Output ["Response Layer"]
+                                    J --> K[Real-time Alerts]
+                                    J --> L[Metrics Dashboard]
+                                    J --> M[Threat Reports]
+                                end
+
+                                classDef primary fill:#0a192f,stroke:#64ffda,stroke-width:2px,color:#fff
+                                classDef secondary fill:#172a45,stroke:#64ffda,stroke-width:2px,color:#fff
+                                classDef highlight fill:#233554,stroke:#64ffda,stroke-width:2px,color:#fff
+
+                                class A,B,C primary
+                                class D,E,F,J secondary
+                                class G,H,I,K,L,M highlight
+                        </div>
+                    </div>
+
                     <div class="architecture-component">
                         <h3>Packet Capture Engine</h3>
                         <ul class="feature-list">
