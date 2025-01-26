@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Security Agent - Owen Jones</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">Owen Jones</a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="projects.html">Projects</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+            <h1>Network Security Agent</h1>
+
+            <div class="status-badge">
+                In Development
+            </div>
+
+            <section class="project-section">
+                <h2>Overview</h2>
+                <p>A high-performance network security monitoring and anomaly detection system written in Go. The agent combines real-time traffic analysis, machine learning-based anomaly detection, and intelligent alert management to provide comprehensive network security monitoring capabilities.</p>
+            </section>
+
+            <section class="project-section">
+                <h2>Key Features</h2>
+                <ul class="feature-list">
+                    <li>Real-time network traffic monitoring with statistical analysis and protocol-aware inspection</li>
+                    <li>Advanced anomaly detection engine with support for multiple detection strategies and adaptive thresholds</li>
+                    <li>Comprehensive alert management system with correlation, enrichment, and intelligent notification capabilities</li>
+                    <li>Dynamic baseline modeling with seasonal pattern recognition and automatic adaptation</li>
+                    <li>Modern web dashboard for real-time monitoring and alert management built with React and TypeScript</li>
+                    <li>Flexible rule engine supporting various detection scenarios including DDoS, port scanning, and data exfiltration</li>
+                </ul>
+            </section>
+
+            <section class="project-section">
+                <h2>Technical Implementation</h2>
+                
+                <h3>Anomaly Detection Engine</h3>
+                <p>The core of the system is a sophisticated anomaly detection engine that combines multiple approaches:</p>
+                <ul class="feature-list">
+                    <li>Statistical Analysis: Implements z-score and IQR-based anomaly detection with dynamic thresholds that adapt to network patterns</li>
+                    <li>Baseline Modeling: Features EWMA (Exponentially Weighted Moving Average) and seasonal pattern recognition for accurate network behavior profiling</li>
+                    <li>Protocol-Specific Detection: Specialized detection algorithms for various protocols (TCP, UDP, ICMP) with protocol-aware analysis</li>
+                    <li>Multi-dimensional Analysis: Considers multiple metrics simultaneously for more accurate anomaly detection and reduced false positives</li>
+                </ul>
+
+                <h3>Packet Capture Engine Architecture</h3>
+                <p>The packet capture system implements a sophisticated processing pipeline with several optimizations:</p>
+                <ul class="feature-list">
+                    <li>Dynamic Batch Processing: Implements an intelligent batch sizing system that automatically adjusts based on throughput, latency, and worker utilization metrics. The system monitors processing latency, channel backlog, and worker performance to optimize batch sizes in real-time.</li>
+                    <li>Advanced Worker Pool: Uses a configurable worker pool with automatic load balancing, including per-worker performance tracking and utilization metrics. Workers process packet batches concurrently while maintaining packet ordering and timing accuracy.</li>
+                    <li>Memory Management: Employs a memory pool for packet batches to reduce allocation overhead and garbage collection pressure. The system also implements zero-copy packet processing where possible, utilizing gopacket's lazy decoding capabilities.</li>
+                    <li>Traffic Control: Features sophisticated rate limiting and sampling mechanisms with token bucket implementation and adaptive sampling rates. The system can handle traffic bursts while maintaining consistent processing rates.</li>
+                </ul>
+
+                <h3>Baseline Learning System</h3>
+                <p>The baseline component provides comprehensive network behavior profiling:</p>
+                <ul class="feature-list">
+                    <li>Multi-Scale Analysis: Maintains three parallel EWMA calculations (short-term: 5-minute, medium-term: hourly, long-term: daily) for each protocol and metric, enabling detection of anomalies across different time scales.</li>
+                    <li>Temporal Pattern Recognition: Implements sophisticated time-based pattern analysis including:
+                        <ul>
+                            <li>Hourly patterns with adaptive thresholds based on time of day</li>
+                            <li>Daily patterns accounting for weekday/weekend variations</li>
+                            <li>Monthly patterns for long-term trend analysis</li>
+                        </ul>
+                    </li>
+                    <li>Health Monitoring: Features a comprehensive health assessment system that tracks:
+                        <ul>
+                            <li>Baseline quality metrics including confidence scores and stability measurements</li>
+                            <li>Coverage analysis across time windows and protocols</li>
+                            <li>Data quality metrics including completeness and consistency</li>
+                            <li>Real-time maturity and learning progress tracking</li>
+                        </ul>
+                    </li>
+                    <li>State Management: Implements robust persistence with atomic state updates, regular checkpointing, and automatic recovery capabilities. The system maintains data integrity while handling large volumes of network statistics.</li>
+                </ul>
+
+                <h3>Alert Management System</h3>
+                <p>The alert processing pipeline implements sophisticated detection and management capabilities:</p>
+                <ul class="feature-list">
+                    <li>Alert Processing: Implements a multi-stage pipeline including:
+                        <ul>
+                            <li>Initial detection with confidence scoring and threshold evaluation</li>
+                            <li>Context enrichment with network and protocol-specific information</li>
+                            <li>Correlation analysis to identify related events</li>
+                            <li>Priority assignment based on multiple factors</li>
+                        </ul>
+                    </li>
+                    <li>State Management: Comprehensive alert lifecycle tracking including:
+                        <ul>
+                            <li>Multiple alert states (New, Acknowledged, Resolved, Dismissed)</li>
+                            <li>Assignment and ownership tracking</li>
+                            <li>Resolution workflow with false positive feedback</li>
+                            <li>Full audit trail of alert modifications</li>
+                        </ul>
+                    </li>
+                    <li>Notification System: Flexible notification routing with:
+                        <ul>
+                            <li>Priority-based channel selection</li>
+                            <li>Rate limiting and aggregation for high-volume alerts</li>
+                            <li>Customizable templates for different channels</li>
+                            <li>Delivery confirmation and retry mechanisms</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="project-section">
+                <h2>Web Dashboard</h2>
+                <p>The project includes a modern web interface built with React and TypeScript, featuring:</p>
+                <ul class="feature-list">
+                    <li>Real-time network statistics and anomaly detection visualization</li>
+                    <li>Interactive alert management interface with filtering and bulk operations</li>
+                    <li>Customizable dashboard layouts for different monitoring scenarios</li>
+                    <li>Advanced configuration interface for rules and detection parameters</li>
+                </ul>
+            </section>
+
+            <section class="project-section">
+                <h2>Development Status</h2>
+                <p>Current development focus areas include:</p>
+                <ul class="status-list">
+                    <li>Implementing machine learning models for more sophisticated anomaly detection</li>
+                    <li>Enhancing the alert correlation engine with graph-based analysis</li>
+                    <li>Adding support for threat intelligence integration and automated response actions</li>
+                    <li>Expanding the web dashboard with additional visualization options</li>
+                    <li>Improving documentation and adding comprehensive testing</li>
+                </ul>
+            </section>
+
+            <a href="https://github.com/objones25/go-network-security-agent" class="github-link" target="_blank">View on GitHub →</a>
+        </main>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
+    </div>
+</body>
+</html>
