@@ -165,14 +165,21 @@ if err != nil {
             </section>
 
             <section class="project-section">
-                <h2>Performance Characteristics</h2>
-                <p>The library demonstrates impressive performance metrics across different operation modes:</p>
-                <ul class="feature-list">
-                    <li>Single embedding operations complete in ~1.85μs with minimal memory allocation (1.5 KB per operation)</li>
-                    <li>Batch processing of 32 inputs achieves ~88ms latency with optimized memory usage</li>
-                    <li>CoreML acceleration provides consistent performance improvements on Apple Silicon</li>
-                    <li>Cached operations show consistent sub-2μs latency with minimal resource usage</li>
-                </ul>
+                <h2>Technical Capabilities</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-label">Vector Operations</span>
+                        <span class="metric-description">SIMD-optimized vector similarity computations with multiple distance metrics</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Index Management</span>
+                        <span class="metric-description">Efficient vector storage with dynamic index updates and persistence</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Search Capabilities</span>
+                        <span class="metric-description">Configurable KNN search with filtering and metadata support</span>
+                    </div>
+                </div>
             </section>
 
             <section class="project-section">

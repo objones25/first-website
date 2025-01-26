@@ -19,61 +19,202 @@
         </header>
 
         <main>
-            <h1>Projects</h1>
+            <section class="projects-hero">
+                <h1>Projects</h1>
+                <p class="lead">A collection of my technical work focusing on high-performance systems, machine learning, and security.</p>
+            </section>
 
-            <div class="project-grid">
-                <div class="project-card">
-                    <h3>Network Security Agent</h3>
-                    <p>A high-performance network security monitoring and anomaly detection system featuring real-time analysis, machine learning-based detection, and comprehensive alert management.</p>
-                    <a href="network-security-agent.html" class="project-link">View Project →</a>
+            <section class="featured-project">
+                <div class="project-card featured">
+                    <div class="project-content">
+                        <div class="project-header">
+                            <h2>Network Security Agent</h2>
+                            <span class="status-badge active">Active Development</span>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tech-tag">Go</span>
+                            <span class="tech-tag">Machine Learning</span>
+                            <span class="tech-tag">Network Security</span>
+                            <span class="tech-tag">Real-time Processing</span>
+                        </div>
+                        <p class="project-description">A sophisticated network security monitoring system featuring real-time traffic analysis, ML-based anomaly detection, and comprehensive alert management.</p>
+                        <div class="key-features">
+                            <h3>Key Features</h3>
+                            <ul>
+                                <li>Dynamic batch processing with automatic optimization</li>
+                                <li>Advanced worker pool with performance tracking</li>
+                                <li>Zero-copy packet processing</li>
+                                <li>Multi-dimensional anomaly detection</li>
+                                <li>Sophisticated alert correlation engine</li>
+                            </ul>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Demo & Documentation</h3>
+                            <p>A live demo with sample network traffic and anomaly detection will be available soon. The system is currently being tested with:</p>
+                            <ul>
+                                <li>Real-time traffic visualization dashboard</li>
+                                <li>Interactive anomaly detection demos</li>
+                                <li>Performance monitoring interface</li>
+                            </ul>
+                            <div class="demo-status">
+                                <span class="status-indicator">🚧</span>
+                                <span>Demo deployment in progress - Expected February 2024</span>
+                            </div>
+                        </div>
+                        <div class="project-links">
+                            <a href="network-security-agent.html" class="project-link">View Details →</a>
+                            <a href="https://github.com/objones25/go-network-security-agent" class="github-link" target="_blank">GitHub Repository →</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="project-card">
-                    <h3>Go Embeddings Library</h3>
-                    <p>A high-performance embedding service written in Go, featuring MacOS Metal acceleration and production-ready features for transformer-based text embeddings.</p>
-                    <a href="go-embeddings-project.html" class="project-link">View Project →</a>
+            </section>
+
+            <section class="project-categories">
+                <div class="category-section">
+                    <h2>Systems & Performance</h2>
+                    <div class="project-grid">
+                        <div class="project-card">
+                            <div class="project-content">
+                                <h3>Go Embeddings Library</h3>
+                                <div class="project-header">
+                                    <span class="status-badge stable">Stable Release</span>
+                                </div>
+                                <div class="project-tags">
+                                    <span class="tech-tag">Go</span>
+                                    <span class="tech-tag">ML</span>
+                                    <span class="tech-tag">CoreML</span>
+                                </div>
+                                <p>High-performance embedding service with MacOS Metal acceleration, achieving sub-2μs latency and optimized batch processing.</p>
+                                <div class="metrics">
+                                    <div class="metric">
+                                        <span class="metric-value">1.85μs</span>
+                                        <span class="metric-label">Latency</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="metric-value">95%</span>
+                                        <span class="metric-label">Cache Hit Rate</span>
+                                    </div>
+                                </div>
+                                <a href="go-embeddings-project.html" class="project-link">View Details →</a>
+                            </div>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-content">
+                                <h3>RSS Feed Aggregator</h3>
+                                <div class="project-header">
+                                    <span class="status-badge complete">Complete</span>
+                                </div>
+                                <div class="project-tags">
+                                    <span class="tech-tag">Go</span>
+                                    <span class="tech-tag">PostgreSQL</span>
+                                    <span class="tech-tag">REST</span>
+                                </div>
+                                <p>Production-ready content aggregation service with automated scraping, authentication, and comprehensive test coverage.</p>
+                                <div class="metrics">
+                                    <div class="metric">
+                                        <span class="metric-value">90%</span>
+                                        <span class="metric-label">Test Coverage</span>
+                                    </div>
+                                </div>
+                                <a href="rss-aggregator-project.html" class="project-link">View Details →</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="project-card">
-                    <h3>RSS Feed Aggregator</h3>
-                    <p>A Go tutorial project from freeCodeCamp featuring REST APIs, database operations, and concurrent programming. Built following Lane Wagner's comprehensive Go course.</p>
-                    <a href="rss-aggregator-project.html" class="project-link">View Project →</a>
-                </div>
-                
-                <div class="project-card">
-                    <h3>IMDB Review Classification</h3>
-                    <p>A machine learning project implementing BERT and traditional ML approaches to classify movie review sentiments with 87% accuracy.</p>
-                    <a href="imdb-review-project.html" class="project-link">View Project →</a>
+                <div class="category-section">
+                    <h2>Machine Learning & AI</h2>
+                    <div class="project-grid">
+                        <div class="project-card">
+                            <div class="project-content">
+                                <h3>IMDB Review Classification</h3>
+                                <div class="project-header">
+                                    <span class="status-badge complete">Complete</span>
+                                </div>
+                                <div class="project-tags">
+                                    <span class="tech-tag">BERT</span>
+                                    <span class="tech-tag">PyTorch</span>
+                                    <span class="tech-tag">NLP</span>
+                                </div>
+                                <p>Sentiment analysis system using BERT, achieving 87% accuracy on 50,000 movie reviews with comprehensive evaluation metrics.</p>
+                                <div class="metrics">
+                                    <div class="metric">
+                                        <span class="metric-value">87%</span>
+                                        <span class="metric-label">Accuracy</span>
+                                    </div>
+                                </div>
+                                <a href="imdb-review-project.html" class="project-link">View Details →</a>
+                            </div>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-content">
+                                <h3>Malware Classification</h3>
+                                <div class="project-header">
+                                    <span class="status-badge complete">Complete</span>
+                                </div>
+                                <div class="project-tags">
+                                    <span class="tech-tag">CNN</span>
+                                    <span class="tech-tag">TensorFlow</span>
+                                    <span class="tech-tag">Security</span>
+                                </div>
+                                <p>Deep learning system for classifying malware into 31 families using computer vision techniques, achieving 93.97% accuracy.</p>
+                                <div class="metrics">
+                                    <div class="metric">
+                                        <span class="metric-value">93.97%</span>
+                                        <span class="metric-label">Accuracy</span>
+                                    </div>
+                                </div>
+                                <a href="malware-classification.html" class="project-link">View Details →</a>
+                            </div>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-content">
+                                <h3>Neural Network Library</h3>
+                                <div class="project-header">
+                                    <span class="status-badge planned">Planned</span>
+                                </div>
+                                <div class="project-tags">
+                                    <span class="tech-tag">C++</span>
+                                    <span class="tech-tag">Python</span>
+                                    <span class="tech-tag">ML</span>
+                                </div>
+                                <p>Flexible neural network implementation with Python bindings, focusing on performance optimization and numerical stability.</p>
+                                <a href="neural-network-project.html" class="project-link">View Details →</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="project-card">
-                    <h3>Snake Game with AI</h3>
-                    <p>A modern implementation of the classic Snake game featuring multiple AI algorithms that can play autonomously.</p>
-                    <a href="snake-game-project.html" class="project-link">View Project →</a>
+                <div class="category-section">
+                    <h2>Security & Cryptography</h2>
+                    <div class="project-grid">
+                        <div class="project-card">
+                            <div class="project-content">
+                                <h3>Cryptographic Library</h3>
+                                <div class="project-header">
+                                    <span class="status-badge planned">Planned</span>
+                                </div>
+                                <div class="project-tags">
+                                    <span class="tech-tag">C++</span>
+                                    <span class="tech-tag">AES</span>
+                                    <span class="tech-tag">Hardware Acceleration</span>
+                                </div>
+                                <p>Comprehensive cryptographic library implementing modern encryption standards with hardware acceleration and extensive testing.</p>
+                                <a href="crypto-library-project.html" class="project-link">View Details →</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="project-card">
-                    <h3>Malware Classification</h3>
-                    <p>A deep learning-based system for classifying malware into 31 different families, achieving 93.97% accuracy using convolutional neural networks.</p>
-                    <a href="malware-classification.html" class="project-link">View Project →</a>
-                </div>
-
-                <div class="project-card">
-                    <h3>Cryptographic Library</h3>
-                    <p>A comprehensive C++ cryptographic library implementing modern encryption standards including AES with hardware acceleration.</p>
-                    <a href="crypto-library-project.html" class="project-link">View Project →</a>
-                </div>
-
-                <div class="project-card">
-                    <h3>Neural Network Library</h3>
-                    <p>A flexible neural network library implemented in C++ with Python bindings, focused on performance and usability.</p>
-                    <a href="neural-network-project.html" class="project-link">View Project →</a>
-                </div>
-            </div>
+            </section>
         </main>
 
         <footer>
             © 2024 Owen Jones. All rights reserved.
         </footer>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
