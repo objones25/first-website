@@ -810,9 +810,9 @@ footer {
 .metrics {
     display: flex;
     justify-content: space-around;
-    gap: 2rem;
+    gap: 1.5rem;
     margin: 1.5rem 0;
-    padding: 2rem;
+    padding: 1.5rem;
     background: var(--bg-color);
     border-radius: 24px;
     border: 1px solid var(--border-color);
@@ -823,36 +823,44 @@ footer {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 0.5rem;
+    padding: 0.25rem;
+    min-width: 0;
+    flex: 1;
 }
 
 .metric-value {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 600;
     color: #4169E1;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .metric-label {
-    font-size: 1rem;
+    font-size: 0.875rem;
     color: var(--text-color);
     opacity: 0.7;
-    white-space: nowrap;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
 }
 
 .metric-label.multiline {
     text-align: center;
     line-height: 1.2;
+    max-width: 100%;
 }
 
-@media (max-width: 768px) {
-    .project-card.featured {
+@media (min-width: 768px) {
+    .project-card.featured .metrics {
         padding: 2rem;
     }
-
-    .metrics {
-        flex-wrap: wrap;
-        gap: 1rem;
+    
+    .project-card.featured .metric-value {
+        font-size: 2.5rem;
+    }
+    
+    .project-card.featured .metric-label {
+        font-size: 1rem;
     }
 }
 
