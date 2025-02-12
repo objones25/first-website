@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Sudoku Solver - Owen Jones</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">Owen Jones</a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="projects.html">Projects</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+            <article class="project-article">
+                <div class="project-header-large">
+                    <div class="header-content">
+                        <h1>Rust Sudoku Solver</h1>
+                        <div class="project-meta">
+                            <span class="status-badge complete">Complete</span>
+                            <div class="tech-stack">
+                                <span class="tech-tag">Rust</span>
+                                <span class="tech-tag">SIMD</span>
+                                <span class="tech-tag">Multi-threading</span>
+                                <span class="tech-tag">API Integration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="project-section">
+                    <h2>Project Overview</h2>
+                    <p>A high-performance, multi-threaded Sudoku solver implementation in Rust that combines advanced optimization techniques with modern API integration. The project showcases Rust's capabilities in systems programming while delivering exceptional performance for puzzle solving.</p>
+                </section>
+
+                <section class="project-section">
+                    <h2>Project Background</h2>
+                    <p>This project emerged from a combination of personal interests and technical exploration. As an avid Sudoku enthusiast, I was inspired by the YouTube channel "Coding with John" and his excellent tutorial on building a Java-based Sudoku solver. The project builds upon my previous experience with a Go-based Sudoku solver, incorporating lessons learned while leveraging Rust's unique capabilities for systems programming and performance optimization.</p>
+                    
+                    <div class="architecture-component">
+                        <h3>Inspiration Sources</h3>
+                        <ul class="feature-list">
+                            <li>Coding with John's Java Sudoku solver tutorial and implementation approach</li>
+                            <li>Previous experience developing a Sudoku solver in Go</li>
+                            <li>Long-time Sudoku enthusiast</li>
+                            <li>Desire to explore Rust's capabilities for high-performance computing</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Key Improvements</h3>
+                        <ul class="feature-list">
+                            <li>Enhanced performance through SIMD acceleration</li>
+                            <li>More sophisticated multi-threading implementation</li>
+                            <li>Addition of API integration for puzzle generation</li>
+                            <li>Advanced caching mechanisms</li>
+                            <li>Comprehensive benchmarking system</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Performance Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <span class="metric-value">19.82ms</span>
+                            <span class="metric-label">Average Solve Time</span>
+                            <span class="metric-description">Across all difficulty levels</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value">100%</span>
+                            <span class="metric-label">Success Rate</span>
+                            <span class="metric-description">Perfect solve rate across 100 puzzles</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value">4x</span>
+                            <span class="metric-label">SIMD Speedup</span>
+                            <span class="metric-description">Solution validation acceleration</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Core Features</h2>
+                    <div class="architecture-component">
+                        <h3>Solver Engine</h3>
+                        <ul class="feature-list">
+                            <li>Multi-threaded solving with Rayon</li>
+                            <li>SIMD-accelerated solution validation</li>
+                            <li>Bitset-based candidate tracking (u16 per cell)</li>
+                            <li>Cell selection optimization</li>
+                            <li>Multiple solution detection</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>API Integration</h3>
+                        <ul class="feature-list">
+                            <li>External puzzle fetching with caching</li>
+                            <li>Rate limiting with exponential backoff</li>
+                            <li>LRU board caching (50 boards)</li>
+                            <li>Batch fetching support</li>
+                            <li>Prefetching capabilities</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Performance Optimization</h3>
+                        <ul class="feature-list">
+                            <li>Zero-copy board state management</li>
+                            <li>Thread-local storage for parallel solving</li>
+                            <li>Lock-free state management</li>
+                            <li>SIMD-aligned board representation</li>
+                            <li>Adaptive parallelization</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Benchmark Results</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <span class="metric-value">127.83µs</span>
+                            <span class="metric-label">Minimum Solve Time</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value">680.26ms</span>
+                            <span class="metric-label">Maximum Solve Time</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value">42.29s</span>
+                            <span class="metric-label">Total Benchmark Duration</span>
+                            <span class="metric-description">100 puzzles</span>
+                        </div>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Difficulty Distribution</h3>
+                        <ul class="feature-list">
+                            <li>Easy: 8% of puzzles</li>
+                            <li>Medium: 70% of puzzles</li>
+                            <li>Hard: 22% of puzzles</li>
+                            <li>Unique Solutions: 46%</li>
+                            <li>Multiple Solutions: 54%</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Future Development</h2>
+                    <div class="development-status">
+                        <h3>Planned Features</h3>
+                        <ul class="feature-list">
+                            <li>Advanced solving techniques (Hidden Singles, Naked Pairs)</li>
+                            <li>GPU acceleration for batch solving</li>
+                            <li>Puzzle generation capabilities</li>
+                            <li>Real-time solving visualization</li>
+                            <li>Difficulty rating system</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="project-links">
+                    <a href="https://github.com/objones25/sudoku_rust" class="github-link" target="_blank">View on GitHub →</a>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
