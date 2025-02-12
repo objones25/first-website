@@ -167,6 +167,100 @@
                     </div>
                 </section>
 
+                <section class="project-section">
+                    <h2>Technical Implementation</h2>
+                    
+                    <div class="code-examples">
+                        <div class="code-snippet">
+                            <h3>SIMD-Optimized Board Validation</h3>
+                            <pre><code>pub struct SimdValidator;
+
+impl SimdValidator {
+    /// Validates a solution using SIMD operations where available
+    pub fn validate_solution(board: &Board) -> bool {
+        if has_simd_support() {
+            #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+            unsafe {
+                let simd_board = SimdBoard::from_board(board);
+                // Validate rows in chunks of 2 for better throughput
+                for chunk in (0..9).step_by(2) {
+                    if !simd_board.validate_multiple_rows(chunk, 
+                        chunk + 2.min(9 - chunk)) {
+                        return false;
+                    }
+                }
+                true
+            }
+        } else {
+            Self::validate_solution_fallback(board)
+        }
+    }
+}</code></pre>
+                        </div>
+
+                        <div class="code-snippet">
+                            <h3>Parallel Solving Strategy</h3>
+                            <pre><code>pub fn solve(&mut self) -> Result<Vec<Vec<i32>>> {
+    let empty_cells = self.find_empty_cells();
+    if empty_cells.is_empty() {
+        if !SimdValidator::validate_solution(&self.board) {
+            return Err(SudokuError::InvalidBoard);
+        }
+        return Ok(self.board.to_vec());
+    }
+
+    // Try each empty cell until we find a solution
+    for (idx, &(row, col)) in empty_cells.iter().enumerate() {
+        let candidates = self.candidates[row * 9 + col];
+        if candidates.is_empty() {
+            continue;
+        }
+
+        // Parallel processing of candidates
+        let solution_found = Arc::new(AtomicBool::new(false));
+        candidates.iter_candidates()
+            .collect::<Vec<_>>()
+            .into_par_iter()
+            .find_any(|&num| {
+                if self.try_solve_with_value(row, col, num, /*...*/) {
+                    solution_found.store(true, Ordering::Relaxed);
+                    return true;
+                }
+                false
+            });
+    }
+    // ...
+}</code></pre>
+                        </div>
+
+                        <div class="code-snippet">
+                            <h3>Efficient Candidate Management</h3>
+                            <pre><code>/// A bitset representation of candidate numbers
+#[derive(Debug, Clone, Copy, Default)]
+pub struct CandidateSet(pub(crate) u16);
+
+impl CandidateSet {
+    #[inline]
+    pub fn all() -> Self {
+        Self(0x1FF) // Binary: 0b111111111 (9 ones)
+    }
+
+    #[inline]
+    pub fn add_candidate(&mut self, n: u8) {
+        debug_assert!(n >= 1 && n <= 9, "Invalid candidate number");
+        self.0 |= 1 << (n - 1);
+    }
+
+    #[inline]
+    pub fn remove_candidate(&mut self, n: u8) {
+        debug_assert!(n >= 1 && n <= 9, "Invalid candidate number");
+        self.0 &= !(1 << (n - 1));
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
                 <div class="project-links">
                     <a href="https://github.com/objones25/sudoku_rust" class="github-link" target="_blank">View on GitHub →</a>
                 </div>
