@@ -51,73 +51,71 @@
                             <ul>
                                 <li>Created Vec<T> with RawVec delegation</li>
                                 <li>Implemented new() and with_capacity()</li>
-                                <li>Added proper growth strategy</li>
+                                <li>Added proper growth strategy with checked arithmetic</li>
+                                <li>Implemented memory allocation with proper error handling</li>
                             </ul>
                         </li>
                         <li>✅ Drop Implementation
                             <ul>
                                 <li>Proper deallocation handling</li>
+                                <li>Zero-sized type handling</li>
                                 <li>Null pointer case handling</li>
                             </ul>
                         </li>
-                        <li>✅ Push and Pop Operations
+                        <li>✅ Memory Operations
                             <ul>
-                                <li>Reallocation-aware push()</li>
-                                <li>Bounds-checked pop()</li>
-                                <li>Element shifting operations</li>
+                                <li>Implemented read_at and write_at with bounds checking</li>
+                                <li>Added get_ref and get_mut for safe access</li>
+                                <li>Implemented shift_right and shift_left for element movement</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="phase completed">
+                    <h3>Phase 2: Iterator Implementation ✅</h3>
+                    <ul>
+                        <li>✅ Core Iterators
+                            <ul>
+                                <li>IntoIter for owned iteration</li>
+                                <li>Iter for shared references</li>
+                                <li>IterMut for mutable references</li>
+                                <li>Drain for removing elements</li>
+                            </ul>
+                        </li>
+                        <li>✅ Iterator Features
+                            <ul>
+                                <li>DoubleEndedIterator for all iterator types</li>
+                                <li>Proper size_hint implementations</li>
+                                <li>Safe memory management in Drain</li>
+                            </ul>
+                        </li>
+                        <li>✅ Testing Suite
+                            <ul>
+                                <li>Comprehensive unit tests for all operations</li>
+                                <li>Iterator-specific test cases</li>
+                                <li>Double-ended iteration tests</li>
+                                <li>Memory safety tests</li>
                             </ul>
                         </li>
                     </ul>
                 </div>
 
                 <div class="phase in-progress">
-                    <h3>Phase 2: Safety and Correctness (Current Focus)</h3>
+                    <h3>Phase 3: Performance Optimization (Current Focus)</h3>
                     <ul>
-                        <li>✅ Bounds Checking
+                        <li>🚧 Growth Strategy Enhancement
                             <ul>
-                                <li>Index and IndexMut traits</li>
-                                <li>Deref and DerefMut traits</li>
+                                <li>Small vector optimization (planned)</li>
+                                <li>Type-size aware growth</li>
+                                <li>Zero-sized type optimization</li>
                             </ul>
                         </li>
-                        <li>✅ Iterator Implementation
+                        <li>⏳ SIMD Implementation
                             <ul>
-                                <li>IntoIterator implementation</li>
-                                <li>DoubleEndedIterator support</li>
-                                <li>Iter, IterMut, and Drain</li>
-                            </ul>
-                        </li>
-                        <li>🚧 Testing Suite (In Progress)
-                            <ul>
-                                <li>Unit test implementation</li>
-                                <li>Edge case coverage</li>
-                                <li>Memory management verification</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="phase planned">
-                    <h3>Phase 3: Advanced Features (Upcoming)</h3>
-                    <ul>
-                        <li>✅ Additional Traits
-                            <ul>
-                                <li>FromIterator implementation</li>
-                                <li>Extend trait support</li>
-                                <li>Clone and Debug implementations</li>
-                            </ul>
-                        </li>
-                        <li>⏳ Growth Strategy Optimization
-                            <ul>
-                                <li>Checked arithmetic for capacity</li>
-                                <li>Zero-sized type handling</li>
-                                <li>Reallocation strategy refinement</li>
-                            </ul>
-                        </li>
-                        <li>⏳ SIMD Optimization
-                            <ul>
-                                <li>SIMD-accelerated operations</li>
-                                <li>Type-specific optimizations</li>
-                                <li>Platform-specific intrinsics</li>
+                                <li>SIMD-accelerated copy operations</li>
+                                <li>Platform-specific optimizations</li>
+                                <li>Type-specific SIMD operations</li>
                             </ul>
                         </li>
                     </ul>
@@ -129,36 +127,70 @@
                 
                 <div class="code-section">
                     <h3>Core Structure</h3>
-                    <pre><code class="language-rust">pub struct Vec<T> {
-    buf: RawVec<T>,
-    len: usize,
+                    <pre><code class="language-rust">pub struct RawVec<T> {
+    ptr: *mut T,      // Raw pointer to heap memory
+    cap: usize,       // Total allocated capacity
 }
 
-struct RawVec<T> {
-    ptr: NonNull<T>,
-    cap: usize,
-    _phantom: PhantomData<T>,
+impl<T> RawVec<T> {
+    pub fn new() -> Self {
+        RawVec {
+            ptr: ptr::null_mut(),
+            cap: 0,
+        }
+    }
+
+    pub fn with_capacity(capacity: usize) -> Self {
+        // Handle zero-sized types
+        if std::mem::size_of::<T>() == 0 {
+            return RawVec {
+                ptr: std::ptr::NonNull::dangling().as_ptr(),
+                cap: usize::MAX,
+            };
+        }
+        // ... allocation logic ...
+    }
 }</code></pre>
                 </div>
 
                 <div class="implementation-notes">
                     <h3>Key Implementation Details</h3>
                     <ul>
-                        <li>Custom memory allocator with optimized growth strategy</li>
-                        <li>Zero-cost abstractions for performance</li>
-                        <li>SIMD optimization for bulk operations</li>
-                        <li>Comprehensive safety guarantees</li>
+                        <li>Safe memory management with proper null pointer handling</li>
+                        <li>Zero-sized type optimization</li>
+                        <li>Checked arithmetic for capacity calculations</li>
+                        <li>Comprehensive iterator support with double-ended iteration</li>
+                        <li>Efficient element movement with shift operations</li>
                     </ul>
                 </div>
 
                 <div class="performance-section">
-                    <h3>Performance Considerations</h3>
-                    <ul>
-                        <li>Cache-friendly memory layout</li>
-                        <li>Optimized reallocation strategy</li>
-                        <li>SIMD acceleration for supported operations</li>
-                        <li>Platform-specific optimizations</li>
-                    </ul>
+                    <h3>Iterator Implementation</h3>
+                    <pre><code class="language-rust">pub struct IntoIter<T> {
+    buf: RawVec<T>,
+    start: usize,
+    end: usize,
+}
+
+pub struct Iter<'a, T> {
+    buf: &'a RawVec<T>,
+    start: usize,
+    end: usize,
+}
+
+pub struct IterMut<'a, T> {
+    buf: &'a mut RawVec<T>,
+    start: usize,
+    end: usize,
+}
+
+pub struct Drain<'a, T> {
+    buf: &'a mut RawVec<T>,
+    start: usize,
+    end: usize,
+    len: usize,
+    original_start: usize,
+}</code></pre>
                 </div>
             </section>
 
