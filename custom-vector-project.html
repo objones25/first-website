@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Vector Implementation - Owen Jones</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">Owen Jones</a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="projects.html">Projects</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
+
+        <main class="project-detail">
+            <section class="project-header">
+                <h1>Custom Vector Implementation</h1>
+                <div class="project-meta">
+                    <span class="status-badge active">In Progress</span>
+                    <div class="project-tags">
+                        <span class="tech-tag">Rust</span>
+                        <span class="tech-tag">Memory Management</span>
+                        <span class="tech-tag">Data Structures</span>
+                        <span class="tech-tag">SIMD</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="project-overview">
+                <h2>Project Overview</h2>
+                <p>A production-grade implementation of a custom vector type in Rust, focusing on understanding memory management, safety guarantees, and performance optimization. This project serves as a deep dive into systems programming concepts and Rust's memory model.</p>
+                
+                <div class="project-links">
+                    <a href="https://github.com/objones25/custom_vector_objones25" class="github-link" target="_blank">GitHub Repository</a>
+                </div>
+            </section>
+
+            <section class="implementation-status">
+                <h2>Implementation Status</h2>
+                
+                <div class="phase completed">
+                    <h3>Phase 1: Basic Structure and Memory Management ✅</h3>
+                    <ul>
+                        <li>✅ Basic Structure Implementation
+                            <ul>
+                                <li>Created Vec<T> with RawVec delegation</li>
+                                <li>Implemented new() and with_capacity()</li>
+                                <li>Added proper growth strategy</li>
+                            </ul>
+                        </li>
+                        <li>✅ Drop Implementation
+                            <ul>
+                                <li>Proper deallocation handling</li>
+                                <li>Null pointer case handling</li>
+                            </ul>
+                        </li>
+                        <li>✅ Push and Pop Operations
+                            <ul>
+                                <li>Reallocation-aware push()</li>
+                                <li>Bounds-checked pop()</li>
+                                <li>Element shifting operations</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="phase in-progress">
+                    <h3>Phase 2: Safety and Correctness (Current Focus)</h3>
+                    <ul>
+                        <li>✅ Bounds Checking
+                            <ul>
+                                <li>Index and IndexMut traits</li>
+                                <li>Deref and DerefMut traits</li>
+                            </ul>
+                        </li>
+                        <li>✅ Iterator Implementation
+                            <ul>
+                                <li>IntoIterator implementation</li>
+                                <li>DoubleEndedIterator support</li>
+                                <li>Iter, IterMut, and Drain</li>
+                            </ul>
+                        </li>
+                        <li>🚧 Testing Suite (In Progress)
+                            <ul>
+                                <li>Unit test implementation</li>
+                                <li>Edge case coverage</li>
+                                <li>Memory management verification</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="phase planned">
+                    <h3>Phase 3: Advanced Features (Upcoming)</h3>
+                    <ul>
+                        <li>✅ Additional Traits
+                            <ul>
+                                <li>FromIterator implementation</li>
+                                <li>Extend trait support</li>
+                                <li>Clone and Debug implementations</li>
+                            </ul>
+                        </li>
+                        <li>⏳ Growth Strategy Optimization
+                            <ul>
+                                <li>Checked arithmetic for capacity</li>
+                                <li>Zero-sized type handling</li>
+                                <li>Reallocation strategy refinement</li>
+                            </ul>
+                        </li>
+                        <li>⏳ SIMD Optimization
+                            <ul>
+                                <li>SIMD-accelerated operations</li>
+                                <li>Type-specific optimizations</li>
+                                <li>Platform-specific intrinsics</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="technical-details">
+                <h2>Technical Implementation</h2>
+                
+                <div class="code-section">
+                    <h3>Core Structure</h3>
+                    <pre><code class="language-rust">pub struct Vec<T> {
+    buf: RawVec<T>,
+    len: usize,
+}
+
+struct RawVec<T> {
+    ptr: NonNull<T>,
+    cap: usize,
+    _phantom: PhantomData<T>,
+}</code></pre>
+                </div>
+
+                <div class="implementation-notes">
+                    <h3>Key Implementation Details</h3>
+                    <ul>
+                        <li>Custom memory allocator with optimized growth strategy</li>
+                        <li>Zero-cost abstractions for performance</li>
+                        <li>SIMD optimization for bulk operations</li>
+                        <li>Comprehensive safety guarantees</li>
+                    </ul>
+                </div>
+
+                <div class="performance-section">
+                    <h3>Performance Considerations</h3>
+                    <ul>
+                        <li>Cache-friendly memory layout</li>
+                        <li>Optimized reallocation strategy</li>
+                        <li>SIMD acceleration for supported operations</li>
+                        <li>Platform-specific optimizations</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="learning-resources">
+                <h2>Learning Resources</h2>
+                <div class="resource-links">
+                    <h3>Documentation</h3>
+                    <ul>
+                        <li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html">Rust Documentation - Vec</a></li>
+                        <li><a href="https://doc.rust-lang.org/nomicon/vec.html">Rustonomicon - Implementing Vec</a></li>
+                        <li><a href="https://doc.rust-lang.org/std/alloc/index.html">Rust Reference - Allocator API</a></li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-rust.min.js"></script>
+</body>
+</html> 
