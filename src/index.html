@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="./styles/styles.css">
     <link rel="preload" href="./styles/styles.css" as="style">
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <meta name="theme-color" content="#0a192f">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#0A1525">
 </head>
 <body>
     <div class="container">
@@ -23,21 +24,204 @@
         </header>
 
         <main>
-            <section class="hero">
-                <h1>Software Engineer & AI Architect</h1>
-                <p>Specializing in high-performance Go systems, machine learning infrastructure, and security-focused software architecture. Building production-grade solutions at the intersection of AI and systems engineering.</p>
+            <section class="hero-container">
+                <svg id="spiral-animation" class="background-spiral" width="2400" height="2400" viewBox="0 0 2400 2400">
+                    <!-- Spiral will be rendered here -->
+                </svg>
+                
+                <div class="hero">
+                    <div class="hero-content">
+                        <h1>Software Engineer & AI Architect</h1>
+                        <p class="hero-text">Specializing in high-performance Go systems, machine learning infrastructure, and security-focused software architecture. Building production-grade solutions at the intersection of AI and systems engineering.</p>
+                        <div class="cta-buttons">
+                            <a href="/projects" class="primary-button">View Projects</a>
+                            <a href="/contact" class="secondary-button">Get in Touch</a>
+                        </div>
+                    </div>
+                </div>
             </section>
 
-            <section class="latest-project">
-                <h2>Latest Work</h2>
-                
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3>Network Security Agent</h3>
-                        <span class="new-badge">New</span>
+            <section class="steps-container">
+                <div class="steps-wrapper">
+                    <div class="steps">
+                        <div class="step step--active">
+                            <div class="step-progress">
+                                <div class="progress-bar" style="height: 82%;"></div>
+                            </div>
+                            <div class="step-content">
+                                <div class="step-title">High Performance Systems</div>
+                                <div class="step-description">
+                                    <div class="step-description-inner">
+                                        Building optimized systems using SIMD, concurrent processing, and advanced algorithms for maximum efficiency.
+                                        <a href="/projects" class="step-cta">
+                                            <span class="cta-text">View Projects</span>
+                                            <svg width="12" height="10" viewBox="0 0 12 10" fill="currentColor">
+                                                <path d="M5.8965 1.208L8.9525 4.248H0.9205V5.432H8.9525L5.9125 8.488L6.6805 9.256L11.0805 4.84L6.6645 0.424L5.8965 1.208Z"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-progress">
+                                <div class="progress-bar" style="height: 62%;"></div>
+                            </div>
+                            <div class="step-content">
+                                <div class="step-title">Security Engineering</div>
+                                <div class="step-description">
+                                    <div class="step-description-inner">
+                                        Developing robust security monitoring systems with real-time analysis and ML-powered threat detection.
+                                        <a href="/projects" class="step-cta">
+                                            <span class="cta-text">Learn More</span>
+                                            <svg width="12" height="10" viewBox="0 0 12 10" fill="currentColor">
+                                                <path d="M5.8965 1.208L8.9525 4.248H0.9205V5.432H8.9525L5.9125 8.488L6.6805 9.256L11.0805 4.84L6.6645 0.424L5.8965 1.208Z"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-progress">
+                                <div class="progress-bar" style="height: 45%;"></div>
+                            </div>
+                            <div class="step-content">
+                                <div class="step-title">Systems Programming</div>
+                                <div class="step-description">
+                                    <div class="step-description-inner">
+                                        Implementing low-level system components with a focus on memory safety and performance optimization.
+                                        <a href="/projects" class="step-cta">
+                                            <span class="cta-text">View Details</span>
+                                            <svg width="12" height="10" viewBox="0 0 12 10" fill="currentColor">
+                                                <path d="M5.8965 1.208L8.9525 4.248H0.9205V5.432H8.9525L5.9125 8.488L6.6805 9.256L11.0805 4.84L6.6645 0.424L5.8965 1.208Z"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-progress">
+                                <div class="progress-bar" style="height: 25%;"></div>
+                            </div>
+                            <div class="step-content">
+                                <div class="step-title">AI Architecture</div>
+                                <div class="step-description">
+                                    <div class="step-description-inner">
+                                        Designing and implementing scalable machine learning infrastructure and production AI systems.
+                                        <a href="/projects" class="step-cta">
+                                            <span class="cta-text">Explore</span>
+                                            <svg width="12" height="10" viewBox="0 0 12 10" fill="currentColor">
+                                                <path d="M5.8965 1.208L8.9525 4.248H0.9205V5.432H8.9525L5.9125 8.488L6.6805 9.256L11.0805 4.84L6.6645 0.424L5.8965 1.208Z"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p>A sophisticated network security monitoring system built in Go, featuring real-time traffic analysis, ML-based anomaly detection, and comprehensive alert management. Currently implementing advanced correlation algorithms and threat intelligence integration.</p>
-                    <a href="/network-security-agent" class="project-link">View Project →</a>
+
+                    <div class="steps-graphic">
+                        <div class="graphic-container graphic-container--visible">
+                            <div class="graphic">
+                                <div class="graphic-background"></div>
+                                <div class="image-wrapper">
+                                    <div class="image-container">
+                                        <div class="image" style="background-image: url('/images/projects/high-performance.webp');"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="featured-projects">
+                <h2>Featured Projects</h2>
+                
+                <div class="project-grid">
+                    <div class="project-card featured">
+                        <div class="project-header">
+                            <h3>Custom Vector Implementation</h3>
+                            <span class="new-badge">In Progress</span>
+                        </div>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Rust</span>
+                            <span class="tech-tag">Memory Management</span>
+                            <span class="tech-tag">Systems Programming</span>
+                        </div>
+                        <p>A low-level implementation of Rust's vector type, focusing on memory management and safety guarantees. Currently implementing core functionality and iterator support.</p>
+                        <a href="/custom-vector-project" class="project-link">View Project →</a>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3>Network Security Agent</h3>
+                        </div>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Go</span>
+                            <span class="tech-tag">ML</span>
+                            <span class="tech-tag">Security</span>
+                        </div>
+                        <p>High-performance network security monitoring system with real-time traffic analysis and ML-based anomaly detection.</p>
+                        <a href="/network-security-agent" class="project-link">View Project →</a>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3>Rust Sudoku Solver</h3>
+                        </div>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Rust</span>
+                            <span class="tech-tag">SIMD</span>
+                            <span class="tech-tag">Algorithms</span>
+                        </div>
+                        <p>High-performance Sudoku solver utilizing SIMD optimization techniques and modern API integration for enhanced solving capabilities.</p>
+                        <div class="project-metrics">
+                            <div class="metric">
+                                <span class="metric-value">14.53ms</span>
+                                <span class="metric-label">Avg Solve Time</span>
+                            </div>
+                        </div>
+                        <a href="/sudoku-rust-project" class="project-link">View Project →</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="skills-section">
+                <h2>Technical Proficiencies</h2>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3>Languages</h3>
+                        <ul>
+                            <li>Go</li>
+                            <li>Rust</li>
+                            <li>Python</li>
+                            <li>C++</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Technologies</h3>
+                        <ul>
+                            <li>Machine Learning</li>
+                            <li>Network Security</li>
+                            <li>Distributed Systems</li>
+                            <li>API Design</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Tools & Frameworks</h3>
+                        <ul>
+                            <li>TensorFlow</li>
+                            <li>Docker</li>
+                            <li>Git</li>
+                            <li>CI/CD</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
         </main>
@@ -46,6 +230,13 @@
             © 2024 Owen Jones. All rights reserved.
         </footer>
     </div>
-    <script type="module" src="./js/script.js"></script>
+    <script type="module">
+        import SpiralAnimation from './js/spiral.js';
+        import './js/steps.js';
+        
+        window.addEventListener('load', () => {
+            new SpiralAnimation('spiral-animation');
+        });
+    </script>
 </body>
 </html>
