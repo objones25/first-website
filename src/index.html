@@ -3,18 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Owen Jones - Software Engineer & AI Architect specializing in high-performance Go systems, machine learning infrastructure, and security-focused software architecture.">
     <title>Owen Jones - Software Engineer & AI Architect</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="preload" href="./styles/styles.css" as="style">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <meta name="theme-color" content="#0a192f">
 </head>
 <body>
     <div class="container">
         <header>
-            <a href="index.html" class="logo">Owen Jones</a>
+            <a href="/" class="logo">Owen Jones</a>
             <nav>
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="projects.html">Projects</a>
-                <a href="contact.html">Contact</a>
+                <a href="/" aria-current="page">Home</a>
+                <a href="/about">About</a>
+                <a href="/projects">Projects</a>
+                <a href="/contact">Contact</a>
             </nav>
         </header>
 
@@ -33,7 +37,7 @@
                         <span class="new-badge">New</span>
                     </div>
                     <p>A sophisticated network security monitoring system built in Go, featuring real-time traffic analysis, ML-based anomaly detection, and comprehensive alert management. Currently implementing advanced correlation algorithms and threat intelligence integration.</p>
-                    <a href="network-security-agent.html" class="project-link">View Project →</a>
+                    <a href="/network-security-agent" class="project-link">View Project →</a>
                 </div>
             </section>
         </main>
@@ -42,6 +46,6 @@
             © 2024 Owen Jones. All rights reserved.
         </footer>
     </div>
-    <script src="script.js"></script>
+    <script type="module" src="./js/script.js"></script>
 </body>
 </html>

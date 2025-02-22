@@ -1,0 +1,55 @@
+{
+  "version": 2,
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/about", "dest": "/about.html" },
+    { "src": "/projects", "dest": "/projects.html" },
+    { "src": "/contact", "dest": "/contact.html" },
+    { "src": "/custom-vector-project", "dest": "/custom-vector-project.html" },
+    { "src": "/sudoku-rust-project", "dest": "/sudoku-rust-project.html" },
+    { "src": "/rss-aggregator-project", "dest": "/rss-aggregator-project.html" },
+    { "src": "/minigrep-project", "dest": "/minigrep-project.html" },
+    { "src": "/network-security-agent", "dest": "/network-security-agent.html" },
+    { "src": "/snake-game-project", "dest": "/snake-game-project.html" },
+    { "src": "/go-embeddings-project", "dest": "/go-embeddings-project.html" },
+    { "src": "/imdb-review-project", "dest": "/imdb-review-project.html" },
+    { "src": "/malware-classification", "dest": "/malware-classification.html" },
+    { "src": "/neural-network-project", "dest": "/neural-network-project.html" },
+    { "src": "/crypto-library-project", "dest": "/crypto-library-project.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+} 
