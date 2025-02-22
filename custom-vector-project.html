@@ -18,128 +18,94 @@
             </nav>
         </header>
 
-        <main class="project-detail">
-            <section class="project-header">
-                <h1>Custom Vector Implementation</h1>
-                <div class="project-meta">
-                    <span class="status-badge active">In Progress</span>
-                    <div class="project-tags">
-                        <span class="tech-tag">Rust</span>
-                        <span class="tech-tag">Memory Management</span>
-                        <span class="tech-tag">Data Structures</span>
-                        <span class="tech-tag">SIMD</span>
+        <main>
+            <article class="project-article">
+                <div class="project-header-large">
+                    <div class="header-content">
+                        <h1>Custom Vector Implementation</h1>
+                        <div class="project-meta">
+                            <span class="status-badge active">In Progress</span>
+                            <div class="tech-stack">
+                                <span class="tech-tag">Rust</span>
+                                <span class="tech-tag">Memory Management</span>
+                                <span class="tech-tag">Data Structures</span>
+                                <span class="tech-tag">Systems Programming</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
 
-            <section class="project-overview">
-                <h2>Project Overview</h2>
-                <p>A production-grade implementation of a custom vector type in Rust, focusing on understanding memory management, safety guarantees, and performance optimization. This project serves as a deep dive into systems programming concepts and Rust's memory model.</p>
-                
-                <div class="project-links">
-                    <a href="https://github.com/objones25/custom_vector_objones25" class="github-link" target="_blank">GitHub Repository</a>
-                </div>
-            </section>
+                <section class="project-section">
+                    <h2>Project Overview</h2>
+                    <p>A low-level implementation of Rust's vector type, focusing on memory management, safety guarantees, and performance optimization. This project serves as a deep dive into systems programming concepts, demonstrating advanced memory management techniques and iterator implementations in Rust.</p>
+                </section>
 
-            <section class="implementation-status">
-                <h2>Implementation Status</h2>
-                
-                <div class="phase completed">
-                    <h3>Phase 1: Basic Structure and Memory Management ✅</h3>
-                    <ul>
-                        <li>✅ Basic Structure Implementation
-                            <ul>
-                                <li>Created Vec<T> with RawVec delegation</li>
-                                <li>Implemented new() and with_capacity()</li>
-                                <li>Added proper growth strategy with checked arithmetic</li>
-                                <li>Implemented memory allocation with proper error handling</li>
-                            </ul>
-                        </li>
-                        <li>✅ Drop Implementation
-                            <ul>
-                                <li>Proper deallocation handling</li>
+                <section class="project-section">
+                    <h2>Project Background</h2>
+                    <p>This project was initiated to gain a deeper understanding of Rust's memory management model and systems programming concepts. By implementing a fundamental data structure from scratch, it provides hands-on experience with unsafe Rust, memory allocation, and performance optimization techniques.</p>
+                    
+                    <div class="architecture-component">
+                        <h3>Learning Objectives</h3>
+                        <ul class="feature-list">
+                            <li>Deep understanding of Rust's memory management</li>
+                            <li>Experience with unsafe Rust and raw pointers</li>
+                            <li>Implementation of growth strategies and performance optimization</li>
+                            <li>Practice with generic programming and trait implementations</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Key Features</h3>
+                        <ul class="feature-list">
+                            <li>Custom memory allocator with growth optimization</li>
+                            <li>Comprehensive iterator implementations</li>
+                            <li>Zero-sized type optimization</li>
+                            <li>Safe memory management with proper null pointer handling</li>
+                            <li>Efficient element movement operations</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Implementation Status</h2>
+                    <div class="status-summary">
+                        <p>The project has completed its core functionality and iterator implementations, currently focusing on performance optimizations. Current progress includes:</p>
+                        
+                        <div class="architecture-component">
+                            <h3>Completed Features ✅</h3>
+                            <ul class="feature-list">
+                                <li>Core memory management functionality</li>
+                                <li>Safe pointer handling and allocation</li>
+                                <li>Comprehensive iterator support</li>
+                                <li>Memory safety test suite</li>
                                 <li>Zero-sized type handling</li>
-                                <li>Null pointer case handling</li>
                             </ul>
-                        </li>
-                        <li>✅ Memory Operations
-                            <ul>
-                                <li>Implemented read_at and write_at with bounds checking</li>
-                                <li>Added get_ref and get_mut for safe access</li>
-                                <li>Implemented shift_right and shift_left for element movement</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+                        </div>
 
-                <div class="phase completed">
-                    <h3>Phase 2: Iterator Implementation ✅</h3>
-                    <ul>
-                        <li>✅ Core Iterators
-                            <ul>
-                                <li>IntoIter for owned iteration</li>
-                                <li>Iter for shared references</li>
-                                <li>IterMut for mutable references</li>
-                                <li>Drain for removing elements</li>
+                        <div class="architecture-component">
+                            <h3>In Progress 🚧</h3>
+                            <ul class="feature-list">
+                                <li>Small vector optimization</li>
+                                <li>Growth strategy refinement</li>
+                                <li>SIMD acceleration for bulk operations</li>
+                                <li>Performance benchmarking suite</li>
                             </ul>
-                        </li>
-                        <li>✅ Iterator Features
-                            <ul>
-                                <li>DoubleEndedIterator for all iterator types</li>
-                                <li>Proper size_hint implementations</li>
-                                <li>Safe memory management in Drain</li>
-                            </ul>
-                        </li>
-                        <li>✅ Testing Suite
-                            <ul>
-                                <li>Comprehensive unit tests for all operations</li>
-                                <li>Iterator-specific test cases</li>
-                                <li>Double-ended iteration tests</li>
-                                <li>Memory safety tests</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+                        </div>
+                    </div>
+                </section>
 
-                <div class="phase in-progress">
-                    <h3>Phase 3: Performance Optimization (Current Focus)</h3>
-                    <ul>
-                        <li>🚧 Growth Strategy Enhancement
-                            <ul>
-                                <li>Small vector optimization (planned)</li>
-                                <li>Type-size aware growth</li>
-                                <li>Zero-sized type optimization</li>
-                            </ul>
-                        </li>
-                        <li>⏳ SIMD Implementation
-                            <ul>
-                                <li>SIMD-accelerated copy operations</li>
-                                <li>Platform-specific optimizations</li>
-                                <li>Type-specific SIMD operations</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-
-            <section class="technical-details">
-                <h2>Technical Implementation</h2>
-                
-                <div class="code-section">
-                    <h3>Core Structure</h3>
-                    <pre><code class="language-rust">pub struct RawVec<T> {
+                <section class="project-section">
+                    <h2>Technical Implementation</h2>
+                    
+                    <div class="code-examples">
+                        <div class="code-snippet">
+                            <h3>Core Memory Management</h3>
+                            <pre><code class="language-rust">pub struct RawVec<T> {
     ptr: *mut T,      // Raw pointer to heap memory
     cap: usize,       // Total allocated capacity
 }
 
 impl<T> RawVec<T> {
-    pub fn new() -> Self {
-        RawVec {
-            ptr: ptr::null_mut(),
-            cap: 0,
-        }
-    }
-
     pub fn with_capacity(capacity: usize) -> Self {
         // Handle zero-sized types
         if std::mem::size_of::<T>() == 0 {
@@ -148,63 +114,107 @@ impl<T> RawVec<T> {
                 cap: usize::MAX,
             };
         }
-        // ... allocation logic ...
+        
+        let layout = Layout::array::<T>(capacity)
+            .expect("Failed to create layout");
+        
+        let ptr = unsafe { 
+            alloc::alloc(layout) as *mut T 
+        };
+        
+        if ptr.is_null() {
+            alloc::handle_alloc_error(layout);
+        }
+        
+        RawVec { ptr, cap: capacity }
     }
 }</code></pre>
-                </div>
+                        </div>
 
-                <div class="implementation-notes">
-                    <h3>Key Implementation Details</h3>
-                    <ul>
-                        <li>Safe memory management with proper null pointer handling</li>
-                        <li>Zero-sized type optimization</li>
-                        <li>Checked arithmetic for capacity calculations</li>
-                        <li>Comprehensive iterator support with double-ended iteration</li>
-                        <li>Efficient element movement with shift operations</li>
-                    </ul>
-                </div>
-
-                <div class="performance-section">
-                    <h3>Iterator Implementation</h3>
-                    <pre><code class="language-rust">pub struct IntoIter<T> {
+                        <div class="code-snippet">
+                            <h3>Iterator Implementation</h3>
+                            <pre><code class="language-rust">pub struct IntoIter<T> {
     buf: RawVec<T>,
     start: usize,
     end: usize,
 }
 
-pub struct Iter<'a, T> {
-    buf: &'a RawVec<T>,
-    start: usize,
-    end: usize,
+impl<T> Iterator for IntoIter<T> {
+    type Item = T;
+    
+    fn next(&mut self) -> Option<T> {
+        if self.start == self.end {
+            None
+        } else {
+            let result = self.buf.read_at(self.start);
+            self.start += 1;
+            Some(result)
+        }
+    }
 }
 
-pub struct IterMut<'a, T> {
-    buf: &'a mut RawVec<T>,
-    start: usize,
-    end: usize,
-}
-
-pub struct Drain<'a, T> {
-    buf: &'a mut RawVec<T>,
-    start: usize,
-    end: usize,
-    len: usize,
-    original_start: usize,
+impl<T> DoubleEndedIterator for IntoIter<T> {
+    fn next_back(&mut self) -> Option<T> {
+        if self.start == self.end {
+            None
+        } else {
+            self.end -= 1;
+            Some(self.buf.read_at(self.end))
+        }
+    }
 }</code></pre>
-                </div>
-            </section>
+                        </div>
 
-            <section class="learning-resources">
-                <h2>Learning Resources</h2>
-                <div class="resource-links">
-                    <h3>Documentation</h3>
-                    <ul>
-                        <li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html">Rust Documentation - Vec</a></li>
-                        <li><a href="https://doc.rust-lang.org/nomicon/vec.html">Rustonomicon - Implementing Vec</a></li>
-                        <li><a href="https://doc.rust-lang.org/std/alloc/index.html">Rust Reference - Allocator API</a></li>
-                    </ul>
+                        <div class="code-snippet">
+                            <h3>Memory Safety</h3>
+                            <pre><code class="language-rust">impl<T> Drop for RawVec<T> {
+    fn drop(&mut self) {
+        if self.cap != 0 && std::mem::size_of::<T>() != 0 {
+            unsafe {
+                let layout = Layout::array::<T>(self.cap)
+                    .expect("Failed to create layout");
+                alloc::dealloc(
+                    self.ptr as *mut u8,
+                    layout
+                );
+            }
+        }
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Next Steps</h2>
+                    <div class="architecture-component">
+                        <h3>Planned Improvements</h3>
+                        <ul class="feature-list">
+                            <li>Implementation of small vector optimization</li>
+                            <li>SIMD acceleration for bulk operations</li>
+                            <li>Advanced growth strategy optimization</li>
+                            <li>Comprehensive benchmarking suite</li>
+                            <li>Performance comparison with std::vec::Vec</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Learning Resources</h2>
+                    <div class="resource-links">
+                        <h3>Documentation</h3>
+                        <ul class="feature-list">
+                            <li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html">Rust Documentation - Vec</a></li>
+                            <li><a href="https://doc.rust-lang.org/nomicon/vec.html">Rustonomicon - Implementing Vec</a></li>
+                            <li><a href="https://doc.rust-lang.org/std/alloc/index.html">Rust Reference - Allocator API</a></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="project-links">
+                    <a href="https://github.com/objones25/custom_vector_objones25" class="github-link" target="_blank">View on GitHub →</a>
                 </div>
-            </section>
+            </article>
         </main>
 
         <footer>
