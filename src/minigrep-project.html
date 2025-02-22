@@ -57,17 +57,17 @@
                     <div class="code-examples">
                         <div class="code-snippet">
                             <h3>Search Implementation</h3>
-                            <pre><code>pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+                            <pre><code>pub fn search&lt;'a&gt;(query: &str, contents: &'a str) -> Vec&lt;&'a str&gt; {
     contents
         .lines()
         .filter(|line| line.contains(query))
         .collect()
 }
 
-pub fn search_case_insensitive<'a>(
+pub fn search_case_insensitive&lt;'a&gt;(
     query: &str,
     contents: &'a str,
-) -> Vec<&'a str> {
+) -> Vec&lt;&'a str&gt; {
     let query = query.to_lowercase();
     contents
         .lines()
@@ -86,8 +86,8 @@ pub fn search_case_insensitive<'a>(
 
 impl Config {
     pub fn build(
-        mut args: impl Iterator<Item = String>,
-    ) -> Result<Config, &'static str> {
+        mut args: impl Iterator&lt;Item = String&gt;,
+    ) -> Result&lt;Config, &'static str&gt; {
         args.next();
 
         let query = match args.next() {
@@ -156,6 +156,12 @@ impl Config {
             © 2024 Owen Jones. All rights reserved.
         </footer>
     </div>
-    <script type="module" src="./js/script.js"></script></script>
+    <script type="module">
+        import { includeSearch } from './js/include-search.js';
+        
+        window.addEventListener('load', () => {
+            includeSearch();
+        });
+    </script>
 </body>
 </html> 
