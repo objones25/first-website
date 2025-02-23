@@ -17,6 +17,7 @@
     { "src": "/malware-classification/?", "dest": "/malware-classification.html" },
     { "src": "/neural-network-project/?", "dest": "/neural-network-project.html" },
     { "src": "/crypto-library-project/?", "dest": "/crypto-library-project.html" },
+    { "src": "/templates/(.*)", "dest": "/src/templates/$1" },
     { "src": "^/$", "dest": "/index.html" },
     { "src": "/(.*)", "status": 404, "dest": "/404.html" }
   ],
