@@ -18,75 +18,88 @@
             </nav>
         </header>
 
-        <main role="main">
-            <h1>IMDB Review Classification</h1>
-
-            <div class="status-badge">
-                Completed - November 2024
-            </div>
-
-            <section class="project-section">
-                <h2>Overview</h2>
-                <p>A machine learning project focused on sentiment analysis of IMDB movie reviews using multiple approaches, including BERT, SVM, and neural networks. The project achieves up to 87% accuracy in classifying reviews as positive or negative, demonstrating the effectiveness of different natural language processing techniques.</p>
-            </section>
-
-            <section class="project-section">
-                <h2>Technical Details</h2>
-                <ul class="feature-list">
-                    <li>BERT-based classification with 87% accuracy</li>
-                    <li>Support Vector Machine implementation achieving 83.5% accuracy</li>
-                    <li>Neural network architecture with 79.5% validation accuracy</li>
-                    <li>Comprehensive text preprocessing pipeline using NLTK</li>
-                    <li>Dataset of 50,000 movie reviews</li>
-                </ul>
-            </section>
-
-            <section class="project-section">
-                <h2>Implementation Approaches</h2>
-                
-                <h3>BERT Model</h3>
-                <p>Implemented using Hugging Face's transformers library, the BERT model achieved the best performance with:</p>
-                <ul class="feature-list">
-                    <li>Precision: 0.88 for negative, 0.87 for positive reviews</li>
-                    <li>Recall: 0.86 for negative, 0.88 for positive reviews</li>
-                    <li>F1-Score: 0.87 across both classes</li>
-                </ul>
-
-                <h3>Traditional Machine Learning</h3>
-                <p>Implemented multiple classical approaches including:</p>
-                <ul class="feature-list">
-                    <li>Support Vector Machine with PCA dimensionality reduction</li>
-                    <li>Multi-layer Perceptron neural network</li>
-                    <li>Logistic Regression with L1 regularization</li>
-                </ul>
-            </section>
-
-            <section class="project-section">
-                <h2>Technical Capabilities</h2>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <span class="metric-label">Text Processing</span>
-                        <span class="metric-description">Advanced tokenization and preprocessing pipeline</span>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-label">Model Architecture</span>
-                        <span class="metric-description">Custom LSTM network with attention mechanism</span>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-label">Inference System</span>
-                        <span class="metric-description">Batch prediction support with model versioning</span>
+        <main>
+            <article class="project-article">
+                <div class="project-header-large">
+                    <div class="header-content">
+                        <div class="project-image">
+                            <img src="./assets/IMDB-sentiment.jpeg" alt="IMDB Review Classification">
+                        </div>
+                        <h1>IMDB Review Classification</h1>
+                        <div class="project-meta">
+                            <span class="status-badge">Completed</span>
+                            <div class="tech-stack">
+                                <span class="tech-tag">BERT</span>
+                                <span class="tech-tag">PyTorch</span>
+                                <span class="tech-tag">NLP</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
 
-            <section class="project-section">
-                <h2>Acknowledgments</h2>
-                <p>Special thanks to the Aladdin Persson YouTube channel for guidance on BERT implementation, and to Kaggle for providing the IMDB dataset.</p>
-            </section>
+                <section class="project-section">
+                    <h2>Overview</h2>
+                    <p>A machine learning project focused on sentiment analysis of IMDB movie reviews using multiple approaches, including BERT, SVM, and neural networks. The project achieves up to 87% accuracy in classifying reviews as positive or negative, demonstrating the effectiveness of different natural language processing techniques.</p>
+                </section>
 
-            <a href="https://github.com/objones25/IMDB_sentiment_analysis" class="github-link" target="_blank">
-                View on GitHub →
-            </a>
+                <section class="project-section">
+                    <h2>Technical Details</h2>
+                    <ul class="feature-list">
+                        <li>BERT-based classification with 87% accuracy</li>
+                        <li>Support Vector Machine implementation achieving 83.5% accuracy</li>
+                        <li>Neural network architecture with 79.5% validation accuracy</li>
+                        <li>Comprehensive text preprocessing pipeline using NLTK</li>
+                        <li>Dataset of 50,000 movie reviews</li>
+                    </ul>
+                </section>
+
+                <section class="project-section">
+                    <h2>Implementation Approaches</h2>
+                    
+                    <h3>BERT Model</h3>
+                    <p>Implemented using Hugging Face's transformers library, the BERT model achieved the best performance with:</p>
+                    <ul class="feature-list">
+                        <li>Precision: 0.88 for negative, 0.87 for positive reviews</li>
+                        <li>Recall: 0.86 for negative, 0.88 for positive reviews</li>
+                        <li>F1-Score: 0.87 across both classes</li>
+                    </ul>
+
+                    <h3>Traditional Machine Learning</h3>
+                    <p>Implemented multiple classical approaches including:</p>
+                    <ul class="feature-list">
+                        <li>Support Vector Machine with PCA dimensionality reduction</li>
+                        <li>Multi-layer Perceptron neural network</li>
+                        <li>Logistic Regression with L1 regularization</li>
+                    </ul>
+                </section>
+
+                <section class="project-section">
+                    <h2>Technical Capabilities</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <span class="metric-label">Text Processing</span>
+                            <span class="metric-description">Advanced tokenization and preprocessing pipeline</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-label">Model Architecture</span>
+                            <span class="metric-description">Custom LSTM network with attention mechanism</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-label">Inference System</span>
+                            <span class="metric-description">Batch prediction support with model versioning</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Acknowledgments</h2>
+                    <p>Special thanks to the Aladdin Persson YouTube channel for guidance on BERT implementation, and to Kaggle for providing the IMDB dataset.</p>
+                </section>
+
+                <a href="https://github.com/objones25/IMDB_sentiment_analysis" class="github-link" target="_blank">
+                    View on GitHub →
+                </a>
+            </article>
         </main>
 
         <footer>
