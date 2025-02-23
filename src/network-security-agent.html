@@ -212,6 +212,13 @@ func (p *PacketProcessor) ProcessBatch(packets []Packet) {
             © 2024 Owen Jones. All rights reserved.
         </footer>
     </div>
-    <script type="module" src="./js/script.js"></script></script>
+    <script type="module">
+        import { includeSearch } from './js/include-search.js';
+        
+        window.addEventListener('load', () => {
+            includeSearch();
+        });
+    </script>
+    <script type="module" src="./js/script.js"></script>
 </body>
 </html>
