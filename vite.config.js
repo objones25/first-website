@@ -3,6 +3,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
   root: 'src',
+  base: '/',
   build: {
     outDir: '../dist',
     emptyOutDir: true,
@@ -32,9 +33,9 @@ export default defineConfig({
     strictPort: true,
     // Handle clean URLs in development
     proxy: {
-      '^/[^.]*$': {
+      '^/[^.]*/?$': {
         target: 'http://localhost:3000',
-        rewrite: (path) => `${path}.html`
+        rewrite: (path) => path.replace(/\/$/, '') + '.html'
       }
     }
   },
