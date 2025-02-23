@@ -77,6 +77,9 @@
                     <div class="project-grid">
                         <div class="project-card">
                             <div class="project-content">
+                                <div class="project-image">
+                                    <img src="./assets/embedding.jpeg" alt="Go Embeddings Library">
+                                </div>
                                 <h3>Go Embeddings Library</h3>
                                 <div class="project-header">
                                     <span class="status-badge stable">Stable Release</span>
@@ -336,6 +339,8 @@
         import { includeSearch } from './js/include-search.js';
         
         window.addEventListener('load', () => {
+            // Initialize fractal with the same instance as home page
+            // This will automatically respect the persistence setting
             new FractalAnimation('fractal-animation');
             includeSearch();
         });

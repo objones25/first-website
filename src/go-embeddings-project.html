@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Go Embeddings Library - Owen Jones</title>
     <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <div class="container">
@@ -19,38 +20,50 @@
         </header>
 
         <main>
-            <h1>Go Embeddings Library</h1>
+            <article class="project-article">
+                <div class="project-header-large">
+                    <div class="header-content">
+                        <div class="project-image">
+                            <img src="./assets/embedding.jpeg" alt="Go Embeddings Library">
+                        </div>
+                        <h1>Go Embeddings Library</h1>
+                        <div class="project-meta">
+                            <span class="status-badge stable">Stable Release</span>
+                            <div class="tech-stack">
+                                <span class="tech-tag">Go</span>
+                                <span class="tech-tag">Machine Learning</span>
+                                <span class="tech-tag">CoreML</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="status-badge">
-                In Development
-            </div>
+                <section class="project-section">
+                    <h2>Overview</h2>
+                    <p>A high-performance, production-ready embedding service written in Go, supporting multiple transformer models with MacOS Metal acceleration. The library combines efficient memory management, optimized batch processing, and hardware acceleration to deliver fast, reliable text embeddings for production environments.</p>
+                </section>
 
-            <section class="project-section">
-                <h2>Overview</h2>
-                <p>A high-performance, production-ready embedding service written in Go, supporting multiple transformer models with MacOS Metal acceleration. The library combines efficient memory management, optimized batch processing, and hardware acceleration to deliver fast, reliable text embeddings for production environments.</p>
-            </section>
+                <section class="project-section">
+                    <h2>Key Features</h2>
+                    <ul class="feature-list">
+                        <li>Production-ready transformer-based text embeddings with comprehensive error handling and logging</li>
+                        <li>MacOS Metal/CoreML hardware acceleration with ANE support, delivering optimized performance on Apple Silicon</li>
+                        <li>Multi-model support with dynamic loading and efficient model management</li>
+                        <li>Optimized batch processing with auto-tuning based on input characteristics</li>
+                        <li>Two-level caching system (memory + disk) with LRU eviction for improved performance</li>
+                        <li>Prometheus metrics integration for comprehensive monitoring</li>
+                        <li>Support for both synchronous and asynchronous operations with worker pools</li>
+                        <li>Intelligent chunking support for processing long documents</li>
+                        <li>Thread-safe implementation with graceful shutdown capabilities</li>
+                    </ul>
+                </section>
 
-            <section class="project-section">
-                <h2>Key Features</h2>
-                <ul class="feature-list">
-                    <li>Production-ready transformer-based text embeddings with comprehensive error handling and logging</li>
-                    <li>MacOS Metal/CoreML hardware acceleration with ANE support, delivering optimized performance on Apple Silicon</li>
-                    <li>Multi-model support with dynamic loading and efficient model management</li>
-                    <li>Optimized batch processing with auto-tuning based on input characteristics</li>
-                    <li>Two-level caching system (memory + disk) with LRU eviction for improved performance</li>
-                    <li>Prometheus metrics integration for comprehensive monitoring</li>
-                    <li>Support for both synchronous and asynchronous operations with worker pools</li>
-                    <li>Intelligent chunking support for processing long documents</li>
-                    <li>Thread-safe implementation with graceful shutdown capabilities</li>
-                </ul>
-            </section>
-
-            <section class="project-section">
-                <h2>Example Usage</h2>
-                <h3>Basic Implementation</h3>
-                <p>The library can be used both as a standalone service and integrated into existing Go applications. Here's a basic example:</p>
-                <pre class="code-block">
-package main
+                <section class="project-section">
+                    <h2>Example Usage</h2>
+                    <h3>Basic Implementation</h3>
+                    <p>The library can be used both as a standalone service and integrated into existing Go applications. Here's a basic example:</p>
+                    <div class="code-snippet">
+                        <pre><code class="language-go">package main
 
 import (
     "context"
@@ -63,13 +76,13 @@ import (
 
 func main() {
     // Initialize configuration
-    config := &embedding.Config{
+    config := &amp;embedding.Config{
         ModelPath:         "./models/all-MiniLM-L6-v2",
         MaxSequenceLength: 512,
         Dimension:        384,  // 384 for MiniLM-L6
         BatchSize:        32,
         EnableMetal:      true,  // Enable CoreML
-        CoreMLConfig: &embedding.CoreMLConfig{
+        CoreMLConfig: &amp;embedding.CoreMLConfig{
             EnableCaching: true,
             RequireANE:    false,
         },
@@ -97,16 +110,13 @@ func main() {
         log.Fatalf("Failed to generate embedding: %v", err)
     }
     fmt.Printf("Single embedding (len=%d): %v\n", len(vector), vector[:5])
-}</pre>
-            </section>
+}</code></pre>
+                    </div>
 
-            <section class="project-section">
-                <h2>Advanced Features</h2>
-                
-                <h3>Asynchronous Batch Processing</h3>
-                <p>For handling large volumes of text, the library provides asynchronous batch processing capabilities:</p>
-                <pre class="code-block">
-// Initialize channels for results and errors
+                    <h3>Asynchronous Batch Processing</h3>
+                    <p>For handling large volumes of text, the library provides asynchronous batch processing capabilities:</p>
+                    <div class="code-snippet">
+                        <pre><code class="language-go">// Initialize channels for results and errors
 results := make(chan embedding.Result)
 errors := make(chan error)
 
@@ -123,22 +133,23 @@ if err != nil {
 }
 
 // Process results as they arrive
-for i := 0; i < len(texts); i++ {
+for i := 0; i &lt; len(texts); i++ {
     select {
-    case result := <-results:
+    case result := &lt;-results:
         fmt.Printf("Embedding: %v\n", result.Embedding[:5])
-    case err := <-errors:
+    case err := &lt;-errors:
         fmt.Printf("Error: %v\n", err)
-    case <-ctx.Done():
+    case &lt;-ctx.Done():
         fmt.Println("Operation timed out")
         return
     }
-}</pre>
+}</code></pre>
+                    </div>
 
-                <h3>Document Chunking</h3>
-                <p>For processing longer documents, the library includes intelligent chunking capabilities:</p>
-                <pre class="code-block">
-// Initialize tokenizer
+                    <h3>Document Chunking</h3>
+                    <p>For processing longer documents, the library includes intelligent chunking capabilities:</p>
+                    <div class="code-snippet">
+                        <pre><code class="language-go">// Initialize tokenizer
 tokConfig := embedding.TokenizerConfig{
     ModelID:        "all-MiniLM-L6-v2",
     SequenceLength: 512,
@@ -161,43 +172,49 @@ Third paragraph here.`
 chunks, err := tokenizer.ChunkDocument(longText, opts)
 if err != nil {
     log.Fatal(err)
-}</pre>
-            </section>
+}</code></pre>
+                    </div>
+                </section>
 
-            <section class="project-section">
-                <h2>Technical Capabilities</h2>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <span class="metric-label">Vector Operations</span>
-                        <span class="metric-description">SIMD-optimized vector similarity computations with multiple distance metrics</span>
+                <section class="project-section">
+                    <h2>Technical Capabilities</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <span class="metric-label">Vector Operations</span>
+                            <span class="metric-description">SIMD-optimized vector similarity computations with multiple distance metrics</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-label">Index Management</span>
+                            <span class="metric-description">Efficient vector storage with dynamic index updates and persistence</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-label">Search Capabilities</span>
+                            <span class="metric-description">Configurable KNN search with filtering and metadata support</span>
+                        </div>
                     </div>
-                    <div class="metric-card">
-                        <span class="metric-label">Index Management</span>
-                        <span class="metric-description">Efficient vector storage with dynamic index updates and persistence</span>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-label">Search Capabilities</span>
-                        <span class="metric-description">Configurable KNN search with filtering and metadata support</span>
-                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Development Status</h2>
+                    <ul class="status-list">
+                        <li>Currently optimizing CoreML integration for improved performance metrics and working on expanding model support</li>
+                        <li>Implementing advanced caching strategies for better resource utilization</li>
+                        <li>Developing comprehensive documentation and usage examples</li>
+                        <li>Fine-tuning batch processing performance for various input scenarios</li>
+                    </ul>
+                </section>
+
+                <div class="project-links">
+                    <a href="https://github.com/objones25/go-embeddings/tree/main" class="github-link" target="_blank">View on GitHub →</a>
                 </div>
-            </section>
-
-            <section class="project-section">
-                <h2>Development Status</h2>
-                <ul class="status-list">
-                    <li>Currently optimizing CoreML integration for improved performance metrics and working on expanding model support</li>
-                    <li>Implementing advanced caching strategies for better resource utilization</li>
-                    <li>Developing comprehensive documentation and usage examples</li>
-                    <li>Fine-tuning batch processing performance for various input scenarios</li>
-                </ul>
-            </section>
-
-            <a href="https://github.com/objones25/go-embeddings/tree/main" class="github-link" target="_blank">View on GitHub →</a>
+            </article>
         </main>
 
         <footer>
             © 2024 Owen Jones. All rights reserved.
         </footer>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-go.min.js"></script>
 </body>
 </html>
