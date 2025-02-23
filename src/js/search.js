@@ -37,7 +37,7 @@ export default class ProjectSearch {
         const description = element.querySelector('p')?.textContent || '';
         const tags = Array.from(element.querySelectorAll('.tech-tag')).map(tag => tag.textContent);
         const link = element.querySelector('a.project-link')?.getAttribute('href') || 
-                    window.location.pathname.includes('/projects/') ? window.location.pathname : '';
+                    (window.location.pathname.includes('/projects/') ? window.location.pathname : '');
         const status = element.querySelector('.status-badge, .new-badge')?.textContent || '';
         
         if (title) {
