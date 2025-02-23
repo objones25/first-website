@@ -3,133 +3,106 @@ export default class ProjectSearch {
         this.searchButton = document.querySelector('.search-button');
         this.searchOverlay = document.querySelector('.search-overlay');
         this.searchInput = document.querySelector('.search-input');
+        this.searchResults = document.querySelector('.search-results');
         this.closeButton = document.querySelector('.close-search');
-        this.resultsContainer = document.querySelector('.search-results');
+
+        // Only initialize if all required elements are present
+        if (!this.searchButton || !this.searchOverlay || !this.searchInput || 
+            !this.searchResults || !this.closeButton) {
+            console.error('Required search elements not found');
+            return;
+        }
+
         this.projects = this.collectProjects();
-        
-        this.setupEventListeners();
+        this.bindEvents();
     }
 
     collectProjects() {
         const projects = [];
-        
-        // Collect projects from project cards
-        document.querySelectorAll('.project-card').forEach(card => {
-            this.collectProjectFromElement(card, projects);
+        const projectElements = document.querySelectorAll('.project');
+
+        projectElements.forEach(element => {
+            const project = this.collectProjectFromElement(element);
+            if (project) {
+                projects.push(project);
+            }
         });
-
-        // Collect from project article (detail pages)
-        const projectArticle = document.querySelector('.project-article');
-        if (projectArticle) {
-            this.collectProjectFromElement(projectArticle, projects);
-        }
-
-        // If no projects found on current page, try to fetch from projects page
-        if (projects.length === 0 && !window.location.pathname.includes('/projects')) {
-            this.fetchProjectsFromProjectsPage();
-        }
 
         return projects;
     }
 
-    collectProjectFromElement(element, projects) {
-        // Only collect if we have a title
-        const titleElement = element.querySelector('h1, h3');
-        if (!titleElement) return;
+    collectProjectFromElement(element) {
+        if (!element) return null;
 
-        const title = titleElement.textContent || '';
-        const description = element.querySelector('p')?.textContent || '';
-        const tags = Array.from(element.querySelectorAll('.tech-tag')).map(tag => tag.textContent || '');
+        const titleElement = element.querySelector('.project-title');
+        if (!titleElement) return null;
+
+        const title = titleElement.textContent?.trim() || '';
+        const description = element.querySelector('.project-description')?.textContent?.trim() || '';
         
-        // More robust link handling
+        // Handle link generation safely
         let link = '';
-        const projectLink = element.querySelector('a.project-link');
-        if (projectLink && projectLink.getAttribute('href')) {
-            link = projectLink.getAttribute('href');
+        const linkElement = element.querySelector('a.project-link');
+        if (linkElement && linkElement.getAttribute('href')) {
+            link = linkElement.getAttribute('href');
         } else if (window.location.pathname.includes('/projects/')) {
             link = window.location.pathname;
         }
 
-        const status = element.querySelector('.status-badge, .new-badge')?.textContent || '';
-        
-        if (title) {
-            projects.push({
-                title,
-                description,
-                tags,
-                link,
-                status,
-                element
-            });
-        }
-    }
-
-    async fetchProjectsFromProjectsPage() {
-        try {
-            const response = await fetch('/projects');
-            if (!response.ok) return;
-
-            const text = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(text, 'text/html');
-            
-            doc.querySelectorAll('.project-card').forEach(card => {
-                this.collectProjectFromElement(card, this.projects);
-            });
-        } catch (error) {
-            console.error('Error fetching projects:', error);
-        }
-    }
-
-    setupEventListeners() {
-        // Open search overlay
-        this.searchButton.addEventListener('click', () => {
-            this.openSearch();
+        // Handle tags safely
+        const tags = [];
+        const tagElements = element.querySelectorAll('.project-tag');
+        tagElements.forEach(tag => {
+            const tagText = tag.textContent?.trim();
+            if (tagText) {
+                tags.push(tagText);
+            }
         });
 
-        // Close search overlay
-        this.closeButton.addEventListener('click', () => {
-            this.closeSearch();
-        });
+        return {
+            title,
+            description,
+            link,
+            tags
+        };
+    }
 
-        // Handle escape key
+    bindEvents() {
+        this.searchButton.addEventListener('click', () => this.openSearch());
+        this.closeButton.addEventListener('click', () => this.closeSearch());
+        this.searchInput.addEventListener('input', () => this.handleSearch());
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.closeSearch();
-        });
-
-        // Handle search input
-        this.searchInput.addEventListener('input', () => {
-            this.handleSearch();
         });
     }
 
     openSearch() {
         this.searchOverlay.classList.add('active');
         this.searchInput.focus();
-        document.body.style.overflow = 'hidden';
     }
 
     closeSearch() {
         this.searchOverlay.classList.remove('active');
         this.searchInput.value = '';
-        this.resultsContainer.innerHTML = '';
-        document.body.style.overflow = '';
+        this.clearResults();
+    }
+
+    clearResults() {
+        while (this.searchResults.firstChild) {
+            this.searchResults.removeChild(this.searchResults.firstChild);
+        }
     }
 
     handleSearch() {
-        const query = this.searchInput.value.toLowerCase().trim();
-        
-        if (!query) {
-            this.resultsContainer.innerHTML = '';
-            return;
-        }
+        const searchTerm = this.searchInput.value.toLowerCase().trim();
+        this.clearResults();
+
+        if (!searchTerm) return;
 
         const results = this.projects.filter(project => {
-            const titleMatch = project.title.toLowerCase().includes(query);
-            const tagMatch = project.tags.some(tag => tag.toLowerCase().includes(query));
-            const descriptionMatch = project.description.toLowerCase().includes(query);
-            
-            return titleMatch || tagMatch || descriptionMatch;
+            return project.title.toLowerCase().includes(searchTerm) ||
+                   project.description.toLowerCase().includes(searchTerm) ||
+                   project.tags.some(tag => tag.toLowerCase().includes(searchTerm));
         });
 
         this.displayResults(results);
@@ -137,23 +110,47 @@ export default class ProjectSearch {
 
     displayResults(results) {
         if (results.length === 0) {
-            this.resultsContainer.innerHTML = `
-                <div class="no-results">
-                    <p>No projects found matching your search.</p>
-                </div>
-            `;
+            const noResults = document.createElement('div');
+            noResults.className = 'no-results';
+            noResults.textContent = 'No matching projects found';
+            this.searchResults.appendChild(noResults);
             return;
         }
 
-        this.resultsContainer.innerHTML = results.map(project => `
-            <div class="search-result">
-                <h3>${project.title}</h3>
-                <p>${project.description}</p>
-                <div class="search-result-tags">
-                    ${project.tags.map(tag => `<span class="search-result-tag">${tag}</span>`).join('')}
-                </div>
-                <a href="${project.link}" class="project-link">View Project →</a>
-            </div>
-        `).join('');
+        results.forEach(project => {
+            const resultElement = document.createElement('div');
+            resultElement.className = 'search-result';
+
+            const title = document.createElement('h3');
+            if (project.link) {
+                const titleLink = document.createElement('a');
+                titleLink.href = project.link;
+                titleLink.textContent = project.title;
+                title.appendChild(titleLink);
+            } else {
+                title.textContent = project.title;
+            }
+            resultElement.appendChild(title);
+
+            if (project.description) {
+                const description = document.createElement('p');
+                description.textContent = project.description;
+                resultElement.appendChild(description);
+            }
+
+            if (project.tags.length > 0) {
+                const tags = document.createElement('div');
+                tags.className = 'search-result-tags';
+                project.tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'search-result-tag';
+                    tagElement.textContent = tag;
+                    tags.appendChild(tagElement);
+                });
+                resultElement.appendChild(tags);
+            }
+
+            this.searchResults.appendChild(resultElement);
+        });
     }
 } 
