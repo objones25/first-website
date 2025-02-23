@@ -33,11 +33,23 @@ export default class ProjectSearch {
     }
 
     collectProjectFromElement(element, projects) {
-        const title = element.querySelector('h1, h3')?.textContent || '';
+        // Only collect if we have a title
+        const titleElement = element.querySelector('h1, h3');
+        if (!titleElement) return;
+
+        const title = titleElement.textContent || '';
         const description = element.querySelector('p')?.textContent || '';
-        const tags = Array.from(element.querySelectorAll('.tech-tag')).map(tag => tag.textContent);
-        const link = element.querySelector('a.project-link')?.getAttribute('href') || 
-                    (window.location.pathname.includes('/projects/') ? window.location.pathname : '');
+        const tags = Array.from(element.querySelectorAll('.tech-tag')).map(tag => tag.textContent || '');
+        
+        // More robust link handling
+        let link = '';
+        const projectLink = element.querySelector('a.project-link');
+        if (projectLink && projectLink.getAttribute('href')) {
+            link = projectLink.getAttribute('href');
+        } else if (window.location.pathname.includes('/projects/')) {
+            link = window.location.pathname;
+        }
+
         const status = element.querySelector('.status-badge, .new-badge')?.textContent || '';
         
         if (title) {
