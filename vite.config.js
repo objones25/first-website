@@ -3,7 +3,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
   root: 'src',
-  base: process.env.NODE_ENV === 'production' ? '/Website/' : '/',
+  base: '/',
   build: {
     outDir: '../dist',
     emptyOutDir: true,
