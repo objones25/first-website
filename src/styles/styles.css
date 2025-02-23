@@ -28,6 +28,24 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* Error page specific styles */
+body.error-page {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body:not(.error-page) .error-container {
+    display: none !important;
+}
+
+/* Regular page styles */
+body:not(.error-page) {
     padding: 2rem;
 }
 

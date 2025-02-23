@@ -10,9 +10,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <meta name="theme-color" content="#0A1525">
+    <style>
+        /* Ensure main content is always visible */
+        .main-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Hide any error content on main pages */
+        body:not(.error-page) .error-container {
+            display: none !important;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
+<body class="home-page">
+    <div class="container main-content">
         <header>
             <a href="/" class="logo">Owen Jones</a>
             <nav>

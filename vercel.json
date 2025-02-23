@@ -2,6 +2,7 @@
   "version": 2,
   "routes": [
     { "handle": "filesystem" },
+    { "src": "^/index(?:/)?$", "dest": "/index.html" },
     { "src": "/about/?", "dest": "/about.html" },
     { "src": "/projects/?", "dest": "/projects.html" },
     { "src": "/contact/?", "dest": "/contact.html" },
@@ -16,6 +17,7 @@
     { "src": "/malware-classification/?", "dest": "/malware-classification.html" },
     { "src": "/neural-network-project/?", "dest": "/neural-network-project.html" },
     { "src": "/crypto-library-project/?", "dest": "/crypto-library-project.html" },
+    { "src": "^/$", "dest": "/index.html" },
     { "src": "/(.*)", "status": 404, "dest": "/404.html" }
   ],
   "headers": [
