@@ -24,6 +24,7 @@ export default defineConfig({
         'malware-classification': resolve(__dirname, 'src/malware-classification.html'),
         'neural-network-project': resolve(__dirname, 'src/neural-network-project.html'),
         'crypto-library-project': resolve(__dirname, 'src/crypto-library-project.html'),
+        '404': resolve(__dirname, 'src/404.html')
       }
     }
   },
