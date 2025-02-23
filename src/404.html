@@ -6,15 +6,23 @@
     <title>Page Not Found</title>
     <link rel="stylesheet" href="./styles/styles.css">
     <style>
+        body.error-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color, #0A1525);
+        }
+
         .error-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
             text-align: center;
             padding: 2rem;
-            background-color: var(--bg-color, #0A1525);
         }
 
         .error-title {
@@ -52,7 +60,7 @@
         }
     </style>
 </head>
-<body>
+<body class="error-page">
     <div class="error-container">
         <h1 class="error-title">404 - Page Not Found</h1>
         <p class="error-message">The page you're looking for doesn't exist or has been moved.</p>
