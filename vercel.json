@@ -1,6 +1,10 @@
 {
   "version": 2,
   "routes": [
+    { "src": "/assets/(.*)", "dest": "/src/assets/$1" },
+    { "src": "/js/(.*)", "dest": "/src/js/$1" },
+    { "src": "/styles/(.*)", "dest": "/src/styles/$1" },
+    { "src": "/templates/(.*)", "dest": "/src/templates/$1" },
     { "handle": "filesystem" },
     { "src": "^/index(?:/)?$", "dest": "/index.html" },
     { "src": "/about/?", "dest": "/about.html" },
@@ -17,7 +21,6 @@
     { "src": "/malware-classification/?", "dest": "/malware-classification.html" },
     { "src": "/neural-network-project/?", "dest": "/neural-network-project.html" },
     { "src": "/crypto-library-project/?", "dest": "/crypto-library-project.html" },
-    { "src": "/templates/(.*)", "dest": "/src/templates/$1" },
     { "src": "^/$", "dest": "/index.html" },
     { "src": "/(.*)", "status": 404, "dest": "/404.html" }
   ],
