@@ -31,14 +31,7 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
-    strictPort: true,
-    // Handle clean URLs in development
-    proxy: {
-      '^/[^.]*/?$': {
-        target: 'http://localhost:3000',
-        rewrite: (path) => path.replace(/\/$/, '') + '.html'
-      }
-    }
+    strictPort: true
   },
   preview: {
     port: 3000,

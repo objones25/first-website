@@ -4,69 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Not Found</title>
+    <link rel="stylesheet" href="./styles/styles.css">
     <style>
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin: 0;
-            padding: 0;
+        .error-container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
-            background-color: var(--bg-color, #0A1525);
-            color: var(--text-color, #E5E7EB);
-        }
-        .container {
             text-align: center;
             padding: 2rem;
+            background-color: var(--bg-color, #0A1525);
         }
-        h1 {
-            font-size: 2rem;
+
+        .error-title {
+            font-size: 3rem;
+            font-weight: 700;
             margin-bottom: 1rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
         }
-        p {
+
+        .error-message {
+            font-size: 1.25rem;
+            color: var(--text-color-secondary);
             margin-bottom: 2rem;
-            color: var(--text-color-secondary, #9CA3AF);
+            max-width: 600px;
         }
-        .button {
+
+        .error-button {
             display: inline-block;
-            padding: 0.75rem 1.5rem;
+            padding: 1rem 2rem;
             background-color: var(--primary-color, #3B82F6);
             color: #FFFFFF;
             text-decoration: none;
-            border-radius: 0.375rem;
-            transition: background-color 0.3s ease;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
-        .button:hover {
-            background-color: var(--primary-color-hover, #2563EB);
+
+        .error-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
         }
     </style>
-    <script>
-        // Single Page Apps for GitHub Pages
-        // MIT License
-        // https://github.com/rafgraph/spa-github-pages
-        (function(l) {
-            if (l.search[1] === '/' ) {
-                var decoded = l.search.slice(1).split('&').map(function(s) { 
-                    return s.replace(/~and~/g, '&')
-                }).join('?');
-                window.history.replaceState(null, null,
-                    l.pathname.slice(0, -1) + decoded + l.hash
-                );
-            }
-        }(window.location));
-
-        // Only redirect if we're on the 404 page
-        if (window.location.pathname === '/404.html') {
-            window.location.href = '/';
-        }
-    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Page Not Found</h1>
-        <p>The page you're looking for doesn't exist or has been moved.</p>
-        <a href="/" class="button">Go to Homepage</a>
+    <div class="error-container">
+        <h1 class="error-title">404 - Page Not Found</h1>
+        <p class="error-message">The page you're looking for doesn't exist or has been moved.</p>
+        <a href="/" class="error-button">Return to Homepage</a>
     </div>
 </body>
 </html> 
