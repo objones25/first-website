@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veet Video Calling App - Owen Jones</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">Owen Jones</a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/projects">Projects</a>
+                <a href="/contact">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+            <article class="project-article">
+                <div class="project-header-large">
+                    <div class="header-content">
+                        <div class="project-image">
+                            <img src="./assets/veet.jpeg" alt="Veet Video Calling App">
+                        </div>
+                        <h1>Veet Video Calling App</h1>
+                        <div class="project-meta">
+                            <span class="status-badge complete">Complete</span>
+                            <div class="tech-stack">
+                                <span class="tech-tag">JavaScript</span>
+                                <span class="tech-tag">WebRTC</span>
+                                <span class="tech-tag">Cloudflare Workers</span>
+                                <span class="tech-tag">Durable Objects</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="project-section">
+                    <h2>Project Overview</h2>
+                    <p>A serverless video calling application built using Cloudflare's Durable Objects and WebRTC technology. This project demonstrates the power of stateful serverless architecture while exploring modern JavaScript and real-time communication patterns. The implementation showcases how to maintain state in a serverless environment using Durable Objects for coordinating WebRTC connections.</p>
+                </section>
+
+                <section class="project-section">
+                    <h2>Key Features</h2>
+                    <div class="architecture-component">
+                        <h3>Core Functionality</h3>
+                        <ul class="feature-list">
+                            <li>Real-time video and audio communication using WebRTC</li>
+                            <li>Stateful room management with Durable Objects</li>
+                            <li>WebSocket-based signaling for connection establishment</li>
+                            <li>Zero external dependencies for core functionality</li>
+                            <li>Automatic peer discovery and connection</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Technical Architecture</h3>
+                        <ul class="feature-list">
+                            <li>Frontend Client: Pure JavaScript implementation for WebRTC and media streams</li>
+                            <li>Cloudflare Worker: Routing layer for client-Durable Object connections</li>
+                            <li>Durable Objects: State management and WebSocket coordination</li>
+                            <li>WebRTC: Peer-to-peer media streaming</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>User Experience</h3>
+                        <ul class="feature-list">
+                            <li>Simple, intuitive interface for video calls</li>
+                            <li>Automatic camera and microphone handling</li>
+                            <li>Real-time connection status updates</li>
+                            <li>Responsive design for various devices</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Technical Implementation</h2>
+                    <div class="architecture-component">
+                        <h3>Durable Objects Integration</h3>
+                        <ul class="feature-list">
+                            <li>State persistence across serverless function invocations</li>
+                            <li>WebSocket session management for signaling</li>
+                            <li>Coordinated peer connection establishment</li>
+                            <li>Room-based connection routing</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>WebRTC Implementation</h3>
+                        <ul class="feature-list">
+                            <li>Peer connection setup and management</li>
+                            <li>ICE candidate handling and exchange</li>
+                            <li>Media stream capture and transmission</li>
+                            <li>Connection state monitoring</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Technical Challenges</h2>
+                    <div class="architecture-component">
+                        <ul class="feature-list">
+                            <li>Implementing stateful behavior in a serverless environment</li>
+                            <li>Coordinating WebRTC peer connections through WebSocket signaling</li>
+                            <li>Managing media streams and user permissions</li>
+                            <li>Handling peer disconnections and reconnections gracefully</li>
+                            <li>Ensuring reliable WebRTC connections across different network conditions</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Learning Outcomes</h2>
+                    <div class="architecture-component">
+                        <ul class="feature-list">
+                            <li>Practical application of Durable Objects for stateful serverless apps</li>
+                            <li>Real-world implementation of WebRTC peer-to-peer connections</li>
+                            <li>WebSocket communication in a serverless environment</li>
+                            <li>Modern JavaScript development practices</li>
+                            <li>Real-time communication patterns and best practices</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="project-links">
+                    <a href="https://github.com/objones25/veet-cloudflare-tutorial-objones25" class="github-link" target="_blank">View on GitHub →</a>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
+    </div>
+    <script type="module">
+        import { includeSearch } from './js/include-search.js';
+        
+        window.addEventListener('load', () => {
+            includeSearch();
+        });
+    </script>
+</body>
+</html> 
