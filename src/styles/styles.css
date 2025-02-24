@@ -316,15 +316,17 @@ main {
 .project-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-.project-header h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin: 0;
+.project-header h2 {
+    margin-bottom: 0;
+    font-size: 1.75rem;
+    flex: 1;
+    min-width: 200px;
 }
 
 .new-badge {
@@ -416,6 +418,8 @@ main {
     text-transform: uppercase;
     position: relative;
     transition: all 0.3s ease;
+    white-space: nowrap;
+    margin: 0;
 }
 
 .status-badge::before {
@@ -573,6 +577,22 @@ footer {
     
     .contact-link {
         text-align: center;
+    }
+
+    .project-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .project-header h2 {
+        font-size: 1.5rem;
+        margin-right: 0;
+    }
+
+    .status-badge {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.8rem;
     }
 }
 
@@ -1460,15 +1480,17 @@ footer {
 .project-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-.project-header h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin: 0;
+.project-header h2 {
+    margin-bottom: 0;
+    font-size: 1.75rem;
+    flex: 1;
+    min-width: 200px;
 }
 
 .new-badge {
