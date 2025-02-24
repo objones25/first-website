@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Web Server - Owen Jones</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">Owen Jones</a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/projects">Projects</a>
+                <a href="/contact">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+            <article class="project-article">
+                <div class="project-header-large">
+                    <div class="header-content">
+                        <div class="project-image">
+                            <img src="./assets/rust-web-server.jpeg" alt="Rust Web Server Project">
+                        </div>
+                        <h1>Learning Rust Through Web Server Implementation</h1>
+                        <div class="project-meta">
+                            <span class="status-badge complete">Complete</span>
+                            <div class="tech-stack">
+                                <span class="tech-tag">Rust</span>
+                                <span class="tech-tag">Systems Programming</span>
+                                <span class="tech-tag">Web Development</span>
+                                <span class="tech-tag">Concurrency</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="project-section">
+                    <h2>Learning Journey Overview</h2>
+                    <p>This project represents the culmination of my comprehensive journey learning Rust, following the official Rust Book and additional course materials. While the web server implementation is straightforward, it demonstrates key Rust concepts and programming paradigms that I mastered throughout the learning process.</p>
+                </section>
+
+                <section class="project-section">
+                    <h2>Key Learning Areas</h2>
+                    <div class="architecture-component">
+                        <h3>Rust Fundamentals</h3>
+                        <ul class="feature-list">
+                            <li>Ownership and Borrowing System
+                                <ul>
+                                    <li>Understanding Rust's unique memory management model</li>
+                                    <li>Working with references and lifetimes</li>
+                                    <li>Implementing Copy and Clone traits appropriately</li>
+                                </ul>
+                            </li>
+                            <li>Type System
+                                <ul>
+                                    <li>Leveraging Rust's strong static typing</li>
+                                    <li>Working with generics and traits</li>
+                                    <li>Understanding algebraic data types</li>
+                                </ul>
+                            </li>
+                            <li>Error Handling
+                                <ul>
+                                    <li>Using Result and Option types</li>
+                                    <li>Implementing custom error types</li>
+                                    <li>Error propagation patterns</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Advanced Concepts</h3>
+                        <ul class="feature-list">
+                            <li>Concurrency
+                                <ul>
+                                    <li>Thread management and synchronization</li>
+                                    <li>Message passing between threads</li>
+                                    <li>Safe concurrent data access</li>
+                                </ul>
+                            </li>
+                            <li>Smart Pointers
+                                <ul>
+                                    <li>Understanding Box, Rc, and Arc</li>
+                                    <li>Interior mutability with RefCell</li>
+                                    <li>Custom smart pointer implementation</li>
+                                </ul>
+                            </li>
+                            <li>Pattern Matching
+                                <ul>
+                                    <li>Destructuring complex data types</li>
+                                    <li>Match expressions and pattern syntax</li>
+                                    <li>Implementing custom patterns</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Web Server Implementation</h2>
+                    <div class="architecture-component">
+                        <h3>Technical Features</h3>
+                        <ul class="feature-list">
+                            <li>Multi-threaded request handling using thread pool</li>
+                            <li>TCP connection management</li>
+                            <li>Basic HTTP request parsing</li>
+                            <li>Static file serving capabilities</li>
+                            <li>Graceful error handling and logging</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Learning Resources</h2>
+                    <div class="architecture-component">
+                        <h3>Core Materials</h3>
+                        <ul class="feature-list">
+                            <li>The Rust Programming Language Book
+                                <ul>
+                                    <li>Comprehensive coverage of language fundamentals</li>
+                                    <li>Practical examples and exercises</li>
+                                    <li>Best practices and idioms</li>
+                                </ul>
+                            </li>
+                            <li>Video Courses
+                                <ul>
+                                    <li>Hands-on implementation exercises</li>
+                                    <li>Real-world application examples</li>
+                                    <li>Performance optimization techniques</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Key Takeaways</h2>
+                    <div class="architecture-component">
+                        <ul class="feature-list">
+                            <li>Deep understanding of Rust's memory safety guarantees</li>
+                            <li>Practical experience with concurrent programming</li>
+                            <li>Appreciation for Rust's type system and compiler checks</li>
+                            <li>Familiarity with Rust's ecosystem and tooling</li>
+                            <li>Confidence in building systems-level applications</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="project-links">
+                    <a href="https://github.com/objones25/rust_web_server_objones25" class="github-link" target="_blank">View on GitHub →</a>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
+    </div>
+    <script type="module">
+        import { includeSearch } from './js/include-search.js';
+        
+        window.addEventListener('load', () => {
+            includeSearch();
+        });
+    </script>
+</body>
+</html> 

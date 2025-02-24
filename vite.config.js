@@ -25,6 +25,7 @@ export default defineConfig({
         'neural-network-project': resolve(__dirname, 'src/neural-network-project.html'),
         'crypto-library-project': resolve(__dirname, 'src/crypto-library-project.html'),
         'veet-project': resolve(__dirname, 'src/veet-project.html'),
+        'rust-web-server-project': resolve(__dirname, 'src/rust-web-server-project.html'),
         '404': resolve(__dirname, 'src/404.html')
       }
     }
