@@ -21,6 +21,7 @@
     { "src": "/malware-classification/?", "dest": "/malware-classification.html" },
     { "src": "/neural-network-project/?", "dest": "/neural-network-project.html" },
     { "src": "/crypto-library-project/?", "dest": "/crypto-library-project.html" },
+    { "src": "/ethical-hacking-course-part-1/?", "dest": "/ethical-hacking-course-part-1.html" },
     { "src": "^/$", "dest": "/index.html" },
     { "src": "/(.*)", "status": 404, "dest": "/404.html" }
   ],
