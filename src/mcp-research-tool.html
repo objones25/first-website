@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Research Tool - Owen Jones</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">Owen Jones</a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/projects">Projects</a>
+                <a href="/contact">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+            <article class="project-article">
+                <div class="project-header-large">
+                    <div class="header-content">
+                        <div class="project-image">
+                            <img src="./assets/research-tool.jpeg" alt="MCP Research Tool">
+                        </div>
+                        <h1>MCP Research Tool</h1>
+                        <div class="project-meta">
+                            <span class="status-badge stable">Stable Release</span>
+                            <div class="tech-stack">
+                                <span class="tech-tag">TypeScript</span>
+                                <span class="tech-tag">AI</span>
+                                <span class="tech-tag">Cloudflare Workers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="project-section">
+                    <h2>Overview</h2>
+                    <p>A powerful, AI-driven research orchestration service that gathers, analyzes, and synthesizes information from multiple sources to provide comprehensive answers to complex queries. Built on Cloudflare Workers, this service leverages multiple specialized tools and AI capabilities to deliver well-structured, properly cited research results.</p>
+                    <p>Special thanks to the Octotools team for inspiring the orchestration component architecture, which uses tool cards to determine the optimal set of tools for each research task.</p>
+                </section>
+
+                <section class="project-section">
+                    <h2>Key Features</h2>
+                    <div class="architecture-component">
+                        <h3>Intelligent Query Analysis</h3>
+                        <ul class="feature-list">
+                            <li>Advanced analysis of user queries to understand intent and constraints</li>
+                            <li>Query optimization for each specialized research tool</li>
+                            <li>Automatic URL and context extraction</li>
+                            <li>Dynamic tool selection based on relevance scoring</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Multi-tool Orchestration</h3>
+                        <ul class="feature-list">
+                            <li>Dynamic tool selection based on query context</li>
+                            <li>Parallel execution with smart retry logic</li>
+                            <li>Automatic query adaptation for each tool</li>
+                            <li>Intelligent tool chaining and result aggregation</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>AI-powered Synthesis</h3>
+                        <ul class="feature-list">
+                            <li>Combines information from diverse sources</li>
+                            <li>Proper citation and source attribution</li>
+                            <li>Structured formatting with sections</li>
+                            <li>Confidence scoring for results</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Technical Implementation</h2>
+                    <div class="code-examples">
+                        <div class="code-snippet">
+                            <h3>Tool Manager Implementation</h3>
+                            <pre><code class="language-typescript">export class ToolManager {
+    private tools: Map<string, Tool>;
+    private relevanceScorer: RelevanceScorer;
+
+    constructor(tools: Tool[]) {
+        this.tools = new Map(tools.map(t => [t.id, t]));
+        this.relevanceScorer = new RelevanceScorer();
+    }
+
+    async selectTools(query: Query, context: Context): Promise<Tool[]> {
+        const scores = await Promise.all(
+            Array.from(this.tools.values()).map(async tool => ({
+                tool,
+                score: await this.relevanceScorer.score(tool, query, context)
+            }))
+        );
+
+        return scores
+            .filter(({score}) => score > RELEVANCE_THRESHOLD)
+            .sort((a, b) => b.score - a.score)
+            .map(({tool}) => tool);
+    }
+
+    async executeTools(
+        tools: Tool[], 
+        query: Query,
+        context: Context
+    ): Promise<Result[]> {
+        return Promise.all(
+            tools.map(tool => 
+                this.executeWithRetry(tool, query, context)
+            )
+        );
+    }
+}</code></pre>
+                        </div>
+
+                        <div class="code-snippet">
+                            <h3>Result Processor Implementation</h3>
+                            <pre><code class="language-typescript">export class ResultProcessor {
+    private synthesizer: Synthesizer;
+    private confidenceCalculator: ConfidenceCalculator;
+
+    constructor() {
+        this.synthesizer = new Synthesizer();
+        this.confidenceCalculator = new ConfidenceCalculator();
+    }
+
+    async process(results: Result[]): Promise<ProcessedResult> {
+        const relevantResults = this.filterRelevant(results);
+        const synthesized = await this.synthesizer.combine(relevantResults);
+        const confidence = this.confidenceCalculator.calculate(synthesized);
+
+        return {
+            content: synthesized.content,
+            sources: this.extractSources(relevantResults),
+            confidence,
+            metadata: this.generateMetadata(results)
+        };
+    }
+
+    private filterRelevant(results: Result[]): Result[] {
+        return results.filter(result => 
+            result.relevanceScore > RELEVANCE_THRESHOLD
+        );
+    }
+}</code></pre>
+                        </div>
+
+                        <div class="code-snippet">
+                            <h3>Orchestrator Implementation</h3>
+                            <pre><code class="language-typescript">export class Orchestrator {
+    private toolManager: ToolManager;
+    private queryOptimizer: QueryOptimizer;
+    private resultProcessor: ResultProcessor;
+
+    async research(
+        query: string, 
+        depth: number = 3
+    ): Promise<ResearchResult> {
+        const optimizedQuery = await this.queryOptimizer.optimize(query);
+        const context = await this.buildContext(optimizedQuery);
+
+        let results: Result[] = [];
+        for (let i = 0; i < depth; i++) {
+            const tools = await this.toolManager.selectTools(
+                optimizedQuery, 
+                context
+            );
+            
+            const iterationResults = await this.toolManager.executeTools(
+                tools,
+                optimizedQuery,
+                context
+            );
+
+            results = results.concat(iterationResults);
+            context.update(iterationResults);
+
+            if (this.hasEnoughInformation(results)) {
+                break;
+            }
+        }
+
+        return this.resultProcessor.process(results);
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Research Tools</h2>
+                    <div class="architecture-component">
+                        <h3>Integrated Tools</h3>
+                        <ul class="feature-list">
+                            <li>Web Search
+                                <ul>
+                                    <li>Brave Search: Privacy-focused web search</li>
+                                    <li>Tavily Search: AI-powered search</li>
+                                </ul>
+                            </li>
+                            <li>Technical Information
+                                <ul>
+                                    <li>GitHub Search: Repository and code search</li>
+                                    <li>Stack Exchange: Technical Q&A</li>
+                                </ul>
+                            </li>
+                            <li>Academic Research
+                                <ul>
+                                    <li>arXiv: Academic papers and preprints</li>
+                                    <li>Research Papers: Scientific literature</li>
+                                </ul>
+                            </li>
+                            <li>Content Extraction
+                                <ul>
+                                    <li>Fire Crawl: Web content extraction</li>
+                                    <li>YouTube Transcript: Video content</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Technical Capabilities</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <span class="metric-label">Query Processing</span>
+                            <span class="metric-description">Advanced NLP for query understanding and optimization</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-label">Tool Orchestration</span>
+                            <span class="metric-description">Dynamic tool selection and parallel execution</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-label">Result Synthesis</span>
+                            <span class="metric-description">AI-powered information synthesis with citations</span>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="project-links">
+                    <a href="https://github.com/objones25/mcp-research-tool" class="github-link" target="_blank">View on GitHub →</a>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-typescript.min.js"></script>
+    <script type="module">
+        import { includeSearch } from './js/include-search.js';
+        
+        window.addEventListener('load', () => {
+            includeSearch();
+        });
+    </script>
+</body>
+</html> 

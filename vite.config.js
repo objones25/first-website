@@ -19,7 +19,7 @@ export default defineConfig({
         'minigrep-project': resolve(__dirname, 'src/minigrep-project.html'),
         'network-security-agent': resolve(__dirname, 'src/network-security-agent.html'),
         'snake-game-project': resolve(__dirname, 'src/snake-game-project.html'),
-        'go-embeddings-project': resolve(__dirname, 'src/go-embeddings-project.html'),
+        'mcp-research-tool': resolve(__dirname, 'src/mcp-research-tool.html'),
         'imdb-review-project': resolve(__dirname, 'src/imdb-review-project.html'),
         'malware-classification': resolve(__dirname, 'src/malware-classification.html'),
         'neural-network-project': resolve(__dirname, 'src/neural-network-project.html'),
