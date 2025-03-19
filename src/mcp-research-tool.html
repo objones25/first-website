@@ -83,35 +83,35 @@
                         <div class="code-snippet">
                             <h3>Tool Manager Implementation</h3>
                             <pre><code class="language-typescript">export class ToolManager {
-    private tools: Map<string, Tool>;
+    private tools: Map&lt;string, Tool&gt;;
     private relevanceScorer: RelevanceScorer;
 
     constructor(tools: Tool[]) {
-        this.tools = new Map(tools.map(t => [t.id, t]));
+        this.tools = new Map(tools.map(t =&gt; [t.id, t]));
         this.relevanceScorer = new RelevanceScorer();
     }
 
-    async selectTools(query: Query, context: Context): Promise<Tool[]> {
+    async selectTools(query: Query, context: Context): Promise&lt;Tool[]&gt; {
         const scores = await Promise.all(
-            Array.from(this.tools.values()).map(async tool => ({
+            Array.from(this.tools.values()).map(async tool =&gt; ({
                 tool,
                 score: await this.relevanceScorer.score(tool, query, context)
             }))
         );
 
         return scores
-            .filter(({score}) => score > RELEVANCE_THRESHOLD)
-            .sort((a, b) => b.score - a.score)
-            .map(({tool}) => tool);
+            .filter(({score}) =&gt; score &gt; RELEVANCE_THRESHOLD)
+            .sort((a, b) =&gt; b.score - a.score)
+            .map(({tool}) =&gt; tool);
     }
 
     async executeTools(
         tools: Tool[], 
         query: Query,
         context: Context
-    ): Promise<Result[]> {
+    ): Promise&lt;Result[]&gt; {
         return Promise.all(
-            tools.map(tool => 
+            tools.map(tool =&gt; 
                 this.executeWithRetry(tool, query, context)
             )
         );
@@ -130,7 +130,7 @@
         this.confidenceCalculator = new ConfidenceCalculator();
     }
 
-    async process(results: Result[]): Promise<ProcessedResult> {
+    async process(results: Result[]): Promise&lt;ProcessedResult&gt; {
         const relevantResults = this.filterRelevant(results);
         const synthesized = await this.synthesizer.combine(relevantResults);
         const confidence = this.confidenceCalculator.calculate(synthesized);
@@ -144,8 +144,8 @@
     }
 
     private filterRelevant(results: Result[]): Result[] {
-        return results.filter(result => 
-            result.relevanceScore > RELEVANCE_THRESHOLD
+        return results.filter(result =&gt; 
+            result.relevanceScore &gt; RELEVANCE_THRESHOLD
         );
     }
 }</code></pre>
@@ -161,12 +161,12 @@
     async research(
         query: string, 
         depth: number = 3
-    ): Promise<ResearchResult> {
+    ): Promise&lt;ResearchResult&gt; {
         const optimizedQuery = await this.queryOptimizer.optimize(query);
         const context = await this.buildContext(optimizedQuery);
 
         let results: Result[] = [];
-        for (let i = 0; i < depth; i++) {
+        for (let i = 0; i &lt; depth; i++) {
             const tools = await this.toolManager.selectTools(
                 optimizedQuery, 
                 context
