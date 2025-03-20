@@ -2,6 +2,9 @@
 const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
 const currentTheme = localStorage.getItem('theme');
 
+// Import search functionality
+import { includeSearch } from './include-search.js';
+
 if (currentTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
 } else if (currentTheme === 'light') {
@@ -19,12 +22,16 @@ function toggleTheme() {
     localStorage.setItem('theme', newTheme);
 }
 
-// Add theme toggle button to all pages
-document.addEventListener('DOMContentLoaded', () => {
+// Add theme toggle button and search functionality to all pages
+document.addEventListener('DOMContentLoaded', async () => {
+    // Add theme toggle
     const button = document.createElement('button');
     button.className = 'theme-toggle';
     button.innerHTML = '🌓';
     button.setAttribute('aria-label', 'Toggle dark mode');
     button.onclick = toggleTheme;
     document.body.appendChild(button);
+
+    // Initialize search
+    await includeSearch();
 }); 

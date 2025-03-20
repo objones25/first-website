@@ -1,4 +1,6 @@
 // Function to include search functionality in all pages
+import ProjectSearch from './search.js';
+
 export async function includeSearch() {
     try {
         // Get the navigation element
@@ -39,15 +41,9 @@ export async function includeSearch() {
             document.body.insertAdjacentHTML('beforeend', searchOverlayHtml);
         }
 
-        // Initialize search functionality only if both parts were inserted
+        // Initialize search functionality directly
         if (document.querySelector('.search-button') && document.querySelector('.search-overlay')) {
-            const searchScript = document.createElement('script');
-            searchScript.type = 'module';
-            searchScript.textContent = `
-                import ProjectSearch from './js/search.js';
-                new ProjectSearch();
-            `;
-            document.body.appendChild(searchScript);
+            new ProjectSearch();
         }
     } catch (error) {
         console.error('Error including search:', error);
