@@ -29,7 +29,10 @@ export default defineConfig({
         'rust-web-server-project': resolve(__dirname, 'src/rust-web-server-project.html'),
         '404': resolve(__dirname, 'src/404.html')
       }
-    }
+    },
+    // Ensure assets in templates directory are included
+    assetsInlineLimit: 0,
+    copyPublicDir: true,
   },
   server: {
     port: 3000,

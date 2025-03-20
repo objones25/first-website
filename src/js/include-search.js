@@ -5,8 +5,11 @@ export async function includeSearch() {
         const nav = document.querySelector('nav');
         if (!nav) return;
 
-        // Fetch the search template
-        const response = await fetch('/templates/search.html');
+        // Import the search template directly
+        import.meta.glob('../templates/search.html', { eager: true });
+        
+        // Fetch the search template with the correct path
+        const response = await fetch('./templates/search.html');
         if (!response.ok) {
             console.error('Failed to load search template');
             return;
