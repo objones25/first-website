@@ -302,6 +302,10 @@ main {
     position: relative;
 }
 
+.project-card.featured .project-image {
+    height: 600px;
+}
+
 .project-image img {
     width: 100%;
     height: 100%;
@@ -594,6 +598,10 @@ footer {
         font-size: 0.7rem;
         padding: 0.4rem 0.8rem;
     }
+
+    .project-card.featured .project-image {
+        height: 400px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -612,6 +620,10 @@ footer {
     
     nav {
         gap: 1rem;
+    }
+
+    .project-card.featured .project-image {
+        height: 300px;
     }
 }
 
