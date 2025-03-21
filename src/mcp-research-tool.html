@@ -304,19 +304,89 @@
                             <li><strong>Metadata</strong>: Execution time, iteration count, tools used, and more</li>
                         </ul>
                     </div>
-                </section>
 
-                <section class="project-section">
-                    <h2>Configuration Options</h2>
                     <div class="architecture-component">
-                        <h3>Research Options</h3>
-                        <ul class="feature-list">
-                            <li><strong>depth</strong>: Number of research iterations (1-5)</li>
-                            <li><strong>maxToolsPerIteration</strong>: Maximum number of tools to use per iteration</li>
-                            <li><strong>cacheResults</strong>: Whether to cache the final research results</li>
-                            <li><strong>relevanceThreshold</strong>: Minimum relevance score for including results</li>
-                            <li><strong>confidenceThreshold</strong>: Minimum confidence score to consider research complete</li>
-                        </ul>
+                        <h3>Example Research Request</h3>
+                        <pre><code class="language-json">{
+  "depth": 3,
+  "query": "recent cybersecurity developments and trends 2024-2025"
+}</code></pre>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Example Research Results</h3>
+                        <div class="research-results">
+                            <div class="confidence-indicator high">
+                                <span class="icon">🟢</span>
+                                <span class="text">High confidence</span>
+                            </div>
+                            
+                            <h4>Recent Developments and Trends in Cybersecurity (2024-2025)</h4>
+
+                            <h5>Introduction</h5>
+                            <p>The cybersecurity landscape is continuously evolving, with new challenges and solutions emerging regularly. This response synthesizes recent developments and trends in cybersecurity for the years 2024-2025, focusing on technological advancements, strategic frameworks, and emerging threats.</p>
+
+                            <h5>Technological Advancements in Cybersecurity</h5>
+
+                            <h6>Decentralized Data Centers</h6>
+                            <ul>
+                                <li>The global edge data center market is expected to grow significantly, driven by the rise of 5G networks, the Internet of Things (IoT), AI-driven automation, and the need for low-latency, decentralized data solutions [1].</li>
+                            </ul>
+
+                            <h6>AI and Machine Learning</h6>
+                            <ul>
+                                <li>AI and machine learning are increasingly integrated into cybersecurity solutions, offering enhanced capabilities for real-time threat detection and response [2].</li>
+                                <li>Specific advancements include AI-driven threat detection systems for smart vehicles and the use of large language models (LLMs) in cybersecurity applications [3,4].</li>
+                            </ul>
+
+                            <h5>Strategic Frameworks and Collaboration</h5>
+
+                            <h6>Cybersecurity Frameworks</h6>
+                            <ul>
+                                <li>New frameworks such as the Cybersecurity Resilience and Law Enforcement Collaboration (CyRLEC) Framework emphasize proactive prevention, early detection, and collaboration with law enforcement to combat cyber threats [5].</li>
+                                <li>Integration of established frameworks like NIST and ISO/IEC 27001 continues to play a critical role in shaping cybersecurity strategies across various industries [2].</li>
+                            </ul>
+
+                            <h6>Collaborative Efforts</h6>
+                            <ul>
+                                <li>There is a growing focus on collaborative approaches, particularly between the private sector and government agencies, to enhance cybersecurity measures and infrastructure [5].</li>
+                            </ul>
+
+                            <h5>Emerging Threats and Challenges</h5>
+
+                            <h6>Quantum Computing</h6>
+                            <ul>
+                                <li>The development of quantum computing poses new challenges for cybersecurity, with potential threats to encryption methods and data security [6].</li>
+                                <li>Concurrently, quantum technology also presents opportunities for enhancing cybersecurity solutions [6].</li>
+                            </ul>
+
+                            <h6>Smart Device Security</h6>
+                            <ul>
+                                <li>With the proliferation of connected devices, securing IoT and smart devices remains a critical challenge. Efforts are concentrated on developing robust security protocols and systems to protect against vulnerabilities [4].</li>
+                            </ul>
+
+                            <h5>Conclusion</h5>
+                            <p>The years 2024-2025 mark significant progress in the field of cybersecurity, with advancements in technology and strategic frameworks playing pivotal roles. However, the landscape continues to evolve with new threats emerging, necessitating ongoing research, development, and collaboration to safeguard digital assets and infrastructures.</p>
+
+                            <h5>Citations:</h5>
+                            <ol class="research-citations">
+                                <li>GlobeNewswire. (2025). From Cloud to Edge: Why Decentralized Data Centers Are the Future of IT & Telecom. <a href="https://www.globenewswire.com/news-release/2025/03/20/3046526/28124/en/From-Cloud-to-Edge-Why-Decentralized-Data-Centers-Are-the-Future-of-IT-Telecom.html">Link</a></li>
+                                <li>GlobeNewswire. (2025). Integrating Cybersecurity Frameworks into IT Security: A Comprehensive Analysis of Threat Mitigation Strategies and Adaptive Technologies. <a href="http://arxiv.org/abs/2502.00651v1">Link</a></li>
+                                <li>GlobeNewswire. (2025). Collaborative Approaches to Enhancing Smart Vehicle Cybersecurity by AI-Driven Threat Detection. <a href="http://arxiv.org/abs/2501.00261v1">Link</a></li>
+                                <li>GlobeNewswire. (2025). AI Emergency Preparedness: Examining the federal government's ability to detect and respond to AI-related national security threats. <a href="http://arxiv.org/abs/2407.17347v2">Link</a></li>
+                                <li>GlobeNewswire. (2025). Building a Resilient Cybersecurity Posture: A Framework for Leveraging Prevent, Detect and Respond Functions and Law Enforcement Collaboration. <a href="http://arxiv.org/abs/2303.10874v1">Link</a></li>
+                                <li>GlobeNewswire. (2025). A Review of Quantum Cybersecurity: Threats, Risks and Opportunities. <a href="http://arxiv.org/abs/2207.03534v1">Link</a></li>
+                            </ol>
+
+                            <div class="result-metadata">
+                                <h5>Metadata</h5>
+                                <ul>
+                                    <li><strong>Time</strong>: 79838ms</li>
+                                    <li><strong>Tools</strong>: tavily_search, news_api_search, github_repo_search, stack_exchange_search, arxiv_search</li>
+                                    <li><strong>Query Types</strong>: current_events, technical</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
