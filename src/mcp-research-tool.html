@@ -41,6 +41,7 @@
                 <section class="project-section">
                     <h2>Overview</h2>
                     <p>A powerful, AI-driven research orchestration service that gathers, analyzes, and synthesizes information from multiple sources to provide comprehensive answers to complex queries. Built on Cloudflare Workers, this service leverages multiple specialized tools and AI capabilities to deliver well-structured, properly cited research results.</p>
+                    <p>This service transforms natural language queries into structured research tasks, intelligently selecting and orchestrating various specialized tools to gather relevant information. It then synthesizes the collected data into a coherent, well-cited response with confidence indicators.</p>
                     <p>Special thanks to the Octotools team for inspiring the orchestration component architecture, which uses tool cards to determine the optimal set of tools for each research task.</p>
                 </section>
 
@@ -49,7 +50,7 @@
                     <div class="architecture-component">
                         <h3>Intelligent Query Analysis</h3>
                         <ul class="feature-list">
-                            <li>Advanced analysis of user queries to understand intent and constraints</li>
+                            <li>Advanced analysis of user queries to understand intent, entities, and constraints</li>
                             <li>Query optimization for each specialized research tool</li>
                             <li>Automatic URL and context extraction</li>
                             <li>Dynamic tool selection based on relevance scoring</li>
@@ -62,59 +63,309 @@
                             <li>Dynamic tool selection based on query context</li>
                             <li>Parallel execution with smart retry logic</li>
                             <li>Automatic query adaptation for each tool</li>
-                            <li>Intelligent tool chaining and result aggregation</li>
+                            <li>Intelligent tool reuse across research iterations</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Iterative Research Process</h3>
+                        <ul class="feature-list">
+                            <li>Multiple research iterations with targeted gap analysis</li>
+                            <li>Highly focused follow-up queries for missing information</li>
+                            <li>Effective handling of follow-up iterations</li>
+                            <li>Smart termination when sufficient information is gathered</li>
                         </ul>
                     </div>
 
                     <div class="architecture-component">
                         <h3>AI-powered Synthesis</h3>
                         <ul class="feature-list">
-                            <li>Combines information from diverse sources</li>
+                            <li>Combines information from diverse sources into comprehensive answers</li>
                             <li>Proper citation and source attribution</li>
-                            <li>Structured formatting with sections</li>
-                            <li>Confidence scoring for results</li>
+                            <li>Structured formatting with sections and highlights</li>
                         </ul>
                     </div>
+
+                    <div class="architecture-component">
+                        <h3>Quality Assurance</h3>
+                        <ul class="feature-list">
+                            <li>Confidence scoring for individual results and overall synthesis</li>
+                            <li>Source credibility assessment</li>
+                            <li>Relevance filtering of results</li>
+                            <li>Batch processing for efficient analysis</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Performance Optimization</h3>
+                        <ul class="feature-list">
+                            <li>Built-in caching system using Cloudflare KV</li>
+                            <li>Parallel execution of tools</li>
+                            <li>Smart retry logic for API failures</li>
+                            <li>Efficient batching for result assessment</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Architecture</h2>
+                    <h3>Core Components</h3>
+                    
+                    <div class="architecture-component">
+                        <h4>Orchestrator (src/orchestrator.ts)</h4>
+                        <ul class="feature-list">
+                            <li>Coordinates the entire research process</li>
+                            <li>Manages tool selection and execution with intelligent reuse</li>
+                            <li>Handles result aggregation and synthesis</li>
+                            <li>Supports metadata-enriched tool execution for better context</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>Query Optimizer (src/queryOptimizer.ts)</h4>
+                        <ul class="feature-list">
+                            <li>Analyzes queries for intent and context</li>
+                            <li>Optimizes queries for different tools</li>
+                            <li>Extracts entities, URLs, and YouTube video IDs</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>Tool Manager (src/toolManager.ts)</h4>
+                        <ul class="feature-list">
+                            <li>Handles tool selection based on relevance</li>
+                            <li>Manages tool execution with retry logic and caching</li>
+                            <li>Provides unified error handling</li>
+                            <li>Uses a fallback to score-based selection when needed</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>Result Processor (src/resultProcessor.ts)</h4>
+                        <ul class="feature-list">
+                            <li>Assesses result relevance with batch processing</li>
+                            <li>Analyzes information gaps and creates targeted follow-up queries</li>
+                            <li>Synthesizes final results</li>
+                            <li>Implements parallel processing for better performance</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>Formatter (src/formatter.ts)</h4>
+                        <ul class="feature-list">
+                            <li>Structures output with proper formatting</li>
+                            <li>Handles citation management</li>
+                            <li>Provides confidence indicators</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Research Process</h2>
+                    <p>The research process follows these steps:</p>
+                    <ol class="process-list">
+                        <li><strong>Query Analysis</strong>: The query is analyzed to understand intent, extract entities, identify URLs, and determine query types.</li>
+                        <li><strong>Tool Selection</strong>: 
+                            <ul>
+                                <li>Tools are selected based on relevance to the query</li>
+                                <li>On initial iterations, previously used tools are filtered out</li>
+                                <li>For follow-up queries, tools can be reused to explore new aspects</li>
+                            </ul>
+                        </li>
+                        <li><strong>Query Optimization</strong>: The query is optimized for each selected tool to maximize relevance.</li>
+                        <li><strong>Tool Execution</strong>: 
+                            <ul>
+                                <li>Tools are executed in parallel with metadata context</li>
+                                <li>Automatic extraction of URLs and YouTube video IDs when relevant</li>
+                                <li>Results are cached for performance</li>
+                            </ul>
+                        </li>
+                        <li><strong>Relevance Assessment</strong>:
+                            <ul>
+                                <li>Results are assessed for relevance against the original query</li>
+                                <li>Processing occurs in batches to handle large result sets efficiently</li>
+                                <li>Diversity is ensured through batch processing</li>
+                            </ul>
+                        </li>
+                        <li><strong>Gap Analysis</strong>:
+                            <ul>
+                                <li>Information gaps are identified</li>
+                                <li>Targeted follow-up queries focus on missing aspects</li>
+                                <li>Analysis provides specific missing aspects and explains the gaps</li>
+                            </ul>
+                        </li>
+                        <li><strong>Iteration</strong>: 
+                            <ul>
+                                <li>Process repeats with follow-up queries until gaps are filled</li>
+                                <li>Tools can be reused between iterations for different aspects</li>
+                                <li>Each iteration builds on previous knowledge</li>
+                            </ul>
+                        </li>
+                        <li><strong>Synthesis</strong>: 
+                            <ul>
+                                <li>All relevant results are synthesized into a comprehensive answer</li>
+                                <li>Sources are properly cited and organized</li>
+                                <li>Confidence score is calculated based on source quality and content</li>
+                            </ul>
+                        </li>
+                    </ol>
                 </section>
 
                 <section class="project-section">
                     <h2>Technical Implementation</h2>
                     <div class="code-examples">
                         <div class="code-snippet">
+                            <h3>Query Optimizer Implementation</h3>
+                            <pre><code class="language-typescript">export class QueryOptimizer {
+    private llmInterface: LLMInterface;
+    private youtubeExtractor: YouTubeExtractor;
+    private urlExtractor: URLExtractor;
+    
+    constructor(llmInterface: LLMInterface) {
+        this.llmInterface = llmInterface;
+        this.youtubeExtractor = new YouTubeExtractor();
+        this.urlExtractor = new URLExtractor();
+    }
+    
+    async optimize(rawQuery: string): Promise&lt;Query&gt; {
+        // Extract URLs and YouTube video IDs
+        const urls = this.urlExtractor.extract(rawQuery);
+        const youtubeIds = this.youtubeExtractor.extract(rawQuery);
+        
+        // Analyze query intent and identify entities
+        const analysis = await this.llmInterface.analyzeQuery(rawQuery);
+        
+        // Determine query type and constraints
+        const queryType = this.determineQueryType(analysis, urls, youtubeIds);
+        
+        // Clean and standardize the query
+        const cleanedQuery = this.cleanQuery(rawQuery);
+        
+        return {
+            original: rawQuery,
+            cleaned: cleanedQuery,
+            entities: analysis.entities,
+            intent: analysis.intent,
+            queryType: queryType,
+            urls: urls,
+            youtubeIds: youtubeIds,
+            constraints: analysis.constraints || []
+        };
+    }
+    
+    // Optimize query for specific tool
+    async optimizeForTool(query: Query, tool: Tool): Promise&lt;string&gt; {
+        // Create tool-specific query based on tool capabilities and query intent
+        return this.llmInterface.optimizeForTool(query, tool.capabilities);
+    }
+}</code></pre>
+                        </div>
+
+                        <div class="code-snippet">
                             <h3>Tool Manager Implementation</h3>
                             <pre><code class="language-typescript">export class ToolManager {
     private tools: Map&lt;string, Tool&gt;;
     private relevanceScorer: RelevanceScorer;
-
-    constructor(tools: Tool[]) {
+    private cacheManager: CacheManager;
+    
+    constructor(tools: Tool[], cacheManager: CacheManager) {
         this.tools = new Map(tools.map(t =&gt; [t.id, t]));
         this.relevanceScorer = new RelevanceScorer();
+        this.cacheManager = cacheManager;
     }
-
-    async selectTools(query: Query, context: Context): Promise&lt;Tool[]&gt; {
+    
+    async selectTools(
+        query: Query, 
+        context: ResearchContext,
+        maxTools: number = 5
+    ): Promise&lt;Tool[]&gt; {
+        // Filter out tools already used in previous iterations if not a follow-up query
+        const availableTools = this.filterAvailableTools(context);
+        
+        // Score tools based on relevance to query
         const scores = await Promise.all(
-            Array.from(this.tools.values()).map(async tool =&gt; ({
+            availableTools.map(async tool =&gt; ({
                 tool,
                 score: await this.relevanceScorer.score(tool, query, context)
             }))
         );
-
+        
+        // Select most relevant tools
         return scores
             .filter(({score}) =&gt; score &gt; RELEVANCE_THRESHOLD)
             .sort((a, b) =&gt; b.score - a.score)
+            .slice(0, maxTools)
             .map(({tool}) =&gt; tool);
     }
-
+    
     async executeTools(
         tools: Tool[], 
         query: Query,
-        context: Context
+        context: ResearchContext
     ): Promise&lt;Result[]&gt; {
+        // Prepare execution metadata
+        const executionMeta = {
+            iterationNumber: context.currentIteration,
+            originalQuery: query.original,
+            isFollowUp: context.isFollowUpQuery,
+            previousTools: context.usedToolIds
+        };
+        
+        // Execute tools in parallel with caching and retry logic
         return Promise.all(
-            tools.map(tool =&gt; 
-                this.executeWithRetry(tool, query, context)
-            )
+            tools.map(async tool =&gt; {
+                // Check cache first
+                const cacheKey = this.generateCacheKey(tool.id, query);
+                const cachedResult = await this.cacheManager.get(cacheKey);
+                
+                if (cachedResult) {
+                    return {
+                        ...cachedResult,
+                        fromCache: true
+                    };
+                }
+                
+                // Execute with retry if needed
+                try {
+                    const optimizedQuery = await this.queryOptimizer.optimizeForTool(query, tool);
+                    const result = await this.executeWithRetry(
+                        tool, 
+                        optimizedQuery, 
+                        executionMeta
+                    );
+                    
+                    // Cache successful results
+                    await this.cacheManager.set(cacheKey, result);
+                    return result;
+                } catch (error) {
+                    return this.handleToolError(tool, error);
+                }
+            })
         );
+    }
+    
+    private async executeWithRetry(
+        tool: Tool, 
+        query: string, 
+        meta: ExecutionMetadata,
+        maxRetries: number = 2
+    ): Promise&lt;Result&gt; {
+        let lastError;
+        
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+                return await tool.execute(query, meta);
+            } catch (error) {
+                lastError = error;
+                if (!this.isRetryableError(error) || attempt === maxRetries) {
+                    break;
+                }
+                // Exponential backoff
+                await this.delay(Math.pow(2, attempt) * 500);
+            }
+        }
+        
+        throw lastError;
     }
 }</code></pre>
                         </div>
@@ -122,31 +373,91 @@
                         <div class="code-snippet">
                             <h3>Result Processor Implementation</h3>
                             <pre><code class="language-typescript">export class ResultProcessor {
-    private synthesizer: Synthesizer;
+    private llmInterface: LLMInterface;
     private confidenceCalculator: ConfidenceCalculator;
-
-    constructor() {
-        this.synthesizer = new Synthesizer();
+    private BATCH_SIZE = 5;
+    
+    constructor(llmInterface: LLMInterface) {
+        this.llmInterface = llmInterface;
         this.confidenceCalculator = new ConfidenceCalculator();
     }
-
-    async process(results: Result[]): Promise&lt;ProcessedResult&gt; {
-        const relevantResults = this.filterRelevant(results);
-        const synthesized = await this.synthesizer.combine(relevantResults);
-        const confidence = this.confidenceCalculator.calculate(synthesized);
-
+    
+    async process(
+        results: Result[], 
+        query: Query, 
+        context: ResearchContext
+    ): Promise&lt;ProcessedResult&gt; {
+        // Process results in batches for better performance
+        const batches = this.createBatches(results, this.BATCH_SIZE);
+        const scoredResults = await this.processBatches(batches, query);
+        
+        // Filter by relevance
+        const relevantResults = this.filterRelevant(scoredResults);
+        
+        // Identify information gaps
+        const gaps = await this.identifyGaps(relevantResults, query, context);
+        
+        // Generate follow-up queries if needed
+        const followUpQueries = gaps.length > 0 
+            ? await this.generateFollowUpQueries(gaps, query, context) 
+            : [];
+        
+        // Synthesize final answer
+        const synthesized = await this.synthesize(relevantResults, query);
+        
+        // Calculate confidence score
+        const confidence = this.confidenceCalculator.calculate(
+            relevantResults, 
+            synthesized
+        );
+        
         return {
             content: synthesized.content,
             sources: this.extractSources(relevantResults),
+            followUpQueries,
             confidence,
-            metadata: this.generateMetadata(results)
+            gaps,
+            metadata: this.generateMetadata(results, scoredResults)
         };
     }
-
-    private filterRelevant(results: Result[]): Result[] {
-        return results.filter(result =&gt; 
-            result.relevanceScore &gt; RELEVANCE_THRESHOLD
+    
+    private async processBatches(
+        batches: Result[][], 
+        query: Query
+    ): Promise&lt;ScoredResult[]&gt; {
+        const results: ScoredResult[] = [];
+        
+        // Process batches in parallel
+        const batchPromises = batches.map(batch => 
+            this.processBatch(batch, query)
         );
+        
+        const processedBatches = await Promise.all(batchPromises);
+        return processedBatches.flat();
+    }
+    
+    private async processBatch(
+        batch: Result[], 
+        query: Query
+    ): Promise&lt;ScoredResult[]&gt; {
+        // Score relevance for each result in batch
+        const scoringResults = await this.llmInterface.scoreRelevance(
+            batch, 
+            query
+        );
+        
+        return batch.map((result, index) => ({
+            ...result,
+            relevanceScore: scoringResults[index].score,
+            relevanceExplanation: scoringResults[index].explanation
+        }));
+    }
+    
+    private async synthesize(
+        results: ScoredResult[], 
+        query: Query
+    ): Promise&lt;SynthesizedResult&gt; {
+        return await this.llmInterface.synthesize(results, query);
     }
 }</code></pre>
                         </div>
@@ -157,36 +468,205 @@
     private toolManager: ToolManager;
     private queryOptimizer: QueryOptimizer;
     private resultProcessor: ResultProcessor;
-
+    private cacheManager: CacheManager;
+    
+    constructor(
+        tools: Tool[], 
+        llmInterface: LLMInterface,
+        cacheManager: CacheManager
+    ) {
+        this.queryOptimizer = new QueryOptimizer(llmInterface);
+        this.toolManager = new ToolManager(tools, cacheManager);
+        this.resultProcessor = new ResultProcessor(llmInterface);
+        this.cacheManager = cacheManager;
+    }
+    
     async research(
         query: string, 
-        depth: number = 3
+        options: ResearchOptions = {}
     ): Promise&lt;ResearchResult&gt; {
+        const {
+            depth = 3,
+            maxToolsPerIteration = 4,
+            cacheResults = true
+        } = options;
+        
+        // Check cache for identical research request
+        if (cacheResults) {
+            const cacheKey = `research:${query}:${depth}`;
+            const cachedResult = await this.cacheManager.get(cacheKey);
+            if (cachedResult) {
+                return {
+                    ...cachedResult,
+                    fromCache: true
+                };
+            }
+        }
+        
+        const startTime = Date.now();
+        
+        // Initialize research context and optimize the query
         const optimizedQuery = await this.queryOptimizer.optimize(query);
-        const context = await this.buildContext(optimizedQuery);
-
+        const context = new ResearchContext(optimizedQuery);
+        
+        // Iterative research process
         let results: Result[] = [];
-        for (let i = 0; i &lt; depth; i++) {
+        let currentQuery = optimizedQuery;
+        
+        for (let i = 0; i < depth; i++) {
+            context.startIteration();
+            
+            // Select tools based on current query and context
             const tools = await this.toolManager.selectTools(
-                optimizedQuery, 
+                currentQuery, 
+                context,
+                maxToolsPerIteration
+            );
+            
+            if (tools.length === 0) {
+                break; // No relevant tools found
+            }
+            
+            // Execute selected tools
+            const iterationResults = await this.toolManager.executeTools(
+                tools,
+                currentQuery,
                 context
             );
             
-            const iterationResults = await this.toolManager.executeTools(
-                tools,
-                optimizedQuery,
+            // Add results to overall collection
+            results = results.concat(iterationResults);
+            
+            // Process results to identify gaps and generate follow-up queries
+            const processed = await this.resultProcessor.process(
+                results, 
+                currentQuery, 
                 context
             );
-
-            results = results.concat(iterationResults);
-            context.update(iterationResults);
-
-            if (this.hasEnoughInformation(results)) {
+            
+            // Update context with new information
+            context.update(iterationResults, processed);
+            
+            // Check if we have enough information or if follow-up is needed
+            if (this.hasEnoughInformation(processed) || processed.followUpQueries.length === 0) {
                 break;
             }
+            
+            // Update query for next iteration using the highest priority follow-up
+            currentQuery = {
+                ...currentQuery,
+                original: processed.followUpQueries[0].query,
+                cleaned: processed.followUpQueries[0].query,
+                parentQuery: currentQuery
+            };
+            
+            // Set context for follow-up query
+            context.setFollowUpQuery(processed.followUpQueries[0]);
         }
+        
+        // Final processing of all results
+        const finalProcessed = await this.resultProcessor.process(
+            results, 
+            optimizedQuery, 
+            context
+        );
+        
+        const researchResult = {
+            answer: finalProcessed.content,
+            sources: finalProcessed.sources,
+            confidence: finalProcessed.confidence,
+            metadata: {
+                executionTime: Date.now() - startTime,
+                iterations: context.currentIteration,
+                totalResults: results.length,
+                queryTypes: [optimizedQuery.queryType],
+                toolsUsed: context.usedToolIds,
+                gaps: finalProcessed.gaps
+            }
+        };
+        
+        // Cache the research result
+        if (cacheResults) {
+            const cacheKey = `research:${query}:${depth}`;
+            await this.cacheManager.set(cacheKey, researchResult, 60 * 60 * 72); // 72 hours TTL
+        }
+        
+        return researchResult;
+    }
+    
+    private hasEnoughInformation(processed: ProcessedResult): boolean {
+        return processed.confidence >= 0.85 && processed.gaps.length === 0;
+    }
+}</code></pre>
+                        </div>
 
-        return this.resultProcessor.process(results);
+                        <div class="code-snippet">
+                            <h3>Cache Manager Implementation</h3>
+                            <pre><code class="language-typescript">export class CacheManager {
+    private kvNamespace: KVNamespace;
+    private memoryCache: Map&lt;string, {value: any, expiry: number}&gt;;
+    
+    constructor(kvNamespace: KVNamespace) {
+        this.kvNamespace = kvNamespace;
+        this.memoryCache = new Map();
+    }
+    
+    async get(key: string): Promise&lt;any&gt; {
+        // Check memory cache first
+        const memCached = this.memoryCache.get(key);
+        if (memCached && memCached.expiry > Date.now()) {
+            return memCached.value;
+        } else if (memCached) {
+            // Remove expired items
+            this.memoryCache.delete(key);
+        }
+        
+        // Check KV store
+        try {
+            const cached = await this.kvNamespace.get(key, 'json');
+            if (cached) {
+                // Refresh memory cache
+                this.setMemoryCache(key, cached, 60 * 15); // 15 minutes
+                return cached;
+            }
+        } catch (error) {
+            console.error('Cache read error:', error);
+        }
+        
+        return null;
+    }
+    
+    async set(key: string, value: any, ttlSeconds: number = 3600): Promise&lt;void&gt; {
+        try {
+            // Write to KV store
+            await this.kvNamespace.put(key, JSON.stringify(value), {
+                expirationTtl: ttlSeconds
+            });
+            
+            // Update memory cache
+            this.setMemoryCache(key, value, ttlSeconds);
+        } catch (error) {
+            console.error('Cache write error:', error);
+        }
+    }
+    
+    async delete(key: string): Promise&lt;void&gt; {
+        try {
+            // Remove from KV store
+            await this.kvNamespace.delete(key);
+            
+            // Remove from memory cache
+            this.memoryCache.delete(key);
+        } catch (error) {
+            console.error('Cache delete error:', error);
+        }
+    }
+    
+    private setMemoryCache(key: string, value: any, ttlSeconds: number): void {
+        this.memoryCache.set(key, {
+            value,
+            expiry: Date.now() + (ttlSeconds * 1000)
+        });
     }
 }</code></pre>
                         </div>
@@ -200,26 +680,39 @@
                         <ul class="feature-list">
                             <li>Web Search
                                 <ul>
-                                    <li>Brave Search: Privacy-focused web search</li>
-                                    <li>Tavily Search: AI-powered search</li>
+                                    <li>Brave Search: Privacy-focused web search with broad coverage</li>
+                                    <li>Tavily Search: AI-powered search with enhanced relevance</li>
                                 </ul>
                             </li>
                             <li>Technical Information
                                 <ul>
-                                    <li>GitHub Search: Repository and code search</li>
-                                    <li>Stack Exchange: Technical Q&A</li>
+                                    <li>GitHub Repository Search: Find relevant repositories</li>
+                                    <li>GitHub Code Search: Search for code examples and implementations</li>
+                                    <li>Stack Exchange: Technical Q&A from Stack Overflow and related sites</li>
                                 </ul>
                             </li>
                             <li>Academic Research
                                 <ul>
                                     <li>arXiv: Academic papers and preprints</li>
-                                    <li>Research Papers: Scientific literature</li>
+                                    <li>Patent Search: Intellectual property and innovation tracking</li>
+                                </ul>
+                            </li>
+                            <li>Current Events
+                                <ul>
+                                    <li>News API: Recent news and developments</li>
+                                    <li>Media Monitoring: Current events tracking</li>
                                 </ul>
                             </li>
                             <li>Content Extraction
                                 <ul>
-                                    <li>Fire Crawl: Web content extraction</li>
-                                    <li>YouTube Transcript: Video content</li>
+                                    <li>Fire Crawl: Web content extraction and analysis</li>
+                                    <li>YouTube Transcript: Video content transcription</li>
+                                </ul>
+                            </li>
+                            <li>Reference Information
+                                <ul>
+                                    <li>Wikipedia Search: General knowledge and reference</li>
+                                    <li>Book Search: Literature and bibliographic information</li>
                                 </ul>
                             </li>
                         </ul>
@@ -227,20 +720,52 @@
                 </section>
 
                 <section class="project-section">
-                    <h2>Technical Capabilities</h2>
-                    <div class="metrics-grid">
-                        <div class="metric-card">
-                            <span class="metric-label">Query Processing</span>
-                            <span class="metric-description">Advanced NLP for query understanding and optimization</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-label">Tool Orchestration</span>
-                            <span class="metric-description">Dynamic tool selection and parallel execution</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-label">Result Synthesis</span>
-                            <span class="metric-description">AI-powered information synthesis with citations</span>
-                        </div>
+                    <h2>Usage Example</h2>
+                    <div class="code-snippet">
+                        <h3>Basic Example</h3>
+                        <pre><code class="language-typescript">const worker = new ResearchWorker();
+
+const result = await worker.research(
+  "What are the latest developments in quantum computing?",
+  { 
+    depth: 3,
+    maxToolsPerIteration: 4,
+    cacheResults: true 
+  }
+);
+
+console.log(result.answer);</code></pre>
+                    </div>
+
+                    <div class="code-snippet">
+                        <h3>Response Format</h3>
+                        <pre><code class="language-typescript">interface ResearchResult {
+  answer: string;          // Synthesized research answer
+  sources: Source[];       // List of sources used
+  confidence: number;      // Overall confidence score (0-1)
+  metadata: {
+    executionTime: number;
+    iterations: number;
+    totalResults: number;
+    queryTypes: string[];
+    toolsUsed: string[];
+    gaps: InformationGap[];
+  }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Configuration Options</h2>
+                    <div class="architecture-component">
+                        <h3>Research Options</h3>
+                        <ul class="feature-list">
+                            <li><strong>depth</strong>: Number of research iterations (1-5)</li>
+                            <li><strong>maxToolsPerIteration</strong>: Maximum number of tools to use per iteration</li>
+                            <li><strong>cacheResults</strong>: Whether to cache the final research results</li>
+                            <li><strong>relevanceThreshold</strong>: Minimum relevance score for including results</li>
+                            <li><strong>confidenceThreshold</strong>: Minimum confidence score to consider research complete</li>
+                        </ul>
                     </div>
                 </section>
 
