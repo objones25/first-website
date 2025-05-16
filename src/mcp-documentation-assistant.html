@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Documentation Assistant - Owen Jones</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">Owen Jones</a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/projects">Projects</a>
+                <a href="/contact">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+            <article class="project-article">
+                <div class="project-header-large">
+                    <div class="header-content">
+                        <div class="project-image">
+                            <img src="./assets/mcp-documentation-assistant.jpg" alt="MCP Documentation Assistant">
+                        </div>
+                        <h1>MCP Documentation Assistant</h1>
+                        <div class="project-meta">
+                            <span class="status-badge stable">Stable Release</span>
+                            <div class="tech-stack">
+                                <span class="tech-tag">TypeScript</span>
+                                <span class="tech-tag">Cloudflare Workers</span>
+                                <span class="tech-tag">AI</span>
+                                <span class="tech-tag">MCP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="project-section">
+                    <h2>Overview</h2>
+                    <p>A powerful Cloudflare Worker that combines web scraping and AI to provide intelligent answers about documentation and web content. Built using the Workers MCP framework, FireCrawl SDK, and Google's Gemini AI, this service transforms complex documentation queries into clear, contextual responses with proper citations.</p>
+                    <p>The MCP Documentation Assistant intelligently analyzes the complexity of queries and automatically expands its search to related documentation pages when necessary, ensuring comprehensive answers that draw from multiple relevant sources. It implements efficient caching strategies to optimize performance and reduce API calls.</p>
+                </section>
+
+                <section class="project-section">
+                    <h2>Key Features</h2>
+                    <div class="architecture-component">
+                        <h3>Smart Content Scraping</h3>
+                        <ul class="feature-list">
+                            <li>Automatically detects and scrapes documentation pages and related content</li>
+                            <li>Intelligent filtering of relevant documentation links</li>
+                            <li>Context-aware scraping based on query complexity</li>
+                            <li>Efficient extraction of main content while filtering out navigation and irrelevant sections</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>AI-Powered Answers</h3>
+                        <ul class="feature-list">
+                            <li>Uses Google's Gemini AI to generate accurate, contextual responses</li>
+                            <li>Carefully crafted prompts to ensure high-quality answers</li>
+                            <li>Handles complex technical questions with detailed explanations</li>
+                            <li>Maintains focus on provided content to ensure accuracy</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Multi-Page Context</h3>
+                        <ul class="feature-list">
+                            <li>Intelligently gathers information from related documentation pages</li>
+                            <li>Automatically identifies and follows relevant documentation links</li>
+                            <li>Combines content from multiple sources for comprehensive answers</li>
+                            <li>Adapts search depth based on query complexity</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Caching System</h3>
+                        <ul class="feature-list">
+                            <li>Implements KV storage to cache responses and reduce API calls</li>
+                            <li>Separate caching for content and responses with appropriate TTLs</li>
+                            <li>Content cached for one week to minimize scraping operations</li>
+                            <li>Responses cached for 24 hours to balance freshness and performance</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Citation Support</h3>
+                        <ul class="feature-list">
+                            <li>Provides answers with specific citations to source content</li>
+                            <li>Clear attribution using square bracket notation</li>
+                            <li>Source URLs included for reference</li>
+                            <li>Distinguishes between main and related page content</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Error Handling</h3>
+                        <ul class="feature-list">
+                            <li>Graceful fallbacks for scraping issues</li>
+                            <li>User-friendly error messages</li>
+                            <li>Automatic handling of rate limits and API failures</li>
+                            <li>Robust error recovery strategies</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Architecture</h2>
+                    <h3>Core Components</h3>
+                    
+                    <div class="architecture-component">
+                        <h4>Worker Entrypoint (src/index.ts)</h4>
+                        <ul class="feature-list">
+                            <li>Main Cloudflare Worker implementation using MCP framework</li>
+                            <li>Handles request routing and environment configuration</li>
+                            <li>Implements caching strategy with KV storage</li>
+                            <li>Provides user-friendly error handling</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>Content Scraper (src/utils.ts)</h4>
+                        <ul class="feature-list">
+                            <li>Utilizes FireCrawl SDK for efficient web scraping</li>
+                            <li>Implements intelligent related page detection</li>
+                            <li>Filters and processes content for optimal AI consumption</li>
+                            <li>Handles batch scraping for related pages</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>AI Integration (src/utils.ts)</h4>
+                        <ul class="feature-list">
+                            <li>Integrates with Google's Gemini AI</li>
+                            <li>Formats prompts for optimal response quality</li>
+                            <li>Ensures proper citation and content focus</li>
+                            <li>Handles AI response processing</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>Caching System</h4>
+                        <ul class="feature-list">
+                            <li>Implements dual-layer caching strategy</li>
+                            <li>Separate caches for content and responses</li>
+                            <li>Optimized TTLs for different cache types</li>
+                            <li>Efficient cache key generation</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Technical Implementation</h2>
+                    
+                    <div class="architecture-component">
+                        <h3>Content Scraping Logic</h3>
+                        <p>The content scraping system intelligently adapts to the complexity of the query and the type of website being analyzed:</p>
+                        <pre><code class="language-typescript">export async function scrapeContent(url: string, apiKey: string, isComplex: boolean = false): Promise<string> {
+  const app = new FirecrawlApp({ apiKey });
+  
+  // Always scrape the main URL first
+  const mainResult = await app.scrapeUrl(url, { 
+    formats: ['markdown', 'links'],
+    onlyMainContent: true
+  }) as ScrapeResponse;
+  
+  if (!mainResult.success || !mainResult.markdown) {
+    throw new Error(`Failed to scrape: ${mainResult.error || 'Unknown error'}`);
+  }
+  
+  // For simple queries or non-doc sites, return just the main content
+  if (!isComplex || !url.match(/docs|documentation|github\.com|api|guide/)) {
+    return mainResult.markdown;
+  }
+  
+  // For complex queries on doc sites, try to add related content
+  try {
+    // Get up to 2 related pages from the links in the main page
+    const relatedUrls = (mainResult.links || [])
+      .filter(linkedUrl => isRelevantDocUrl(linkedUrl, url))
+      .slice(0, 2);
+    
+    if (relatedUrls.length === 0) {
+      return mainResult.markdown;
+    }
+    
+    // Use batch scraping for efficiency
+    const batchResult = await app.batchScrapeUrls(relatedUrls, {
+      formats: ['markdown'],
+      onlyMainContent: true
+    });
+    
+    // Combine all content with source labels
+    const allContent = [`## Main Page: ${url}\n\n${mainResult.markdown}`];
+    
+    if (batchResult.success && batchResult.data) {
+      batchResult.data.forEach((result: any) => {
+        if (result.success && result.markdown) {
+          allContent.push(`## Related Page: ${result.metadata.url}\n\n${result.markdown}`);
+        }
+      });
+    }
+    
+    return allContent.join('\n\n');
+  } catch (error) {
+    // If related page scraping fails, just return the main content
+    console.error('Error getting related pages:', error);
+    return mainResult.markdown;
+  }
+}</code></pre>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>AI Prompt Formatting</h3>
+                        <p>The system uses carefully crafted prompts to ensure high-quality, focused responses:</p>
+                        <pre><code class="language-typescript">export function formatContentQuery(content: string, question: string): string {
+  return `You are a helpful AI assistant that provides accurate, concise answers based on the given content.
+Your task is to answer questions using ONLY the information provided.
+If the answer cannot be found in the content, say so clearly.
+Always include specific citations in [square brackets] and present the most relevant information first.
+
+Content:
+${content}
+
+Question: ${question}
+
+Answer: `;
+}</code></pre>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Caching Implementation</h3>
+                        <p>The caching system uses Cloudflare KV storage with separate caches for content and responses:</p>
+                        <pre><code class="language-typescript">async askAboutUrl(url: string, question: string): Promise<string> {
+  // Use two distinct cache keys
+  const responseCacheKey = `r:${url}:${question}`;
+  const contentCacheKey = `c:${url}`;
+  
+  // Try to get the AI response from cache first
+  const cachedResponse = await this.env.CONTENT_CACHE.get(responseCacheKey);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  try {
+    // Determine complexity of the query
+    const isComplexQuery = question.length > 50 || 
+                         question.includes('how') ||
+                         question.includes('explain') ||
+                         question.includes('compare');
+    
+    // Try to get scraped content from cache
+    let content = await this.env.CONTENT_CACHE.get(contentCacheKey);
+    
+    // If no cached content, scrape it
+    if (!content) {
+      content = await scrapeContent(url, this.env.FIRE_CRAWL_API_KEY, isComplexQuery);
+      
+      // Cache scraped content for 1 week
+      await this.env.CONTENT_CACHE.put(contentCacheKey, content, { expirationTtl: 604800 });
+    }
+    
+    // Format prompt and get AI response
+    const prompt = formatContentQuery(content, question);
+    const response = await ask(prompt, this.env.GEMINI_API_KEY);
+    
+    // Cache the response for 24 hours
+    await this.env.CONTENT_CACHE.put(responseCacheKey, response, { expirationTtl: 86400 });
+    
+    return response;
+  } catch (error) {
+    // Error handling...
+  }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Usage Example</h2>
+                    <div class="architecture-component">
+                        <h3>Basic Usage</h3>
+                        <p>The MCP Documentation Assistant exposes a single endpoint through the MCP framework:</p>
+                        <pre><code class="language-typescript">async askAboutUrl(url: string, question: string): Promise<string></code></pre>
+                        <p>Example usage:</p>
+                        <pre><code class="language-typescript">const worker = new MyWorker();
+const answer = await worker.askAboutUrl(
+  'https://docs.example.com/api',
+  'What are the authentication methods?'
+);</code></pre>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Response Format</h3>
+                        <div class="research-results">
+                            <div class="confidence-indicator high">
+                                <span class="icon">🟢</span>
+                                <span class="text">High confidence</span>
+                            </div>
+                            
+                            <h4>Authentication Methods in Example API</h4>
+
+                            <p>The Example API supports three authentication methods:</p>
+
+                            <h5>1. API Key Authentication</h5>
+                            <p>The most common method is API key authentication, where you include your API key in the request header [Main Page]. This is recommended for most use cases due to its simplicity and security.</p>
+                            
+                            <p>Example:</p>
+                            <pre><code>Authorization: Bearer YOUR_API_KEY</code></pre>
+
+                            <h5>2. OAuth 2.0</h5>
+                            <p>For applications requiring delegated user access, OAuth 2.0 is supported [Related Page: https://docs.example.com/api/oauth]. This method requires implementing the authorization code flow and refreshing tokens as needed.</p>
+
+                            <h5>3. JWT Authentication</h5>
+                            <p>For server-to-server communication, JWT authentication is available [Main Page]. This requires generating a signed JWT with your service account credentials.</p>
+
+                            <p>All authentication methods require HTTPS, and requests without proper authentication will receive a 401 Unauthorized response [Main Page].</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Setup and Configuration</h2>
+                    <div class="architecture-component">
+                        <h3>Prerequisites</h3>
+                        <ul class="feature-list">
+                            <li>Node.js and npm installed</li>
+                            <li>Cloudflare Workers account</li>
+                            <li>FireCrawl API key</li>
+                            <li>Google Gemini API key</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Environment Configuration</h3>
+                        <p>The worker requires the following environment variables:</p>
+                        <ul class="feature-list">
+                            <li><code>SHARED_SECRET</code>: Secret key for MCP authentication</li>
+                            <li><code>FIRE_CRAWL_API_KEY</code>: API key for FireCrawl service</li>
+                            <li><code>GEMINI_API_KEY</code>: API key for Google's Gemini AI</li>
+                            <li><code>CONTENT_CACHE</code>: KV namespace binding for caching</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Deployment</h3>
+                        <p>Deploy to Cloudflare Workers with:</p>
+                        <pre><code class="language-bash">npm run deploy</code></pre>
+                    </div>
+                </section>
+
+                <div class="project-links">
+                    <a href="https://github.com/objones25/ts-cag-mcp" class="github-link" target="_blank">View on GitHub →</a>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-typescript.min.js"></script>
+    <script type="module">
+        import { includeSearch } from './js/include-search.js';
+        
+        window.addEventListener('load', () => {
+            includeSearch();
+        });
+    </script>
+</body>
+</html>

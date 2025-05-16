@@ -20,6 +20,7 @@ export default defineConfig({
         'network-security-agent': resolve(__dirname, 'src/network-security-agent.html'),
         'snake-game-project': resolve(__dirname, 'src/snake-game-project.html'),
         'mcp-research-tool': resolve(__dirname, 'src/mcp-research-tool.html'),
+        'mcp-documentation-assistant': resolve(__dirname, 'src/mcp-documentation-assistant.html'),
         'imdb-review-project': resolve(__dirname, 'src/imdb-review-project.html'),
         'malware-classification': resolve(__dirname, 'src/malware-classification.html'),
         'neural-network-project': resolve(__dirname, 'src/neural-network-project.html'),
@@ -43,4 +44,4 @@ export default defineConfig({
     port: 3000,
     strictPort: true
   }
-}); 
+});

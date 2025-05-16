@@ -17,6 +17,7 @@
     { "src": "/network-security-agent/?", "dest": "/network-security-agent.html" },
     { "src": "/snake-game-project/?", "dest": "/snake-game-project.html" },
     { "src": "/mcp-research-tool/?", "dest": "/mcp-research-tool.html" },
+    { "src": "/mcp-documentation-assistant/?", "dest": "/mcp-documentation-assistant.html" },
     { "src": "/imdb-review-project/?", "dest": "/imdb-review-project.html" },
     { "src": "/malware-classification/?", "dest": "/malware-classification.html" },
     { "src": "/neural-network-project/?", "dest": "/neural-network-project.html" },
@@ -62,4 +63,4 @@
       ]
     }
   ]
-} 
+}
