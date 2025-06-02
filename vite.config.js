@@ -31,6 +31,7 @@ export default defineConfig({
         'rust-web-server-project': resolve(__dirname, 'src/rust-web-server-project.html'),
         'brave-search-agent': resolve(__dirname, 'src/brave-search-agent.html'),
         'gemini-chat-agent': resolve(__dirname, 'src/gemini-chat-agent.html'),
+        'shorelark-project': resolve(__dirname, 'src/shorelark-project.html'),
         '404': resolve(__dirname, 'src/404.html')
       }
     },

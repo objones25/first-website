@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shorelark Evolution Simulation - Owen Jones</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">Owen Jones</a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/projects">Projects</a>
+                <a href="/contact">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+            <article class="project-article">
+                <div class="project-header-large">
+                    <div class="header-content">
+                        <div class="project-image">
+                            <img src="./assets/shorelark-bird-icon.jpeg" alt="Shorelark Evolution Simulation">
+                        </div>
+                        <h1>Shorelark Evolution Simulation</h1>
+                        <div class="project-meta">
+                            <span class="status-badge complete">Complete</span>
+                            <div class="tech-stack">
+                                <span class="tech-tag">Rust</span>
+                                <span class="tech-tag">WebAssembly</span>
+                                <span class="tech-tag">Neural Networks</span>
+                                <span class="tech-tag">Genetic Algorithms</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="project-section">
+                    <h2>Overview</h2>
+                    <p>Shorelark is a sophisticated evolution simulation that demonstrates how artificial life can emerge through the combination of neural networks and genetic algorithms. Built entirely from scratch in Rust and compiled to WebAssembly, this project showcases birds learning to navigate their environment and find food through evolutionary processes.</p>
+                    <p>This project was developed following Patryk Wychowaniec's comprehensive tutorial series "Learning to Fly," which provides an in-depth exploration of implementing AI concepts from first principles. The simulation features autonomous agents (birds) that evolve their behavior over generations, becoming increasingly efficient at survival tasks.</p>
+                    <p>The project demonstrates the power of combining multiple AI techniques: feedforward neural networks serve as bird brains, genetic algorithms drive evolution, and sophisticated vision systems enable environmental awareness. All components are implemented from mathematical foundations without external AI libraries.</p>
+                </section>
+
+                <section class="project-section">
+                    <h2>Key Features</h2>
+                    <div class="architecture-component">
+                        <h3>Neural Network Engine</h3>
+                        <ul class="feature-list">
+                            <li>Custom feedforward neural network implementation with configurable layer topology</li>
+                            <li>ReLU activation functions with weight randomization and propagation</li>
+                            <li>Comprehensive test coverage with mathematical verification</li>
+                            <li>Efficient weight serialization for genetic algorithm integration</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Genetic Algorithm</h3>
+                        <ul class="feature-list">
+                            <li>Roulette wheel selection based on fitness scores (food consumption)</li>
+                            <li>Uniform crossover combining neural network weights from two parents</li>
+                            <li>Gaussian mutation introducing controlled random variations</li>
+                            <li>Fitness-based evolution with comprehensive statistics tracking</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Vision System</h3>
+                        <ul class="feature-list">
+                            <li>Sophisticated bird vision with configurable field of view and range</li>
+                            <li>Multiple photoreceptor cells for detailed environmental perception</li>
+                            <li>Distance-based energy calculation using trigonometric mathematics</li>
+                            <li>Parameterized testing framework for vision system verification</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Real-time Simulation</h3>
+                        <ul class="feature-list">
+                            <li>Smooth 60 FPS rendering using HTML5 Canvas API</li>
+                            <li>Interactive visualization with rotating triangular birds and circular food</li>
+                            <li>Fast-forward training mode for accelerated evolution</li>
+                            <li>Real-time statistics tracking with min/max/average fitness scores</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>WebAssembly Integration</h3>
+                        <ul class="feature-list">
+                            <li>Seamless Rust-to-web compilation with wasm-bindgen</li>
+                            <li>Type-safe boundaries between Rust simulation and JavaScript UI</li>
+                            <li>Optimized performance for real-time execution</li>
+                            <li>Memory-efficient data structures for large populations</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Architecture</h2>
+                    <h3>Multi-Crate Workspace Structure</h3>
+                    
+                    <div class="architecture-component">
+                        <h4>lib-neural-network</h4>
+                        <ul class="feature-list">
+                            <li>Custom feedforward neural network implementation</li>
+                            <li>Layer and neuron abstractions with configurable topology</li>
+                            <li>Weight serialization and deserialization for genetic algorithms</li>
+                            <li>Comprehensive test suite with floating-point precision handling</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>lib-genetic-algorithm</h4>
+                        <ul class="feature-list">
+                            <li>Generic genetic algorithm implementation with trait-based design</li>
+                            <li>Pluggable selection, crossover, and mutation strategies</li>
+                            <li>Statistics generation with fitness tracking</li>
+                            <li>Parameterized testing for algorithm verification</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>lib-simulation</h4>
+                        <ul class="feature-list">
+                            <li>Core simulation engine with physics and collision detection</li>
+                            <li>Animal and food entity management</li>
+                            <li>Eye implementation with trigonometric field-of-view calculations</li>
+                            <li>Brain integration connecting vision to neural network decision-making</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>lib-simulation-wasm</h4>
+                        <ul class="feature-list">
+                            <li>WebAssembly bindings and JavaScript interop layer</li>
+                            <li>Data conversion between Rust and JavaScript types</li>
+                            <li>Performance-optimized simulation stepping</li>
+                            <li>Statistics aggregation and formatting</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Technical Implementation</h2>
+                    <p>The Shorelark simulation demonstrates advanced systems programming concepts implemented in Rust, showcasing both performance optimization and mathematical precision.</p>
+                    
+                    <div class="architecture-component">
+                        <h4>Neural Network Architecture</h4>
+                        <p>Birds' brains are implemented as feedforward neural networks with a carefully designed three-layer topology:</p>
+                        <pre><code class="language-rust">// Network topology for bird brains
+let brain = nn::Network::random(rng, &[
+    // Input Layer: Eye cells (vision data)
+    nn::LayerTopology { neurons: eye.cells() },
+    
+    // Hidden Layer: Processing layer  
+    nn::LayerTopology { neurons: 2 * eye.cells() },
+    
+    // Output Layer: Speed and rotation control
+    nn::LayerTopology { neurons: 2 },
+]);</code></pre>
+                    </div>
+                    
+                    <div class="architecture-component">
+                        <h4>Vision System Mathematics</h4>
+                        <p>The eye implementation uses trigonometry to calculate what each bird sees, with sophisticated field-of-view calculations:</p>
+                        <pre><code class="language-rust">// Calculate if food is within field of view
+let vec = food.position - bird.position;
+let distance = vec.norm();
+let angle = na::Rotation2::rotation_between(&na::Vector2::y(), &vec).angle();
+let angle = angle - bird.rotation.angle();
+let angle = na::wrap(angle, -PI, PI);
+
+// Determine which eye cell sees the food
+if angle &gt;= -self.fov_angle / 2.0 &amp;&amp; angle &lt;= self.fov_angle / 2.0 {
+    let cell_index = ((angle + self.fov_angle / 2.0) / self.fov_angle) * self.cells as f32;
+    let energy = (self.fov_range - distance) / self.fov_range;
+    cells[cell_index as usize] += energy;
+}</code></pre>
+                    </div>
+                    
+                    <div class="architecture-component">
+                        <h4>Genetic Algorithm Process</h4>
+                        <p>Evolution occurs through a sophisticated genetic algorithm with three main phases: selection chooses parents based on fitness, crossover combines neural network weights, and mutation introduces controlled variations.</p>
+                    </div>
+                    
+                    <div class="architecture-component">
+                        <h4>WebAssembly Compilation</h4>
+                        <p>The Rust simulation compiles to WebAssembly using wasm-pack, enabling high-performance execution in web browsers while maintaining type safety across the Rust-JavaScript boundary.</p>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Evolution Process</h2>
+                    <p>The simulation follows a structured evolutionary process:</p>
+                    <ol class="process-list">
+                        <li><strong>Initialization</strong>: A population of birds is created with randomized neural network weights and random positions in the environment.</li>
+                        <li><strong>Simulation Phase</strong>: Birds navigate the environment for 2500 simulation steps, using their vision to detect food and their neural networks to make movement decisions.</li>
+                        <li><strong>Fitness Evaluation</strong>: Each bird's fitness is measured by the amount of food consumed during the generation.</li>
+                        <li><strong>Selection</strong>: Roulette wheel selection chooses parent birds based on fitness scores, giving higher-performing birds better chances of reproduction.</li>
+                        <li><strong>Crossover</strong>: Uniform crossover combines neural network weights from two parents to create offspring with mixed traits.</li>
+                        <li><strong>Mutation</strong>: Gaussian mutation introduces small random changes to prevent local optima and maintain genetic diversity.</li>
+                        <li><strong>Population Replacement</strong>: The new generation replaces the old one, and the process repeats.</li>
+                        <li><strong>Statistics Tracking</strong>: Each generation's performance is tracked with minimum, maximum, and average fitness scores.</li>
+                    </ol>
+                </section>
+
+                <section class="project-section">
+                    <h2>Learning Outcomes</h2>
+                    <div class="architecture-component">
+                        <h3>Technical Skills Demonstrated</h3>
+                        <ul class="feature-list">
+                            <li><strong>Systems Programming</strong>: Building complex, multi-component systems in Rust with proper error handling and memory safety</li>
+                            <li><strong>AI Implementation</strong>: Creating neural networks and genetic algorithms from mathematical foundations</li>
+                            <li><strong>WebAssembly</strong>: Compiling Rust to WASM for high-performance web applications</li>
+                            <li><strong>Mathematical Computing</strong>: Implementing trigonometry, linear algebra, and statistical calculations</li>
+                            <li><strong>Testing Strategies</strong>: Developing comprehensive test suites for mathematical and visual systems</li>
+                            <li><strong>Performance Optimization</strong>: Optimizing simulation performance for real-time execution</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>AI & Machine Learning Concepts</h3>
+                        <ul class="feature-list">
+                            <li><strong>Neural Network Architecture</strong>: Understanding feedforward networks, activation functions, and weight propagation</li>
+                            <li><strong>Evolutionary Computation</strong>: Implementing selection pressure, genetic operators, and fitness landscapes</li>
+                            <li><strong>Emergent Behavior</strong>: Observing complex behaviors arising from simple rules and evolutionary pressure</li>
+                            <li><strong>Simulation Design</strong>: Creating realistic physics and environmental interactions</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Tutorial Series Reference</h2>
+                    <div class="architecture-component">
+                        <h3>Based on "Learning to Fly" Tutorial Series</h3>
+                        <p>This project follows Patryk Wychowaniec's comprehensive 4-part tutorial series:</p>
+                        <ul class="feature-list">
+                            <li><a href="https://pwy.io/posts/learning-to-fly-pt1/" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 500;">Part 1: The Domain</a> - Introduction to neural networks and genetic algorithms</li>
+                            <li><a href="https://pwy.io/posts/learning-to-fly-pt2/" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 500;">Part 2: The Neural Network</a> - Building feedforward networks from scratch</li>
+                            <li><a href="https://pwy.io/posts/learning-to-fly-pt3/" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 500;">Part 3: The Genetic Algorithm</a> - Implementing selection, crossover, and mutation</li>
+                            <li><a href="https://pwy.io/posts/learning-to-fly-pt4/" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 500;">Part 4: The User Interface</a> - WebAssembly integration and visualization</li>
+                        </ul>
+                        <p>The tutorial provides an excellent foundation for understanding how to implement AI concepts from first principles, with detailed explanations of mathematical concepts and practical Rust programming techniques.</p>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Future Enhancements</h2>
+                    <div class="architecture-component">
+                        <h3>Potential Improvements</h3>
+                        <ul class="feature-list">
+                            <li><strong>Parameter Optimization</strong>: Implement automated hyperparameter tuning using grid search or Bayesian optimization</li>
+                            <li><strong>Complex Environments</strong>: Add obstacles, predators, and varying terrain for more challenging evolutionary pressures</li>
+                            <li><strong>Advanced Genetics</strong>: Implement sexual selection, speciation, and more sophisticated genetic operators</li>
+                            <li><strong>Analytics Dashboard</strong>: Create visualization tools for analyzing evolutionary trends and population dynamics</li>
+                            <li><strong>Multi-objective Evolution</strong>: Evolve for multiple fitness criteria simultaneously</li>
+                            <li><strong>Neural Architecture Evolution</strong>: Allow the network topology itself to evolve</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="project-links">
+                    <a href="https://github.com/objones25/shorelark-objones25" class="github-link" target="_blank">View on GitHub →</a>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-rust.min.js"></script>
+    <script type="module">
+        import { includeSearch } from './js/include-search.js';
+        
+        window.addEventListener('load', () => {
+            includeSearch();
+        });
+    </script>
+</body>
+</html>

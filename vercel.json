@@ -28,6 +28,7 @@
     { "src": "/rust-web-server-project/?", "dest": "/rust-web-server-project.html" },
     { "src": "/brave-search-agent/?", "dest": "/brave-search-agent.html" },
     { "src": "/gemini-chat-agent/?", "dest": "/gemini-chat-agent.html" },
+    { "src": "/shorelark-project/?", "dest": "/shorelark-project.html" },
     { "src": "^/$", "dest": "/index.html" },
     { "src": "/(.*)", "status": 404, "dest": "/404.html" }
   ],
