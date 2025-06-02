@@ -12,6 +12,9 @@
     --card-bg: rgba(15, 27, 45, 0.6);
     --tag-bg: rgba(59, 130, 246, 0.1);
     --timeline-line: rgba(255, 255, 255, 0.1);
+    /* Brighter text colors for projects */
+    --project-text-primary: #FFFFFF;
+    --project-text-secondary: #E2E8F0;
 }
 
 /* Reset and Base Styles */
@@ -331,6 +334,7 @@ main {
     font-size: 1.75rem;
     flex: 1;
     min-width: 200px;
+    color: var(--project-text-primary);
 }
 
 .new-badge {
@@ -343,7 +347,7 @@ main {
 }
 
 .project-card p {
-    color: var(--text-color-secondary);
+    color: var(--project-text-secondary);
     margin-bottom: 1.5rem;
     line-height: 1.8;
 }
@@ -977,11 +981,11 @@ footer {
     left: 50%;
     transform: translate(-50%, -50%) scale(2);
     z-index: 1;
-    opacity: 0.6;
+    opacity: 0.25;
     pointer-events: none;
     width: 2400px;
     height: 2400px;
-    filter: blur(1px);
+    filter: blur(2px);
 }
 
 .projects-hero .hero-content {
@@ -1058,7 +1062,8 @@ footer {
     font-size: 1.1rem;
     line-height: 1.8;
     margin: 1.5rem 0;
-    color: var(--text-color);
+    color: var(--project-text-secondary);
+    opacity: 0.95;
 }
 
 .key-features {
@@ -1068,6 +1073,7 @@ footer {
 .key-features h3 {
     margin-bottom: 1rem;
     font-size: 1.2rem;
+    color: var(--project-text-primary);
 }
 
 .key-features ul {
@@ -1079,6 +1085,7 @@ footer {
     margin-bottom: 0.5rem;
     padding-left: 1.5rem;
     position: relative;
+    color: var(--project-text-secondary);
 }
 
 .key-features li::before {
@@ -1095,6 +1102,7 @@ footer {
 .category-section h2 {
     margin-bottom: 2rem;
     font-size: 2rem;
+    color: var(--project-text-primary);
 }
 
 .metrics {
@@ -1164,7 +1172,7 @@ footer {
 }
 
 .demo-info h3 {
-    color: var(--text-color);
+    color: var(--project-text-primary);
     margin-bottom: 1rem;
 }
 
@@ -1178,6 +1186,7 @@ footer {
     margin-bottom: 0.5rem;
     padding-left: 1.5rem;
     position: relative;
+    color: var(--project-text-secondary);
 }
 
 .demo-info li::before {
@@ -1474,7 +1483,8 @@ footer {
 }
 
 .project-card {
-    background: var(--card-bg);
+    background: rgba(15, 27, 45, 0.85);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 2rem;
