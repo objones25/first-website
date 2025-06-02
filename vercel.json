@@ -10,6 +10,7 @@
     { "src": "/about/?", "dest": "/about.html" },
     { "src": "/projects/?", "dest": "/projects.html" },
     { "src": "/contact/?", "dest": "/contact.html" },
+    { "src": "/go-embeddings-project/?", "dest": "/go-embeddings-project.html" },
     { "src": "/custom-vector-project/?", "dest": "/custom-vector-project.html" },
     { "src": "/sudoku-rust-project/?", "dest": "/sudoku-rust-project.html" },
     { "src": "/rss-aggregator-project/?", "dest": "/rss-aggregator-project.html" },
@@ -25,6 +26,8 @@
     { "src": "/ethical-hacking-course-part-1/?", "dest": "/ethical-hacking-course-part-1.html" },
     { "src": "/veet-project/?", "dest": "/veet-project.html" },
     { "src": "/rust-web-server-project/?", "dest": "/rust-web-server-project.html" },
+    { "src": "/brave-search-agent/?", "dest": "/brave-search-agent.html" },
+    { "src": "/gemini-chat-agent/?", "dest": "/gemini-chat-agent.html" },
     { "src": "^/$", "dest": "/index.html" },
     { "src": "/(.*)", "status": 404, "dest": "/404.html" }
   ],

@@ -4,6 +4,7 @@ import { resolve } from 'path';
 export default defineConfig({
   root: 'src',
   base: '/',
+  assetsInclude: ['**/*.html'],
   build: {
     outDir: '../dist',
     emptyOutDir: true,
@@ -13,6 +14,7 @@ export default defineConfig({
         about: resolve(__dirname, 'src/about.html'),
         contact: resolve(__dirname, 'src/contact.html'),
         projects: resolve(__dirname, 'src/projects.html'),
+        'go-embeddings-project': resolve(__dirname, 'src/go-embeddings-project.html'),
         'custom-vector-project': resolve(__dirname, 'src/custom-vector-project.html'),
         'sudoku-rust-project': resolve(__dirname, 'src/sudoku-rust-project.html'),
         'rss-aggregator-project': resolve(__dirname, 'src/rss-aggregator-project.html'),
@@ -28,6 +30,8 @@ export default defineConfig({
         'ethical-hacking-course-part-1': resolve(__dirname, 'src/ethical-hacking-course-part-1.html'),
         'veet-project': resolve(__dirname, 'src/veet-project.html'),
         'rust-web-server-project': resolve(__dirname, 'src/rust-web-server-project.html'),
+        'brave-search-agent': resolve(__dirname, 'src/brave-search-agent.html'),
+        'gemini-chat-agent': resolve(__dirname, 'src/gemini-chat-agent.html'),
         '404': resolve(__dirname, 'src/404.html')
       }
     },

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brave Search Agent - Owen Jones</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">Owen Jones</a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/projects">Projects</a>
+                <a href="/contact">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+            <article class="project-article">
+                <div class="project-header-large">
+                    <div class="header-content">
+                        <div class="project-image">
+                            <img src="./assets/brave_search_agent.png" alt="Brave Search Agent">
+                        </div>
+                        <h1>Brave Search Agent</h1>
+                        <div class="project-meta">
+                            <span class="status-badge stable">Stable Release</span>
+                            <div class="tech-stack">
+                                <span class="tech-tag">TypeScript</span>
+                                <span class="tech-tag">Cloudflare Workers</span>
+                                <span class="tech-tag">AI</span>
+                                <span class="tech-tag">Brave API</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="project-section">
+                    <h2>Overview</h2>
+                    <p>A Cloudflare Workers AI agent that provides advanced search capabilities using the Brave Search API. This agent offers multiple search modes, from standard web search to AI-powered intelligent search, with comprehensive logging and performance metrics.</p>
+                    <p>The agent can be interacted with via HTTP requests or WebSockets, providing flexible integration options for various applications. It features robust parameter handling, type validation, and detailed performance logging throughout the search process.</p>
+                    <p>Built with a focus on performance and reliability, the agent includes automatic type conversion, empty value handling, and parameter filtering to ensure optimal interaction with the Brave Search API.</p>
+                </section>
+
+                <section class="project-section">
+                    <h2>Key Features</h2>
+                    <div class="architecture-component">
+                        <h3>Multiple Search Modes</h3>
+                        <ul class="feature-list">
+                            <li><strong>Direct Search</strong>: Standard web search using Brave Search API</li>
+                            <li><strong>Optimized Search</strong>: Enhanced search using query suggestions to improve results</li>
+                            <li><strong>Agentic Search</strong>: AI-powered search using Google's Gemini Pro model</li>
+                            <li><strong>AI Search</strong>: Configurable AI-powered search with graceful error handling</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Performance Optimization</h3>
+                        <ul class="feature-list">
+                            <li>Comprehensive logging system with timing measurements</li>
+                            <li>Performance metrics for all API calls and data processing</li>
+                            <li>Smart retry logic for API failures</li>
+                            <li>Efficient parameter processing and validation</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Advanced Query Processing</h3>
+                        <ul class="feature-list">
+                            <li>Query suggestions from Brave Suggest API</li>
+                            <li>Automatic parameter type conversion</li>
+                            <li>Empty value handling to prevent API errors</li>
+                            <li>Customizable search parameters (count, safesearch, country, etc.)</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>State Management</h3>
+                        <ul class="feature-list">
+                            <li>Conversation history tracking</li>
+                            <li>Recent searches storage</li>
+                            <li>User preference management</li>
+                            <li>Session state persistence</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Flexible Integration</h3>
+                        <ul class="feature-list">
+                            <li>RESTful HTTP endpoints</li>
+                            <li>WebSocket support for real-time interaction</li>
+                            <li>JSON-based request/response format</li>
+                            <li>Comprehensive error handling and reporting</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Architecture</h2>
+                    <h3>Core Components</h3>
+                    
+                    <div class="architecture-component">
+                        <h4>Search Engine</h4>
+                        <ul class="feature-list">
+                            <li>Handles all search operations across different modes</li>
+                            <li>Manages API interactions with Brave Search and Suggest APIs</li>
+                            <li>Implements parameter validation and processing</li>
+                            <li>Provides unified response formatting</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>AI Integration</h4>
+                        <ul class="feature-list">
+                            <li>Google Gemini Pro integration for intelligent search</li>
+                            <li>Context-aware query processing</li>
+                            <li>Natural language understanding</li>
+                            <li>Enhanced result synthesis</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>Logging System</h4>
+                        <ul class="feature-list">
+                            <li>Structured logging with consistent prefixes</li>
+                            <li>Timing measurements for performance analysis</li>
+                            <li>Error tracking and debugging information</li>
+                            <li>Request/response logging for troubleshooting</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>State Manager</h4>
+                        <ul class="feature-list">
+                            <li>Maintains conversation context</li>
+                            <li>Stores user preferences</li>
+                            <li>Tracks search history</li>
+                            <li>Manages session data</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Technical Implementation</h2>
+                    <p>The Brave Search Agent is built using TypeScript and deployed on Cloudflare Workers, leveraging edge computing for global low-latency performance. The implementation focuses on robustness, performance, and ease of use.</p>
+                    
+                    <div class="architecture-component">
+                        <h4>Parameter Processing</h4>
+                        <p>The agent includes sophisticated parameter processing utilities that ensure all parameters are correctly formatted before being sent to the Brave Search API. This includes automatic type conversion from strings to their expected types (numbers, booleans, arrays).</p>
+                    </div>
+                    
+                    <div class="architecture-component">
+                        <h4>Performance Logging</h4>
+                        <p>Comprehensive performance logging throughout the codebase provides detailed insights into execution times for specific operations, helping identify bottlenecks and optimize performance.</p>
+                    </div>
+                    
+                    <div class="architecture-component">
+                        <h4>Error Handling</h4>
+                        <p>Robust error handling ensures graceful degradation when services are unavailable, with detailed error messages for debugging and user-friendly responses for production use.</p>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>API Endpoints</h2>
+                    <div class="architecture-component">
+                        <h3>HTTP Endpoints</h3>
+                        <ul class="feature-list">
+                            <li><code>POST /agents/brave-search-agent/default/search</code> - Direct search</li>
+                            <li><code>POST /agents/brave-search-agent/default/optimized-search</code> - Optimized search with suggestions</li>
+                            <li><code>POST /agents/brave-search-agent/default/agentic-search</code> - AI-powered search</li>
+                            <li><code>POST /agents/brave-search-agent/default/ai-search</code> - Configurable AI search</li>
+                            <li><code>POST /agents/brave-search-agent/default/suggest</code> - Query suggestions</li>
+                            <li><code>GET /agents/brave-search-agent/default/state</code> - Get current state</li>
+                            <li><code>POST /agents/brave-search-agent/default/preferences</code> - Update preferences</li>
+                            <li><code>POST /agents/brave-search-agent/default/clear-history</code> - Clear search history</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>WebSocket Messages</h3>
+                        <p>The agent supports WebSocket connections for real-time interaction with JSON message types including:</p>
+                        <ul class="feature-list">
+                            <li><code>search_request</code> - Standard search</li>
+                            <li><code>optimized_search_request</code> - Enhanced search</li>
+                            <li><code>agentic_search_request</code> - AI-powered search</li>
+                            <li><code>ai_search_request</code> - Configurable AI search</li>
+                            <li><code>suggest_request</code> - Query suggestions</li>
+                            <li><code>update_preferences</code> - Preference updates</li>
+                            <li><code>clear_history</code> - History clearing</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Usage Examples</h2>
+                    <div class="architecture-component">
+                        <h3>Direct Search</h3>
+                        <pre><code class="language-bash">curl -X POST http://localhost:8787/agents/brave-search-agent/default/search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "weather in San Francisco",
+    "options": {
+      "count": 10,
+      "safesearch": "moderate"
+    }
+  }'</code></pre>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>AI-Powered Search</h3>
+                        <pre><code class="language-bash">curl -X POST http://localhost:8787/agents/brave-search-agent/default/agentic-search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "What are the best restaurants in New York City?",
+    "preferences": {
+      "safesearch": "moderate",
+      "country": "US"
+    }
+  }'</code></pre>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>WebSocket Example</h3>
+                        <pre><code class="language-javascript">const ws = new WebSocket('ws://localhost:8787/agents/brave-search/default');
+
+ws.send(JSON.stringify({
+  type: 'optimized_search_request',
+  query: 'latest AI developments',
+  searchOptions: {
+    count: 15,
+    safesearch: 'moderate'
+  },
+  suggestOptions: {
+    count: 3
+  }
+}));</code></pre>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Performance Log Example</h3>
+                        <pre><code class="language-text">[SEARCH] Direct search started for: "weather in San Francisco"
+[TIMING] Direct search - Update history: 5ms
+[BRAVE_SEARCH] Search started for: "weather in San Francisco"
+[TIMING] Brave search - Process parameters: 2ms
+[TIMING] Brave search - Build URL: 1ms
+[TIMING] Brave search - Fetch request: 320ms
+[TIMING] Brave search - Parse JSON: 15ms
+[TIMING] Brave search - Process results: 8ms
+[TIMING] Brave search - Total execution time: 346ms
+[SEARCH] Direct search results: 10 web results, 10 total results</code></pre>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Deployment</h2>
+                    <p>The agent is designed for easy deployment on Cloudflare Workers:</p>
+                    
+                    <div class="architecture-component">
+                        <h3>Prerequisites</h3>
+                        <ul class="feature-list">
+                            <li>Node.js (v16 or later)</li>
+                            <li>Wrangler CLI (v4 or later)</li>
+                            <li>Cloudflare account</li>
+                            <li>Brave Search API key</li>
+                            <li>Brave Suggest API key</li>
+                            <li>Google Gemini API key (for AI features)</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Deployment Steps</h3>
+                        <pre><code class="language-bash"># Install dependencies
+npm install
+
+# Deploy to Cloudflare Workers
+npm run deploy
+
+# Set up API keys as secrets
+wrangler secret put BRAVE_SEARCH_API_KEY
+wrangler secret put BRAVE_SUGGEST_API_KEY
+wrangler secret put GEMINI_API_KEY</code></pre>
+                    </div>
+                </section>
+
+                <div class="project-links">
+                    <a href="https://github.com/objones25/brave-agent" class="github-link" target="_blank">View on GitHub →</a>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <script type="module">
+        import { includeSearch } from './js/include-search.js';
+        
+        window.addEventListener('load', () => {
+            includeSearch();
+        });
+    </script>
+</body>
+</html>

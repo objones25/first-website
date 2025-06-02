@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Chat Agent - Owen Jones</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="logo">Owen Jones</a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/projects">Projects</a>
+                <a href="/contact">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+            <article class="project-article">
+                <div class="project-header-large">
+                    <div class="header-content">
+                        <div class="project-image">
+                            <img src="./assets/gemini_chat_agent.png" alt="Gemini Chat Agent">
+                        </div>
+                        <h1>Gemini Chat Agent</h1>
+                        <div class="project-meta">
+                            <span class="status-badge stable">Stable Release</span>
+                            <div class="tech-stack">
+                                <span class="tech-tag">TypeScript</span>
+                                <span class="tech-tag">Cloudflare Workers</span>
+                                <span class="tech-tag">Google Gemini</span>
+                                <span class="tech-tag">WebRTC</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="project-section">
+                    <h2>Overview</h2>
+                    <p>An advanced AI chat agent powered by Google Gemini 2.5 Pro with sophisticated capabilities including deep thinking, code execution, real-time web search, voice interaction, and text-to-speech. Built on Cloudflare Workers for global edge deployment.</p>
+                    <p>The agent features a transparent reasoning process with collapsible thinking sections, allowing users to understand the AI's thought process. It supports multi-modal interactions through text, voice, and audio, with real-time streaming responses using Server-Sent Events.</p>
+                    <p>Designed with a serverless architecture, the agent automatically scales to handle varying loads while maintaining low latency through Cloudflare's global edge network. Chat history is persisted using Cloudflare KV storage for seamless conversation continuity.</p>
+                </section>
+
+                <section class="project-section">
+                    <h2>Key Features</h2>
+                    <div class="architecture-component">
+                        <h3>Advanced AI Capabilities</h3>
+                        <ul class="feature-list">
+                            <li><strong>Deep Thinking</strong>: Transparent reasoning process with collapsible thinking sections</li>
+                            <li><strong>Code Execution</strong>: Real-time Python code execution with live results</li>
+                            <li><strong>Web Search</strong>: Real-time Google Search integration for current information</li>
+                            <li><strong>Multi-modal Support</strong>: Text, voice, and audio interactions</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Voice Integration</h3>
+                        <ul class="feature-list">
+                            <li><strong>Voice Recording</strong>: Hold-to-record voice messages with automatic transcription</li>
+                            <li><strong>Text-to-Speech</strong>: High-quality speech synthesis with multiple voice options</li>
+                            <li><strong>Audio Processing</strong>: Advanced audio handling with Web Audio API</li>
+                            <li><strong>Voice Selection</strong>: Multiple voice options for personalized experience</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Chat Experience</h3>
+                        <ul class="feature-list">
+                            <li><strong>Real-time Streaming</strong>: Live response streaming with Server-Sent Events</li>
+                            <li><strong>Chat History</strong>: Persistent conversation history with Cloudflare KV storage</li>
+                            <li><strong>Markdown Support</strong>: Rich text formatting with syntax highlighting</li>
+                            <li><strong>Session Management</strong>: Automatic session handling and restoration</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Performance & Deployment</h3>
+                        <ul class="feature-list">
+                            <li><strong>Edge Computing</strong>: Deployed on Cloudflare Workers for global low-latency</li>
+                            <li><strong>Scalable Architecture</strong>: Serverless design with automatic scaling</li>
+                            <li><strong>Static Assets</strong>: Optimized asset delivery through Cloudflare CDN</li>
+                            <li><strong>Global Distribution</strong>: Available worldwide with consistent performance</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Architecture</h2>
+                    <h3>System Design</h3>
+                    <p>The Gemini Chat Agent follows a modular architecture that separates concerns between the frontend interface, edge worker processing, and external service integrations:</p>
+                    
+                    <div class="architecture-component">
+                        <h4>Frontend Layer</h4>
+                        <ul class="feature-list">
+                            <li>Voice recording with Web Audio API</li>
+                            <li>Real-time audio playback</li>
+                            <li>Markdown rendering with syntax highlighting</li>
+                            <li>Server-Sent Events for streaming responses</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>Edge Worker</h4>
+                        <ul class="feature-list">
+                            <li>Request processing and routing</li>
+                            <li>Session management</li>
+                            <li>API integration orchestration</li>
+                            <li>Response streaming</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>Storage Layer</h4>
+                        <ul class="feature-list">
+                            <li>Cloudflare KV for chat history persistence</li>
+                            <li>Session data storage</li>
+                            <li>User preference management</li>
+                            <li>Conversation context maintenance</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>AI Integration</h4>
+                        <ul class="feature-list">
+                            <li>Google Gemini 2.5 Pro API integration</li>
+                            <li>Thinking engine for transparent reasoning</li>
+                            <li>Code execution environment</li>
+                            <li>Web search capabilities</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Technical Implementation</h2>
+                    <p>The agent is built using TypeScript and modern web technologies, leveraging Cloudflare's edge computing platform for optimal performance and scalability.</p>
+                    
+                    <div class="architecture-component">
+                        <h4>Voice Processing</h4>
+                        <p>Voice recording requires HTTPS or localhost for security. The implementation uses the Web Audio API for recording and processing, with automatic transcription through the Gemini API.</p>
+                    </div>
+                    
+                    <div class="architecture-component">
+                        <h4>Streaming Architecture</h4>
+                        <p>Server-Sent Events enable real-time streaming of AI responses, providing immediate feedback as the AI processes and generates content. This includes separate streams for thinking, code execution, and final responses.</p>
+                    </div>
+                    
+                    <div class="architecture-component">
+                        <h4>Session Management</h4>
+                        <p>Each chat session is assigned a unique ID, with conversation history stored in Cloudflare KV. The system maintains up to 20 messages per session for optimal context while managing storage efficiently.</p>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h4>Code Execution</h4>
+                        <p>The agent can execute Python code in real-time, displaying both the code and its output. This feature is particularly useful for mathematical computations, algorithm demonstrations, and data processing tasks.</p>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>API Reference</h2>
+                    <div class="architecture-component">
+                        <h3>POST /api/chat</h3>
+                        <p>Send a chat message or audio data to the AI agent.</p>
+                        
+                        <h4>Request Body</h4>
+                        <pre><code class="language-json">{
+  "message": "Your text message",
+  "audioData": "base64_encoded_audio_data",
+  "sessionId": "optional_session_id",
+  "tts": true,
+  "voice": "Kore"
+}</code></pre>
+
+                        <h4>Response Events (Server-Sent Events)</h4>
+                        <pre><code class="language-json">// Thinking process
+{"type": "thinking", "content": "AI reasoning..."}
+
+// Code execution
+{"type": "code", "content": "print('hello')", "language": "python"}
+{"type": "codeResult", "content": "hello"}
+
+// Web search
+{"type": "search", "content": "Searched: current weather"}
+
+// Text response
+{"type": "text", "content": "Response text..."}
+
+// Audio response
+{"type": "audio", "audioData": "base64_audio_data"}
+
+// Completion
+{"type": "complete"}</code></pre>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Usage Examples</h2>
+                    <div class="architecture-component">
+                        <h3>Basic Text Chat</h3>
+                        <pre><code class="language-javascript">fetch('/api/chat', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    message: "Explain quantum computing",
+    tts: true
+  })
+});</code></pre>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Voice Message</h3>
+                        <pre><code class="language-javascript">// Send audio data
+fetch('/api/chat', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    audioData: base64AudioData,
+    sessionId: "user_session_123"
+  })
+});</code></pre>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Mathematical Algorithm Implementation</h3>
+                        <p>Ask the AI: "Please use python to determine the 300th prime number using the segmented sieve algorithm"</p>
+                        
+                        <p>The AI will demonstrate advanced algorithmic problem-solving:</p>
+                        <ul class="feature-list">
+                            <li><strong>Deep Thinking Process</strong>: Show transparent reasoning through multiple thinking iterations</li>
+                            <li><strong>Algorithm Explanation</strong>: Explain the segmented sieve approach and its advantages</li>
+                            <li><strong>Code Implementation</strong>: Generate optimized Python code with detailed comments</li>
+                            <li><strong>Real-time Execution</strong>: Execute the algorithm and display results</li>
+                            <li><strong>Verification</strong>: Test with known smaller primes to validate correctness</li>
+                        </ul>
+
+                        <h4>Expected Output</h4>
+                        <pre><code class="language-text">The 300th prime number is: 1987
+The 1st prime number is: 2
+The 6th prime number is: 13
+The 10th prime number is: 29
+The 16th prime number is: 53
+The 100th prime number is: 541</code></pre>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Deployment Guide</h2>
+                    <div class="architecture-component">
+                        <h3>Prerequisites</h3>
+                        <ul class="feature-list">
+                            <li>Node.js 18+ and npm</li>
+                            <li>Cloudflare account</li>
+                            <li>Google AI Studio API key</li>
+                            <li>Wrangler CLI installed globally</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Setup Steps</h3>
+                        <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/objones25/gemini-chat-agent.git
+cd gemini-chat-agent
+
+# Install dependencies
+npm install
+
+# Create environment file
+echo "GEMINI_API_KEY=your_gemini_api_key_here" > .dev.vars
+
+# Create KV namespaces
+wrangler kv:namespace create "CHAT_HISTORY"
+wrangler kv:namespace create "CHAT_HISTORY" --preview
+
+# Update wrangler.toml with namespace IDs
+# Then run locally
+npm run dev</code></pre>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Production Deployment</h3>
+                        <pre><code class="language-bash"># Set production secrets
+wrangler secret put GEMINI_API_KEY
+
+# Deploy to Cloudflare Workers
+npm run deploy
+
+# Your app will be available at:
+# https://gemini-agent.your-subdomain.workers.dev</code></pre>
+                    </div>
+                </section>
+
+                <section class="project-section">
+                    <h2>Configuration</h2>
+                    <div class="architecture-component">
+                        <h3>Wrangler Configuration</h3>
+                        <pre><code class="language-toml">name = "gemini-agent"
+main = "src/worker.ts"
+compatibility_date = "2024-05-28"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[[kv_namespaces]]
+binding = "CHAT_HISTORY"
+id = "your_kv_namespace_id"
+preview_id = "your_preview_kv_namespace_id"</code></pre>
+                    </div>
+
+                    <div class="architecture-component">
+                        <h3>Performance Optimization</h3>
+                        <ul class="feature-list">
+                            <li><strong>Chat History</strong>: Limited to 20 messages per session</li>
+                            <li><strong>Audio Files</strong>: Maximum 20MB for voice messages</li>
+                            <li><strong>TTS</strong>: Text limited to 800 characters for optimal performance</li>
+                            <li><strong>Session Timeout</strong>: Automatic cleanup of inactive sessions</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="project-links">
+                    <a href="https://github.com/objones25/gemini-chat-agent" class="github-link" target="_blank">View on GitHub →</a>
+                </div>
+            </article>
+        </main>
+
+        <footer>
+            © 2024 Owen Jones. All rights reserved.
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-toml.min.js"></script>
+    <script type="module">
+        import { includeSearch } from './js/include-search.js';
+        
+        window.addEventListener('load', () => {
+            includeSearch();
+        });
+    </script>
+</body>
+</html>
