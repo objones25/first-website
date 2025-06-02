@@ -7,11 +7,8 @@ export async function includeSearch() {
         const nav = document.querySelector('nav');
         if (!nav) return;
 
-        // Import the search template directly
-        import.meta.glob('../templates/search.html', { eager: true });
-        
         // Fetch the search template with the correct path
-        const response = await fetch('./templates/search.html');
+        const response = await fetch('/templates/search.html');
         if (!response.ok) {
             console.error('Failed to load search template');
             return;
@@ -53,4 +50,4 @@ export async function includeSearch() {
         if (searchButton) searchButton.remove();
         if (searchOverlay) searchOverlay.remove();
     }
-} 
+}
