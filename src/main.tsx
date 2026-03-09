@@ -8,6 +8,7 @@ import './index.css'
 const Home = lazy(() => import('./pages/Home'))
 const About = lazy(() => import('./pages/About'))
 const Projects = lazy(() => import('./pages/Projects'))
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const Contact = lazy(() => import('./pages/Contact'))
 
 const router = createBrowserRouter([
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { index: true, element: <Suspense><Home /></Suspense> },
       { path: 'about', element: <Suspense><About /></Suspense> },
       { path: 'projects', element: <Suspense><Projects /></Suspense> },
+      { path: 'projects/:slug', element: <Suspense><ProjectDetail /></Suspense> },
       { path: 'contact', element: <Suspense><Contact /></Suspense> },
     ],
   },
