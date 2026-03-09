@@ -1,0 +1,86 @@
+import type { Project } from '@/types'
+
+export const projects: Project[] = [
+  {
+    slug: 'veet',
+    title: 'Veet',
+    description: 'A fast, lightweight package manager built in Rust with a focus on developer experience.',
+    year: '2024',
+    tags: ['Rust', 'CLI', 'Systems'],
+    status: 'active',
+  },
+  {
+    slug: 'shorelark',
+    title: 'Shorelark',
+    description: 'Neural network simulation of evolving creatures using genetic algorithms and WebAssembly.',
+    year: '2024',
+    tags: ['Rust', 'WASM', 'AI'],
+    status: 'complete',
+  },
+  {
+    slug: 'brave-search-agent',
+    title: 'Brave Search Agent',
+    description: 'An autonomous AI research agent leveraging the Brave Search API to synthesize information.',
+    year: '2024',
+    tags: ['Python', 'AI', 'Agents'],
+    status: 'stable',
+  },
+  {
+    slug: 'mcp-research-tool',
+    title: 'MCP Research Tool',
+    description: 'Model Context Protocol server for deep research workflows with structured knowledge retrieval.',
+    year: '2024',
+    tags: ['Python', 'MCP', 'AI'],
+    status: 'active',
+  },
+  {
+    slug: 'gemini-chat-agent',
+    title: 'Gemini Chat Agent',
+    description: 'Multi-modal conversational AI agent built on top of Google Gemini with tool use.',
+    year: '2023',
+    tags: ['Python', 'AI', 'Gemini'],
+    status: 'complete',
+  },
+  {
+    slug: 'neural-network',
+    title: 'Neural Network',
+    description: 'A neural network implementation from scratch in Python with backpropagation and MNIST training.',
+    year: '2023',
+    tags: ['Python', 'ML', 'Math'],
+    status: 'complete',
+  },
+  {
+    slug: 'custom-vector',
+    title: 'Custom Vector',
+    description: 'A memory-safe, generic dynamic array in C++ matching the STL vector interface.',
+    year: '2023',
+    tags: ['C++', 'Systems', 'Data Structures'],
+    status: 'complete',
+  },
+  {
+    slug: 'rss-aggregator',
+    title: 'RSS Aggregator',
+    description: 'A concurrent RSS feed aggregator and reader built in Go with a REST API.',
+    year: '2023',
+    tags: ['Go', 'Web', 'APIs'],
+    status: 'complete',
+  },
+  {
+    slug: 'rust-web-server',
+    title: 'Rust Web Server',
+    description: 'A multithreaded HTTP/1.1 web server in Rust built without any external dependencies.',
+    year: '2023',
+    tags: ['Rust', 'Systems', 'Networking'],
+    status: 'complete',
+  },
+  {
+    slug: 'minigrep',
+    title: 'Minigrep',
+    description: 'A grep clone built in Rust — command-line text search with regex support.',
+    year: '2022',
+    tags: ['Rust', 'CLI'],
+    status: 'complete',
+  },
+]
+
+export const featuredProjects = projects.slice(0, 4)
