@@ -51,7 +51,7 @@ export default function Archive() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="text-text-muted max-w-xl leading-relaxed"
           >
-            Earlier projects from when I was learning the fundamentals — systems programming in Rust, Go, C++, and early AI/ML experiments.
+            Older projects I still find interesting but don't need on the main page.
           </motion.p>
         </div>
 

@@ -51,7 +51,7 @@ export default function About() {
             <span className="label block mb-6">// Background</span>
             <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
-                Applied Math degree from UCLA. I spend most of my time in Python and TypeScript —
+                Applied Math degree from UCLA. I spend most of my time in Python and TypeScript,
                 building ML pipelines, training neural nets from scratch, and wiring up AI-powered APIs.
                 Currently deepening my ML foundations through ISL and Karpathy's makemore series.
               </p>
@@ -63,7 +63,7 @@ export default function About() {
             <span className="label block mt-12 mb-6">// Beyond the Code</span>
             <p className="text-text-muted leading-relaxed">
               When I'm not coding I'm usually at the gym. Currently training for Hyrox and DEKA
-              competitions — a lot of running and heavy functional fitness. Surfing and hiking fill
+              competitions, a lot of running and heavy functional fitness. Surfing and hiking fill
               out the rest of the time, and living close to the water in Santa Barbara makes that
               pretty easy.
             </p>

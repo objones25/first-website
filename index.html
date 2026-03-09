@@ -7,6 +7,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <title>Owen Jones - Software Engineer & AI Architect</title>
+    <script>
+      // GitHub Pages SPA redirect: restore path from 404.html redirect
+      (function () {
+        var p = window.location.search.slice(1).split('&').find(function (s) { return s.startsWith('p=') });
+        if (p) {
+          var path = decodeURIComponent(p.slice(2));
+          window.history.replaceState(null, '', path || '/');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
