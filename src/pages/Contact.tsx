@@ -42,10 +42,10 @@ export default function Contact() {
               I'm open to interesting projects, collaborations, and opportunities. Whether you have a project in mind or just want to connect, feel free to reach out.
             </p>
             <a
-              href="mailto:hello@owenjones.dev"
+              href="mailto:owenbeckettjones@gmail.com"
               className="text-lg text-text hover:text-text-muted transition-colors duration-200"
             >
-              hello@owenjones.dev →
+              owenbeckettjones@gmail.com →
             </a>
           </div>
 
@@ -54,9 +54,8 @@ export default function Contact() {
               <span className="label block mb-3">Elsewhere</span>
               <div className="space-y-2">
                 {[
-                  { label: 'GitHub', href: 'https://github.com/' },
-                  { label: 'LinkedIn', href: 'https://linkedin.com/' },
-                  { label: 'Twitter / X', href: 'https://twitter.com/' },
+                  { label: 'GitHub', href: 'https://github.com/objones25' },
+                  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/owenbeckettjones/' },
                 ].map(({ label, href }) => (
                   <a
                     key={label}

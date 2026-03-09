@@ -72,6 +72,22 @@ export default function Projects() {
             </motion.div>
           ))}
         </div>
+
+        {/* Archive link */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+          className="mt-16 pt-8 border-t border-border"
+        >
+          <Link
+            to="/archive"
+            className="mono text-text-muted hover:text-text transition-colors duration-200"
+          >
+            // Archive — Older Work →
+          </Link>
+        </motion.div>
+
       </div>
     </PageTransition>
   )

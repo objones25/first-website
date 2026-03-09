@@ -9,6 +9,7 @@ const Home = lazy(() => import('./pages/Home'))
 const About = lazy(() => import('./pages/About'))
 const Projects = lazy(() => import('./pages/Projects'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
+const Archive = lazy(() => import('./pages/Archive'))
 const Contact = lazy(() => import('./pages/Contact'))
 
 const router = createBrowserRouter([
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       { path: 'about', element: <Suspense><About /></Suspense> },
       { path: 'projects', element: <Suspense><Projects /></Suspense> },
       { path: 'projects/:slug', element: <Suspense><ProjectDetail /></Suspense> },
+      { path: 'archive', element: <Suspense><Archive /></Suspense> },
       { path: 'contact', element: <Suspense><Contact /></Suspense> },
     ],
   },
