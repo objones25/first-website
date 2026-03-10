@@ -237,7 +237,15 @@ export function BraveSearchDemo() {
       <div className="mt-12">
         {status === 'loading' && <LoadingSkeleton />}
         {status === 'error' && <ErrorPane message={errorMsg} />}
-        {status === 'success' && result && <ResultsPane mode={mode} result={result} />}
+        {status === 'success' && result && (
+          <>
+            <ResultsPane mode={mode} result={result} />
+            <details className="mt-8 border border-dashed border-border-strong">
+              <summary className="mono text-xs text-text-muted px-4 py-2 cursor-pointer">// RAW RESPONSE (debug)</summary>
+              <pre className="mono text-xs text-text-muted overflow-auto p-4">{JSON.stringify(result, null, 2)}</pre>
+            </details>
+          </>
+        )}
       </div>
     </div>
   )
