@@ -124,26 +124,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: 'browserbase-agent',
-    title: 'Browserbase Agent',
-    description: 'Cloudflare Worker exposing browser automation as a REST API, powered by Stagehand and Cloudflare Browser Rendering.',
-    year: '2025',
-    tags: ['TypeScript', 'Cloudflare', 'Agents'],
-    status: 'complete',
-    overview: 'A Cloudflare Worker that wraps Stagehand and Cloudflare Browser Rendering into a simple REST API. Send a natural language prompt and a URL, get back a full action history. Supports multiple LLM providers, SSE streaming, MCP integrations, and secure variable substitution for credentials.',
-    challenge: 'Mostly a docs-following exercise in deploying an agent on Cloudflare Workers and learning how Stagehand abstracts browser automation. The variable substitution pattern — where sensitive values are swapped in client-side and never sent to the LLM — was the most interesting design detail to get right.',
-    approach: 'Built on Cloudflare Browser Rendering rather than a self-hosted browser to keep the infrastructure serverless. Stagehand handles translating natural language actions into Playwright calls, so the worker itself stays thin — just request parsing, variable substitution, and streaming the action log back over SSE.',
-    features: [
-      'Natural language browser automation via a single POST endpoint',
-      'Secure variable substitution — credentials are injected after the prompt is sent to the LLM',
-      'SSE streaming for real-time action updates',
-      'MCP integration support for external tools (search, docs, databases)',
-    ],
-    links: [
-      { label: 'GitHub', href: 'https://github.com/objones25/browserbase-agent' },
-    ],
-  },
-  {
     slug: 'brave-search-agent',
     title: 'Brave Search Agent',
     description: 'Cloudflare Worker API with four search modes — direct, AI-synthesized, query-optimized, and fully agentic — powered by Brave Search and Gemini.',

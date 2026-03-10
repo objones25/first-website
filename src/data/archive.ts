@@ -8,6 +8,13 @@ export interface ArchiveProject {
 
 export const archiveProjects: ArchiveProject[] = [
   {
+    title: 'Browserbase Agent',
+    description: 'Cloudflare Worker exposing browser automation as a REST API, powered by Stagehand and Cloudflare Browser Rendering.',
+    year: '2025',
+    tags: ['TypeScript', 'Cloudflare', 'Agents'],
+    href: 'https://github.com/objones25/browserbase-agent',
+  },
+  {
     title: 'Gemini Chat Agent',
     description: 'AI chat agent on Cloudflare Workers with SSE streaming, code execution, thinking mode, and KV-persisted chat history. Built as a precursor to the Gemini Audio Agent.',
     year: '2025',
