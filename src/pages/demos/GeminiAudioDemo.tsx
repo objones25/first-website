@@ -55,6 +55,7 @@ export function GeminiAudioDemo() {
   const nextStartRef = useRef(0)
   const workletUrlRef = useRef<string | null>(null)
   const entryIdRef = useRef(0)
+  const ariaBufferRef = useRef<string[]>([])
 
   useEffect(() => {
     const blob = new Blob([WORKLET_SRC], { type: 'application/javascript' })
@@ -151,9 +152,19 @@ export function GeminiAudioDemo() {
           addTranscript('user', msg.text as string)
           break
         case 'output_transcript':
-          addTranscript('aria', msg.text as string)
+          ariaBufferRef.current.push(msg.text as string)
+          break
+        case 'turn_complete':
+          if (ariaBufferRef.current.length > 0) {
+            addTranscript('aria', ariaBufferRef.current.join(' '))
+            ariaBufferRef.current = []
+          }
           break
         case 'interrupted':
+          if (ariaBufferRef.current.length > 0) {
+            addTranscript('aria', ariaBufferRef.current.join(' '))
+            ariaBufferRef.current = []
+          }
           stopPlayback()
           break
         case 'error':
