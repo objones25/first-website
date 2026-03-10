@@ -23,6 +23,8 @@
     "vite": "^6.4.1"
   },
   "dependencies": {
+    "@clerk/react-router": "^3.0.2",
+    "@clerk/themes": "^2.4.57",
     "@radix-ui/react-dialog": "^1.1.15",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",

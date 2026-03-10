@@ -1,4 +1,5 @@
 import { Link, useParams, Navigate } from 'react-router-dom'
+import { useAuth } from '@clerk/react-router'
 import { motion } from 'framer-motion'
 import { projects } from '@/data/projects'
 import { PageTransition } from '@/components/layout/PageTransition'
@@ -14,6 +15,7 @@ const statusLabel: Record<string, string> = {
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>()
+  const { isSignedIn } = useAuth()
   const index = projects.findIndex(p => p.slug === slug)
   const project = projects[index]
 
@@ -162,6 +164,25 @@ export default function ProjectDetail() {
               <Placeholder />
             )}
           </Section>
+
+          {/* Live Demo CTA */}
+          {project.hasDemo && (
+            <Section label="// Live Demo" delay={0.3}>
+              <div className="flex flex-col gap-3">
+                <Link
+                  to={`/projects/${project.slug}/demo`}
+                  className="mono border border-border px-4 py-2 hover:border-border-strong transition-colors duration-200 inline-block w-fit"
+                >
+                  [ Launch Demo ] →
+                </Link>
+                {!isSignedIn && (
+                  <p className="mono text-text-muted text-xs">
+                    Sign in required — free account, no card needed.
+                  </p>
+                )}
+              </div>
+            </Section>
+          )}
 
         </div>
 

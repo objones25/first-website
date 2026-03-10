@@ -16,6 +16,7 @@ export interface Project {
   approach?: string
   features?: string[]
   links?: ProjectLink[]
+  hasDemo?: boolean
 }
 
 export interface NavLink {

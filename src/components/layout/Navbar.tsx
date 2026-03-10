@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useAuth, UserButton } from '@clerk/react-router'
 import { navLinks } from '@/data/navigation'
 import { useScrolled } from '@/hooks/useScrolled'
 import { cn } from '@/lib/utils'
@@ -6,6 +7,7 @@ import { cn } from '@/lib/utils'
 export function Navbar() {
   const { pathname } = useLocation()
   const scrolled = useScrolled()
+  const { isSignedIn } = useAuth()
 
   return (
     <header
@@ -19,20 +21,39 @@ export function Navbar() {
           OJ
         </Link>
 
-        <nav className="flex items-center gap-8">
-          {navLinks.map(({ label, href }) => (
+        <div className="flex items-center gap-8">
+          <nav className="flex items-center gap-8">
+            {navLinks.map(({ label, href }) => (
+              <Link
+                key={href}
+                to={href}
+                className={cn(
+                  'mono uppercase tracking-wider transition-colors duration-200',
+                  pathname === href ? 'text-text' : 'text-text-muted hover:text-text'
+                )}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+
+          {isSignedIn ? (
+            <UserButton
+              appearance={{
+                elements: {
+                  avatarBox: 'w-7 h-7',
+                },
+              }}
+            />
+          ) : (
             <Link
-              key={href}
-              to={href}
-              className={cn(
-                'mono uppercase tracking-wider transition-colors duration-200',
-                pathname === href ? 'text-text' : 'text-text-muted hover:text-text'
-              )}
+              to="/sign-in"
+              className="mono text-text-muted hover:text-text transition-colors duration-200"
             >
-              {label}
+              [ Sign In ]
             </Link>
-          ))}
-        </nav>
+          )}
+        </div>
       </div>
     </header>
   )

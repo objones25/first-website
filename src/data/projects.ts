@@ -40,6 +40,7 @@ export const projects: Project[] = [
     links: [
       { label: 'GitHub', href: 'https://github.com/objones25/weather-api' },
     ],
+    hasDemo: true,
   },
   {
     slug: 'fake-news-classifier',
@@ -60,6 +61,7 @@ export const projects: Project[] = [
     links: [
       { label: 'GitHub', href: 'https://github.com/objones25/fake-news-classifier' },
     ],
+    hasDemo: true,
   },
   {
     slug: 'computer-use-agent',
@@ -180,6 +182,7 @@ export const projects: Project[] = [
     links: [
       { label: 'GitHub', href: 'https://github.com/objones25/gemini-audio-agent' },
     ],
+    hasDemo: true,
   },
   {
     slug: 'chess',
