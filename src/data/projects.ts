@@ -43,27 +43,6 @@ export const projects: Project[] = [
     hasDemo: true,
   },
   {
-    slug: 'fake-news-classifier',
-    title: 'Fake News Classifier',
-    description: 'ML pipeline for fake news detection using TF-IDF and ensemble methods. 99.97% test accuracy with AdaBoost on 38k articles.',
-    year: '2026',
-    tags: ['Python', 'scikit-learn', 'NLP'],
-    status: 'complete',
-    overview: 'A machine learning pipeline for classifying fake vs. real news articles, built as a hands-on introduction to scikit-learn and NLP. Covers the full workflow: EDA, data leakage detection, feature engineering, TF-IDF vectorization, feature selection, and hyperparameter-tuned comparison of 7 models on 38k articles.',
-    challenge: 'The most important step was catching data leakage before touching a model. The subject column gave 100% classification accuracy on its own because real and fake news used completely non-overlapping subject labels — a model trained on that wouldn\'t be learning anything about language. The date column was a subtler version of the same problem. Removing both and building features purely from title and text content is what made the final accuracy meaningful.',
-    approach: 'SelectKBest (f_classif) was chosen over PCA for dimensionality reduction. With sparse TF-IDF data, PCA required 13,075 components to retain 95% variance — more than double the 5,000 features SelectKBest needed, and 17x the disk footprint. AdaBoost won over XGBoost and LightGBM not because it\'s a better algorithm in general, but because the dataset is highly separable; the simpler ensemble was sufficient and trained in 4 minutes vs. 80 for Gradient Boosting.',
-    features: [
-      '99.97% test accuracy — 3 misclassifications out of 7,730 test articles',
-      'Detected and removed two sources of data leakage (subject column: 100% accuracy; date column: 75%) before modeling',
-      'Title capital ratio was the single most discriminative feature (F-score 45,372) — fake news averaged 30% caps vs. 6% for real',
-      '7 models compared with RandomizedSearchCV; AdaBoost outperformed XGBoost, LightGBM, and Random Forest',
-    ],
-    links: [
-      { label: 'GitHub', href: 'https://github.com/objones25/fake-news-classifier' },
-    ],
-    hasDemo: true,
-  },
-  {
     slug: 'computer-use-agent',
     title: 'Computer Use Agent',
     description: 'Autonomous desktop agent using Claude\'s Computer Use API with human-in-the-loop credential handling and CAPTCHA solving.',

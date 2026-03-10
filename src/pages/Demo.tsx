@@ -2,13 +2,11 @@ import { useParams, Navigate } from 'react-router-dom'
 import type { ComponentType } from 'react'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { WeatherDemo } from './demos/WeatherDemo'
-import { FakeNewsDemo } from './demos/FakeNewsDemo'
 import { GeminiAudioDemo } from './demos/GeminiAudioDemo'
 import { BraveSearchDemo } from './demos/BraveSearchDemo'
 
 const DEMOS: Record<string, ComponentType> = {
   'weather-api': WeatherDemo,
-  'fake-news-classifier': FakeNewsDemo,
   'gemini-audio-agent': GeminiAudioDemo,
   'brave-search-agent': BraveSearchDemo,
 }
