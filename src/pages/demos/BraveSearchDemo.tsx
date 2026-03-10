@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 
 const BASE_URL = import.meta.env.VITE_BRAVE_SEARCH_AGENT_URL as string
 
@@ -78,7 +79,8 @@ export function BraveSearchDemo() {
 
     const body: Record<string, unknown> = { query: query.trim() }
     if (mode !== 'agentic') {
-      body.options = options
+      const { freshness, ...rest } = options
+      body.options = freshness === 'any' ? rest : options
     }
 
     try {
@@ -292,7 +294,9 @@ function ResultsPane({ mode, result }: { mode: Mode; result: NonNullable<Result>
         {r.answer && (
           <div>
             <span className="section-label block mb-3">// ANSWER</span>
-            <p className="mono text-sm text-text leading-relaxed whitespace-pre-wrap">{r.answer}</p>
+            <div className="mono text-sm text-text leading-relaxed prose prose-invert prose-sm max-w-none">
+              <ReactMarkdown>{r.answer}</ReactMarkdown>
+            </div>
           </div>
         )}
       </div>
@@ -325,7 +329,9 @@ function ResultsPane({ mode, result }: { mode: Mode; result: NonNullable<Result>
         {r.answer && (
           <div>
             <span className="section-label block mb-3">// ANSWER</span>
-            <p className="mono text-sm text-text leading-relaxed whitespace-pre-wrap">{r.answer}</p>
+            <div className="mono text-sm text-text leading-relaxed prose prose-invert prose-sm max-w-none">
+              <ReactMarkdown>{r.answer}</ReactMarkdown>
+            </div>
           </div>
         )}
       </div>
