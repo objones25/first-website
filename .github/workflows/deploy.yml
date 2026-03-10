@@ -33,6 +33,7 @@ jobs:
         run: npm run build
         env:
           VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
+          VITE_BRAVE_SEARCH_AGENT_URL: ${{ secrets.VITE_BRAVE_SEARCH_AGENT_URL }}
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
