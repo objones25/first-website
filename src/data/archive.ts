@@ -15,13 +15,6 @@ export const archiveProjects: ArchiveProject[] = [
     href: 'https://github.com/objones25/gemini-chat-agent',
   },
   {
-    title: 'Brave Search Agent',
-    description: 'Cloudflare Worker exposing Brave Search as an AI agent with four search modes — direct, optimized, agentic (Gemini-powered), and suggestion-enhanced.',
-    year: '2025',
-    tags: ['TypeScript', 'Cloudflare', 'Agents'],
-    href: 'https://github.com/objones25/brave-agent',
-  },
-  {
     title: 'YouTube Transcript MCP Server',
     description: 'Serverless MCP server on Cloudflare Workers for extracting YouTube transcripts.',
     year: '2025',

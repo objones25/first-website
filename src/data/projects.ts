@@ -144,6 +144,27 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: 'brave-search-agent',
+    title: 'Brave Search Agent',
+    description: 'Cloudflare Worker API with four search modes — direct, AI-synthesized, query-optimized, and fully agentic — powered by Brave Search and Gemini.',
+    year: '2025',
+    tags: ['TypeScript', 'Cloudflare', 'Gemini'],
+    status: 'active',
+    overview: 'A Cloudflare Worker that wraps Brave Search through four progressively more intelligent endpoints. The simplest runs a direct web search. AI mode passes results to Gemini for synthesis. Optimized mode has Gemini rewrite and expand the query, fans out multiple searches in parallel, then merges and deduplicates results. Agentic mode gives Gemini full autonomy — it calls Brave Search as a tool up to five times, using Gemini 3\'s thought signatures to maintain reasoning context across turns, then synthesizes a cited answer.',
+    challenge: 'Getting the agentic mode right required careful multi-turn function calling. Gemini 3 uses thought signatures to preserve reasoning context across sequential tool calls — preserving that state, feeding results back correctly, and deciding when to stop before the 5-call cap was the core design problem. The optimized mode needed query deduplication logic to avoid resurfacing the same result from alternative queries that converge on similar terms.',
+    approach: 'Each mode is a separate endpoint so callers choose the cost/quality tradeoff explicitly. Agentic mode passes a Brave Search tool definition to Gemini and loops until it calls stop or hits the cap. Optimized mode generates alternatives in a single Gemini call, fans out with Promise.all, then re-ranks the merged result set. Standard and AI modes are stateless — one Brave call, optional Gemini synthesis, return.',
+    features: [
+      'Four endpoints: /search (direct), /ai (Gemini-synthesized), /optimized (query-expanded fan-out), /agentic (autonomous multi-step)',
+      'Agentic mode: Gemini autonomously calls Brave Search up to 5 times using native function calling with thought signatures',
+      'Optimized mode: generates 3-5 alternative queries in parallel and merges/deduplicates the result set',
+      'Full Brave Search options: count, safesearch, freshness, result_filter, country, extra_snippets, and more',
+    ],
+    links: [
+      { label: 'GitHub', href: 'https://github.com/objones25/brave-agent' },
+    ],
+    hasDemo: true,
+  },
+  {
     slug: 'battleship',
     title: 'Battleship',
     description: 'Real-time multiplayer Battleship with React, Socket.io, and JWT authentication via HTTP-only cookies.',
