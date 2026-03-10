@@ -12,34 +12,34 @@ interface Options {
 }
 
 interface WebResult {
-  title?: string
-  url?: string
-  description?: string
+  title: string
+  url: string
+  description: string
+  source: string
 }
 
-interface SearchResult {
-  web?: { results?: WebResult[] }
+// search: { query, results: { webResults, newsResults, ... } }
+interface SearchResponse {
+  results?: { webResults?: WebResult[] }
 }
 
-interface AiResult {
+// ai: { query, answer }
+interface AiResponse {
   answer?: string
-  sources?: WebResult[]
-  web?: { results?: WebResult[] }
 }
 
-interface OptimizedResult {
-  rewritten_query?: string
-  results?: WebResult[]
-  web?: { results?: WebResult[] }
+// optimized: { query, optimization: { optimizedQuery, ... }, results: { webResults, ... } }
+interface OptimizedResponse {
+  optimization?: { optimizedQuery?: string }
+  results?: { webResults?: WebResult[] }
 }
 
-interface AgenticResult {
+// agentic: { query, answer }
+interface AgenticResponse {
   answer?: string
-  citations?: WebResult[]
-  thinking?: string[]
 }
 
-type Result = SearchResult | AiResult | OptimizedResult | AgenticResult | null
+type Result = SearchResponse | AiResponse | OptimizedResponse | AgenticResponse | null
 
 const MODE_LABELS: Record<Mode, string> = {
   search: 'SEARCH',
@@ -265,8 +265,8 @@ function ErrorPane({ message }: { message: string }) {
 
 function ResultsPane({ mode, result }: { mode: Mode; result: NonNullable<Result> }) {
   if (mode === 'search') {
-    const r = result as SearchResult
-    const results = r.web?.results ?? []
+    const r = result as SearchResponse
+    const results = r.results?.webResults ?? []
     return (
       <div>
         <span className="section-label block mb-4">
@@ -278,8 +278,7 @@ function ResultsPane({ mode, result }: { mode: Mode; result: NonNullable<Result>
   }
 
   if (mode === 'ai') {
-    const r = result as AiResult
-    const sources = r.sources ?? r.web?.results ?? []
+    const r = result as AiResponse
     return (
       <div className="space-y-8">
         {r.answer && (
@@ -288,25 +287,19 @@ function ResultsPane({ mode, result }: { mode: Mode; result: NonNullable<Result>
             <p className="mono text-sm text-text leading-relaxed whitespace-pre-wrap">{r.answer}</p>
           </div>
         )}
-        {sources.length > 0 && (
-          <div>
-            <span className="section-label block mb-4">// SOURCES — {sources.length}</span>
-            <WebResultList results={sources} />
-          </div>
-        )}
       </div>
     )
   }
 
   if (mode === 'optimized') {
-    const r = result as OptimizedResult
-    const results = r.results ?? r.web?.results ?? []
+    const r = result as OptimizedResponse
+    const results = r.results?.webResults ?? []
     return (
       <div className="space-y-8">
-        {r.rewritten_query && (
+        {r.optimization?.optimizedQuery && (
           <div>
             <span className="section-label block mb-2">// REWRITTEN QUERY</span>
-            <p className="mono text-sm text-text">{r.rewritten_query}</p>
+            <p className="mono text-sm text-text">{r.optimization.optimizedQuery}</p>
           </div>
         )}
         <div>
@@ -318,34 +311,13 @@ function ResultsPane({ mode, result }: { mode: Mode; result: NonNullable<Result>
   }
 
   if (mode === 'agentic') {
-    const r = result as AgenticResult
-    const citations = r.citations ?? []
+    const r = result as AgenticResponse
     return (
       <div className="space-y-8">
-        {r.thinking && r.thinking.length > 0 && (
-          <details className="border border-dashed border-border-strong">
-            <summary className="section-label px-4 py-3 cursor-pointer hover:text-text transition-colors">
-              // REASONING STEPS ({r.thinking.length})
-            </summary>
-            <div className="px-4 pb-4 space-y-2">
-              {r.thinking.map((step, i) => (
-                <p key={i} className="mono text-xs text-text-muted leading-relaxed">
-                  {i + 1}. {step}
-                </p>
-              ))}
-            </div>
-          </details>
-        )}
         {r.answer && (
           <div>
             <span className="section-label block mb-3">// ANSWER</span>
             <p className="mono text-sm text-text leading-relaxed whitespace-pre-wrap">{r.answer}</p>
-          </div>
-        )}
-        {citations.length > 0 && (
-          <div>
-            <span className="section-label block mb-4">// CITATIONS — {citations.length}</span>
-            <WebResultList results={citations} />
           </div>
         )}
       </div>
