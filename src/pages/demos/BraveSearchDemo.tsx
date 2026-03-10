@@ -337,6 +337,10 @@ function ResultsPane({ mode, result }: { mode: Mode; result: NonNullable<Result>
   )
 }
 
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+}
+
 function WebResultList({ results }: { results: WebResult[] }) {
   if (results.length === 0) {
     return <p className="mono text-text-muted text-sm">No results.</p>
@@ -367,7 +371,7 @@ function WebResultList({ results }: { results: WebResult[] }) {
           )}
           {r.description && (
             <p className="mono text-xs text-text-muted ml-9 mt-1 leading-relaxed">
-              {r.description}
+              {stripHtml(r.description)}
             </p>
           )}
         </div>
