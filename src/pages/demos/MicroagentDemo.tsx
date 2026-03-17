@@ -278,7 +278,7 @@ export function MicroagentDemo() {
   return (
     <div className="max-w-4xl mx-auto px-6 pt-16 pb-32">
       <span className="section-label block mb-4">// Live Demo — Microagent</span>
-      <h1 className="display mb-2">Microagent</h1>
+      <h1 className="display pb-[0.25em] mb-2">Microagent</h1>
       <p className="mono text-text-muted text-sm mb-12">
         Test-first AI coding agent. Describe a function — Claude generates a locked test suite, then iterates on an implementation until all tests pass.
       </p>
