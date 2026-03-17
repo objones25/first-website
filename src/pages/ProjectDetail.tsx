@@ -62,7 +62,7 @@ export default function ProjectDetail() {
                   initial={{ y: '105%' }}
                   animate={{ y: '0%' }}
                   transition={{ duration: 0.9, ease, delay: 0.06 }}
-                  className="display"
+                  className="display pb-[0.3em]"
                 >
                   {project.title}
                 </motion.h1>

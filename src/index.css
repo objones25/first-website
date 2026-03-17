@@ -85,7 +85,7 @@
   .clip {
     overflow: hidden;
     display: block;
-    padding-bottom: 0.25em;
+    padding-bottom: 0.12em;
   }
 
   /* Horizontal scroll — hide scrollbar */
