@@ -55,9 +55,6 @@ export default function About() {
                 building ML pipelines, training neural nets from scratch, and wiring up AI-powered APIs.
                 Currently deepening my ML foundations through ISL and Karpathy's makemore series.
               </p>
-              <p>
-                Incoming MS in Business Analytics at USC, starting fall 2026.
-              </p>
             </div>
 
             <span className="label block mt-12 mb-6">// Beyond the Code</span>
