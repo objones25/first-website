@@ -122,6 +122,7 @@ export const projects: Project[] = [
     links: [
       { label: 'GitHub', href: 'https://github.com/objones25/document-scanner-summarizer' },
     ],
+    hasDemo: true,
   },
   {
     slug: 'brave-search-agent',

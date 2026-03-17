@@ -5,12 +5,14 @@ import { WeatherDemo } from './demos/WeatherDemo'
 import { GeminiAudioDemo } from './demos/GeminiAudioDemo'
 import { BraveSearchDemo } from './demos/BraveSearchDemo'
 import { MicroagentDemo } from './demos/MicroagentDemo'
+import { DocumentScannerDemo } from './demos/DocumentScannerDemo'
 
 const DEMOS: Record<string, ComponentType> = {
   'weather-api': WeatherDemo,
   'gemini-audio-agent': GeminiAudioDemo,
   'brave-search-agent': BraveSearchDemo,
   'microagent': MicroagentDemo,
+  'document-scanner': DocumentScannerDemo,
 }
 
 export default function Demo() {
