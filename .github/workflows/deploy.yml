@@ -35,6 +35,8 @@ jobs:
           VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
           VITE_BRAVE_SEARCH_AGENT_URL: ${{ secrets.VITE_BRAVE_SEARCH_AGENT_URL }}
           VITE_WEATHER_API_URL: ${{ secrets.VITE_WEATHER_API_URL }}
+          VITE_MICROAGENT_WS_URL: ${{ secrets.VITE_MICROAGENT_WS_URL }}
+          VITE_MICROAGENT_TOKEN: ${{ secrets.VITE_MICROAGENT_TOKEN }}
         
       - name: Setup Pages
         uses: actions/configure-pages@v4

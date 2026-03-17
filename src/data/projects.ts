@@ -2,6 +2,27 @@ import type { Project } from '@/types'
 
 export const projects: Project[] = [
   {
+    slug: 'microagent',
+    title: 'Microagent',
+    description: 'Test-first AI coding agent — generates a locked test suite, iterates until all tests pass, and includes an evaluation harness for systematically improving test design across prompt versions.',
+    year: '2026',
+    tags: ['Python', 'Claude API', 'FastAPI'],
+    status: 'complete',
+    overview: 'A Python reimagining of Steve Sewell\'s microagent concept. Given a task description, Claude generates a locked pytest file in Phase 1 — tests that describe the correct behavior and that the agent cannot modify. In Phase 2, Claude iteratively writes and debugs a solution using file I/O, pytest, and scratchpad tools until all tests pass or the iteration cap is hit. A ground-truth pytest run verifies the final result independently of what the agent reports.',
+    challenge: 'The hard problem was that a high pass rate tells you almost nothing — with a capable model, nearly everything passes. The real question is whether the tests are actually catching bugs, testing the right boundaries, and making verifiable claims. Building the judge and eval loop to surface that signal, and then using it to drive 8 prompt versions worth of improvements, was the actual work.',
+    approach: 'Test-lock design: tests are generated once and never modified. The eval harness runs batches of tasks, judges outputs, and optionally generates improved prompts — creating a feedback loop. Each v2.x version came from reading judge output, identifying failure patterns (tautological assertions, unverified numeric claims, missing complexity guards), and encoding fixes as prompt rules.',
+    features: [
+      'Streaming WebSocket API with token auth, concurrency cap, and structured logging — deployed on Railway',
+      'Evaluation harness with judge-based scoring, A/B prompt comparison, and automated prompt optimizer',
+      '8 prompt versions iterated via the eval loop — each targeting specific test design failure patterns identified by the judge',
+      'Test revision flow: agent can propose revised tests, requires calculator-verified proof before rewriting, prompts for human approval',
+    ],
+    links: [
+      { label: 'GitHub', href: 'https://github.com/objones25/microagent' },
+    ],
+    hasDemo: true,
+  },
+  {
     slug: 'makemore',
     title: 'Makemore',
     description: 'Character-level name generation model using a WaveNet-style hierarchical MLP trained on 32k names.',

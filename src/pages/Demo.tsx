@@ -4,11 +4,13 @@ import { PageTransition } from '@/components/layout/PageTransition'
 import { WeatherDemo } from './demos/WeatherDemo'
 import { GeminiAudioDemo } from './demos/GeminiAudioDemo'
 import { BraveSearchDemo } from './demos/BraveSearchDemo'
+import { MicroagentDemo } from './demos/MicroagentDemo'
 
 const DEMOS: Record<string, ComponentType> = {
   'weather-api': WeatherDemo,
   'gemini-audio-agent': GeminiAudioDemo,
   'brave-search-agent': BraveSearchDemo,
+  'microagent': MicroagentDemo,
 }
 
 export default function Demo() {
