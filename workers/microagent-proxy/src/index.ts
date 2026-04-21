@@ -32,7 +32,6 @@ export default {
 
     const { 0: client, 1: server } = new WebSocketPair()
 
-    upstream.accept()
     server.accept()
 
     server.addEventListener('message', ({ data }) => {
