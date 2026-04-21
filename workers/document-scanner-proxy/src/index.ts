@@ -35,9 +35,13 @@ export default {
 
     const response = await fetch(proxied)
 
+    const upstreamHeaders = Object.fromEntries(
+      [...response.headers.entries()].filter(([k]) => !k.startsWith('access-control-'))
+    )
+
     return new Response(response.body, {
       status: response.status,
-      headers: { ...Object.fromEntries(response.headers), ...CORS_HEADERS },
+      headers: { ...upstreamHeaders, ...CORS_HEADERS },
     })
   },
 }

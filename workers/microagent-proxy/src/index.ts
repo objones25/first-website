@@ -23,19 +23,28 @@ export default {
     upstreamUrl.search = url.search
     upstreamUrl.searchParams.set('token', env.TOKEN)
 
-    let upstream: WebSocket
-    try {
-      upstream = new WebSocket(upstreamUrl.toString())
-    } catch (err) {
-      return new Response(`Upstream connect error: ${String(err)}`, { status: 502 })
-    }
-
+    const upstream = new WebSocket(upstreamUrl.toString())
     const { 0: client, 1: server } = new WebSocketPair()
 
     server.accept()
 
+    const pendingToUpstream: (string | ArrayBuffer)[] = []
+    let upstreamReady = false
+
+    upstream.addEventListener('open', () => {
+      upstreamReady = true
+      for (const msg of pendingToUpstream) {
+        try { upstream.send(msg) } catch { /* ignore */ }
+      }
+      pendingToUpstream.length = 0
+    })
+
     server.addEventListener('message', ({ data }) => {
-      try { upstream.send(data as string | ArrayBuffer) } catch { /* upstream closed */ }
+      if (upstreamReady) {
+        try { upstream.send(data as string | ArrayBuffer) } catch { /* upstream closed */ }
+      } else {
+        pendingToUpstream.push(data as string | ArrayBuffer)
+      }
     })
 
     upstream.addEventListener('message', ({ data }) => {
