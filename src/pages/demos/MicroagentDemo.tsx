@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 
 const WS_BASE = import.meta.env.VITE_MICROAGENT_WS_URL as string
-const WS_TOKEN = import.meta.env.VITE_MICROAGENT_TOKEN as string
 
 // ── Server event types ────────────────────────────────────────────────────────
 
@@ -198,7 +197,7 @@ export function MicroagentDemo() {
     setPendingApproval(null)
     finishedRef.current = false
 
-    const ws = new WebSocket(`${WS_BASE}/ws/run?token=${WS_TOKEN}`)
+    const ws = new WebSocket(`${WS_BASE}/ws/run`)
     wsRef.current = ws
 
     ws.onopen = () => {
