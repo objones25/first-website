@@ -2,6 +2,27 @@ import type { Project } from '@/types'
 
 export const projects: Project[] = [
   {
+    slug: 'snake-q-learning',
+    title: 'Snake Q-Learning',
+    description: 'Tabular Q-learning agent that learns to play Snake, built around a rotation-invariant, distance-bucketed state encoding rather than a neural network.',
+    year: '2026',
+    tags: ['Python', 'Reinforcement Learning', 'FastAPI'],
+    status: 'complete',
+    overview: 'A Q-learning agent for Snake with no neural network — its entire "brain" is a 1,600-row table of state-action values, updated with a plain Bellman-equation rule. The environment is a small Gym-like world built from scratch on top of a minimal Snake entity, and a FastAPI backend streams live training or greedy-playthrough frames over Server-Sent Events for the browser demo below.',
+    challenge: 'The original state encoding used three plain booleans for danger and a 3-way sign for food direction — 72 states total. It trained fine but plateaued hard: average score converged to roughly 21-22 by episode 5,000-6,000 and never improved with more training. The root cause was information loss, not under-training — a boolean "danger ahead" can\'t distinguish a wall directly in front of the snake from one five cells away, and a 3-way food sign can\'t distinguish food one cell away from food across the entire board.',
+    approach: 'Replacing the encoding with distance-bucketed danger (four buckets across each of three relative directions) and bucketed food position (five buckets per axis) took the table from 72 to 1,600 states — and broke the plateau. Both danger and food are encoded relative to the snake\'s own heading rather than absolute grid direction, so the agent learns one rotation-invariant policy instead of four rotated copies of the same one. A separate FastAPI service exposes the same train()/play() generators the CLI uses as GET /train and GET /play Server-Sent Event streams, so the exact same episode loop drives the CLI\'s progress output, an optional pygame renderer, and this live browser demo — none of the RL logic is duplicated across the three.',
+    features: [
+      'Rotation-invariant, distance-bucketed state encoding (1,600 states) that broke through a hard plateau a simpler 72-state boolean encoding hit at avg score ~21-22',
+      'train() and play() are implemented as generators, not functions — shared unmodified by the CLI, an optional pygame renderer, and the FastAPI SSE endpoints',
+      'Greedy playthrough over 100,000 episodes averages a score of 42 (final snake length), with a top score of 87',
+      '500-episode soak test asserting environment invariants hold on every single step, which previously caught a collision-set desync bug',
+    ],
+    links: [
+      { label: 'GitHub', href: 'https://github.com/objones25/snake-q-learning' },
+    ],
+    hasDemo: true,
+  },
+  {
     slug: 'microagent',
     title: 'Microagent',
     description: 'Test-first AI coding agent — generates a locked test suite, iterates until all tests pass, and includes an evaluation harness for systematically improving test design across prompt versions.',
