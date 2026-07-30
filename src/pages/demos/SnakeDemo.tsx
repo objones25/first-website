@@ -222,6 +222,7 @@ export function SnakeDemo() {
       grid_size: String(gridSize),
       fps: String(fps),
       n_episodes: String(nEpisodes),
+      use_shield: 'true',
     })
     const url = `${BASE_URL}/${mode}?${params}`
 

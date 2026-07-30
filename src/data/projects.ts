@@ -8,14 +8,13 @@ export const projects: Project[] = [
     year: '2026',
     tags: ['Python', 'Reinforcement Learning', 'FastAPI'],
     status: 'complete',
-    overview: 'There\'s no neural network here. The whole agent is a 1,600-row Q-table (a plain list of lists) updated with the Bellman equation. The environment (reset()/step()) is a small Gym-style world built from scratch on top of a minimal Snake entity.',
+    overview: 'There\'s no neural network here. The whole agent is a 1,600-row Q-table (a plain list of lists) updated with the Bellman equation. The environment (reset()/step()) is a small Gym-style world built from scratch on top of a minimal Snake entity. Before the table is consulted, a flood-fill safety shield filters the candidate moves down to whichever ones keep the snake\'s escape routes open, so the epsilon-greedy policy is only ever choosing among moves that don\'t trap it.',
     challenge: 'The original state encoding used three booleans for danger and a 3-way sign for food direction: 72 states total. It trained fine, but the average score plateaued around 21-22 by episode 5,000 and never moved past that, even after 30,000 episodes. The problem wasn\'t training time, it was that the encoding couldn\'t represent the difference between situations that call for different actions: a boolean "wall ahead" can\'t tell a wall one cell away from a wall five cells away, and a 3-way food direction can\'t tell food that\'s adjacent from food clear across the board.',
     approach: 'Replacing that with distance-bucketed danger (four buckets, across each of three directions relative to the snake\'s own heading) and bucketed food position (five buckets per axis, also relative to heading) took the table from 72 states to 1,600, and broke the plateau. Because everything is encoded relative to the snake\'s heading instead of absolute grid direction, the agent only has to learn one policy instead of four rotated copies of the same one.',
     features: [
       'Rotation-invariant, distance-bucketed state encoding (1,600 states), replacing an earlier 72-state boolean encoding that plateaued at an average score of ~21-22 and never improved with more training',
       'train() and play() are generators, yielding one step at a time, so the CLI and an optional pygame renderer share the exact same episode loop with nothing duplicated',
-      'A Q-table trained for 100,000 episodes averages a score of 42 and peaks at 87 over a 100,000-episode greedy playthrough',
-      'A 500-episode soak test checks environment invariants on every single step. It\'s what caught a pos_set desync bug in Snake.move during development',
+      'A flood-fill safety shield filters candidate moves down to whichever ones keep the snake\'s escape routes open, before the Q-table\'s epsilon-greedy policy picks among them; on the default 20x20 grid this policy averages a score of 79 (top score 123) across 1,000 greedy episodes',
     ],
     links: [
       { label: 'GitHub', href: 'https://github.com/objones25/snake-q-learning' },
