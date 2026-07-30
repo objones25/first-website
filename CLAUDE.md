@@ -21,7 +21,7 @@ Workers (each is an independent Wrangler project — run from inside `workers/<n
 - `npm run deploy` — `wrangler deploy`; not wired into any CI, always manual
 - Secrets (`TOKEN`, `WEATHER_API_KEY`) are Wrangler secrets (`wrangler secret put <NAME>`), never in `wrangler.toml`. `weather-proxy` has `.dev.vars.example`; the other two don't but need a local `.dev.vars` with `TOKEN=...`.
 
-There's no root env template — a local `.env` needs `VITE_CLERK_PUBLISHABLE_KEY`, `VITE_BRAVE_SEARCH_AGENT_URL`, `VITE_WEATHER_API_URL`, `VITE_MICROAGENT_WS_URL`, `VITE_DOCUMENT_SCANNER_URL` (same names used as GitHub Actions secrets in `deploy.yml`).
+There's no root env template — a local `.env` needs `VITE_CLERK_PUBLISHABLE_KEY`, `VITE_BRAVE_SEARCH_AGENT_URL`, `VITE_WEATHER_API_URL`, `VITE_MICROAGENT_WS_URL`, `VITE_DOCUMENT_SCANNER_URL`, `VITE_SNAKE_API_URL` (same names used as GitHub Actions secrets in `deploy.yml`).
 
 ## Frontend architecture (`src/`)
 
@@ -34,12 +34,13 @@ There's no root env template — a local `.env` needs `VITE_CLERK_PUBLISHABLE_KE
 
 **Data as CMS**: `src/data/projects.ts` holds the canonical `Project[]` — essay-length `overview`/`challenge`/`approach`/`features` strings live directly in this TS file (no headless CMS/MDX). `src/data/archive.ts` is a separate, simpler `ArchiveProject` shape (defined locally there, not in `src/types`) for older GitHub-only projects. `src/data/navigation.ts` holds nav links. This is a portfolio site only — there is no blog/posts system despite `react-markdown` being a dependency (it's used once, to render AI answer text in `BraveSearchDemo.tsx`).
 
-**Worker proxy integration**: the frontend never calls upstream demo backends directly — only the Cloudflare Worker proxies, which inject secrets server-side. Of the 5 demos, only 3 have their proxy source in this repo's `workers/`:
+**Worker proxy integration**: most demos never call upstream demo backends directly — they go through a Cloudflare Worker proxy that injects secrets server-side. Of the 6 demos, only 3 have their proxy source in this repo's `workers/`:
 - `WeatherDemo.tsx` → `VITE_WEATHER_API_URL` → `workers/weather-proxy`
 - `DocumentScannerDemo.tsx` → `VITE_DOCUMENT_SCANNER_URL` → `workers/document-scanner-proxy`
 - `MicroagentDemo.tsx` → `VITE_MICROAGENT_WS_URL` (raw WebSocket) → `workers/microagent-proxy`
 - `BraveSearchDemo.tsx` → `VITE_BRAVE_SEARCH_AGENT_URL` — worker lives in a separate repo
 - `GeminiAudioDemo.tsx` — WebSocket URL is **hardcoded** (`wss://gemini-audio-agent.owenbeckettjones.workers.dev/ws`), not a `VITE_*` var like the others; worker also lives in a separate repo. Treat this as an inconsistency, not a pattern to copy.
+- `SnakeDemo.tsx` → `VITE_SNAKE_API_URL` — calls the Railway-deployed FastAPI SSE endpoints directly; no Worker proxy exists or is needed, since that API requires no secret and already sets `CORS: *`.
 
 **Styling**: Tailwind CSS 4 via `@tailwindcss/vite` — config lives in `src/index.css` (`@theme` block), there is no `tailwind.config.js`. Custom design tokens (`--color-background/surface/text/border...`, `Inter` + `Space Mono` fonts) and custom `@layer utilities` classes (`.display`, `.heading-lg`, `.mono`, `.clip`, marquee classes) implement a monospace "terminal" aesthetic (`// LABELS`, `[ Bracketed Buttons ]`, padded numeric indices) — no icon library is actually used despite `lucide-react` being installed. `cn()` (`src/lib/utils.ts`, `clsx` + `tailwind-merge`) is the className helper, though most components still use plain strings/template literals. `framer-motion` is used pervasively with a shared entrance easing curve `[0.16, 1, 0.3, 1]` and clip-reveal (`y: '105%' → '0%'`) heading animations; route transitions go through `AnimatePresence` in `RootLayout`.
 
