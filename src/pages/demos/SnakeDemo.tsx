@@ -67,7 +67,8 @@ async function streamSnake(
 
   if (!res.ok) {
     const text = await res.text().catch(() => '')
-    return { ok: false, message: `${res.status}: ${text || res.statusText}` }
+    const body = text.length > 300 ? text.slice(0, 300) + '…' : text
+    return { ok: false, message: `${res.status}: ${body || res.statusText}` }
   }
 
   const reader = res.body?.getReader()
@@ -131,6 +132,13 @@ function drawBoard(canvas: HTMLCanvasElement, frame: Frame, flash: boolean) {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
+  const dpr = window.devicePixelRatio || 1
+  if (canvas.width !== CANVAS_SIZE * dpr) {
+    canvas.width = CANVAS_SIZE * dpr
+    canvas.height = CANVAS_SIZE * dpr
+  }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
   const cell = CANVAS_SIZE / frame.board.grid_size
 
   ctx.fillStyle = COLORS.background
@@ -139,7 +147,7 @@ function drawBoard(canvas: HTMLCanvasElement, frame: Frame, flash: boolean) {
   ctx.strokeStyle = COLORS.grid
   ctx.lineWidth = 1
   for (let i = 0; i <= frame.board.grid_size; i++) {
-    const pos = i * cell
+    const pos = Math.round(i * cell) + 0.5
     ctx.beginPath()
     ctx.moveTo(pos, 0)
     ctx.lineTo(pos, CANVAS_SIZE)
@@ -185,13 +193,10 @@ export function SnakeDemo() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const controllerRef = useRef<AbortController | null>(null)
 
-  useEffect(() => () => { controllerRef.current?.abort() }, [])
-
-  useEffect(() => {
-    if (canvasRef.current && frame) {
-      drawBoard(canvasRef.current, frame, frame.reward === -10)
-    }
-  }, [frame])
+  useEffect(() => () => {
+    controllerRef.current?.abort()
+    controllerRef.current = null
+  }, [])
 
   const nEpisodes = mode === 'train' ? trainEpisodes : playEpisodes
   const episodeOptions = mode === 'train' ? TRAIN_EPISODES : PLAY_EPISODES
@@ -199,6 +204,12 @@ export function SnakeDemo() {
 
   const start = useCallback(async () => {
     if (status === 'connecting' || status === 'streaming') return
+
+    if (!BASE_URL) {
+      setStatus('error')
+      setErrorMsg('Demo not configured — VITE_SNAKE_API_URL is missing')
+      return
+    }
 
     setStatus('connecting')
     setErrorMsg('')
@@ -219,6 +230,15 @@ export function SnakeDemo() {
       (f) => {
         setStatus('streaming')
         setFrame(f)
+        if (canvasRef.current) {
+          const isDeath = f.reward === -10
+          drawBoard(canvasRef.current, f, isDeath)
+          if (isDeath) {
+            setTimeout(() => {
+              if (canvasRef.current) drawBoard(canvasRef.current, f, false)
+            }, 400)
+          }
+        }
       },
       controller.signal,
     )
@@ -245,7 +265,7 @@ export function SnakeDemo() {
   return (
     <div className="max-w-4xl mx-auto px-6 pt-16 pb-32">
       <span className="section-label block mb-4">// Live Demo — Snake Q-Learning</span>
-      <h1 className="display mb-2">Snake Q-Learning</h1>
+      <h1 className="display pb-[0.3em] mb-2">Snake Q-Learning</h1>
       <p className="mono text-text-muted text-sm mb-12">
         Tabular Q-learning agent playing Snake, streamed live frame-by-frame from the agent running on Railway.
       </p>
@@ -259,7 +279,7 @@ export function SnakeDemo() {
                 key={m}
                 type="button"
                 disabled={isActive}
-                onClick={() => setMode(m)}
+                onClick={() => { setMode(m); setFrame(null) }}
                 className={`mono text-xs px-4 py-2 border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
                   mode === m
                     ? 'border-text bg-text text-background'
@@ -280,7 +300,7 @@ export function SnakeDemo() {
                 key={g}
                 type="button"
                 disabled={isActive}
-                onClick={() => setGridSize(g)}
+                onClick={() => { setGridSize(g); setFrame(null) }}
                 className={`mono text-xs px-4 py-2 border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
                   gridSize === g
                     ? 'border-text bg-text text-background'
@@ -301,7 +321,7 @@ export function SnakeDemo() {
                 key={n}
                 type="button"
                 disabled={isActive}
-                onClick={() => setEpisodes(n)}
+                onClick={() => { setEpisodes(n); setFrame(null) }}
                 className={`mono text-xs px-4 py-2 border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
                   nEpisodes === n
                     ? 'border-text bg-text text-background'
@@ -322,7 +342,7 @@ export function SnakeDemo() {
                 key={f}
                 type="button"
                 disabled={isActive}
-                onClick={() => setFps(f)}
+                onClick={() => { setFps(f); setFrame(null) }}
                 className={`mono text-xs px-4 py-2 border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
                   fps === f
                     ? 'border-text bg-text text-background'
@@ -354,7 +374,7 @@ export function SnakeDemo() {
         </div>
 
         {status === 'error' && (
-          <p className="mono text-xs text-text-muted border border-dashed border-border-strong px-4 py-3">
+          <p className="mono text-xs text-text-muted border border-dashed border-border-strong px-4 py-3 break-all">
             // {errorMsg}
           </p>
         )}
@@ -373,13 +393,11 @@ export function SnakeDemo() {
 
         <canvas
           ref={canvasRef}
-          width={CANVAS_SIZE}
-          height={CANVAS_SIZE}
           className="w-full max-w-[480px] aspect-square border border-border-strong bg-background"
         />
 
         {frame && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px border border-border-strong border-t-0 max-w-[480px]">
+          <div className={`grid grid-cols-2 ${frame.epsilon !== null ? 'sm:grid-cols-4' : 'sm:grid-cols-3'} gap-px border border-border-strong border-t-0 max-w-[480px]`}>
             <Stat label="EPISODE" value={`${frame.episode + 1} / ${nEpisodes}`} />
             <Stat label="SCORE" value={String(frame.score)} />
             {frame.epsilon !== null && <Stat label="EPSILON" value={frame.epsilon.toFixed(3)} />}
