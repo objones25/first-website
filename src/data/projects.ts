@@ -13,7 +13,7 @@ export const projects: Project[] = [
     approach: 'RoPE, RMSNorm, SwiGLU, grouped-query attention, tied embeddings, standard for this kind of model. Training and generation share one code path. Trained past the compute-optimal point on purpose, since inference cost matters more than training cost once you\'re actually running the thing. Tokenizer trains fresh from the data every run instead of shipping as a fixed file.',
     features: [
       '478.6M-parameter decoder-only transformer (RoPE, RMSNorm, SwiGLU, grouped-query attention, weight-tied embeddings) trained from scratch: pretrained on ~9.7B tokens, then SFT\'d and DPO preference-tuned on top',
-      'Two Chinchilla-driven scale-ups driven by a reproducible "flat val_loss tail" signal, plus a per-block residual-stream cosine-similarity analysis that settled a width-vs-depth question before the second scale-up',
+      'Two scale-ups, both triggered by val_loss flattening out at Chinchilla-optimal size; a cosine-similarity look at the residual stream showed most of the change happening in layer one, so the second scale-up went wider instead of deeper',
       'KV-cache-aware forward pass serving both full-sequence training and single-token cached decode from one code path, with masking applied only where SDPA\'s causal mask is actually correct',
       'Stateless streaming chat completion API on RunPod Serverless (scale-to-zero), fronted by a Cloudflare Worker that injects the RunPod key server-side and re-streams tokens to the browser',
     ],
