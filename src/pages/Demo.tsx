@@ -7,6 +7,7 @@ import { BraveSearchDemo } from './demos/BraveSearchDemo'
 import { MicroagentDemo } from './demos/MicroagentDemo'
 import { DocumentScannerDemo } from './demos/DocumentScannerDemo'
 import { SnakeDemo } from './demos/SnakeDemo'
+import { LlmFromScratchDemo } from './demos/LlmFromScratchDemo'
 
 const DEMOS: Record<string, ComponentType> = {
   'weather-api': WeatherDemo,
@@ -15,6 +16,7 @@ const DEMOS: Record<string, ComponentType> = {
   'microagent': MicroagentDemo,
   'document-scanner': DocumentScannerDemo,
   'snake-q-learning': SnakeDemo,
+  'llm-from-scratch': LlmFromScratchDemo,
 }
 
 export default function Demo() {

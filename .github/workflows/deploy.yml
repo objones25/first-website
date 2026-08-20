@@ -41,7 +41,8 @@ jobs:
           VITE_MICROAGENT_WS_URL: ${{ secrets.VITE_MICROAGENT_WS_URL }}
           VITE_DOCUMENT_SCANNER_URL: ${{ secrets.VITE_DOCUMENT_SCANNER_URL }}
           VITE_SNAKE_API_URL: ${{ secrets.VITE_SNAKE_API_URL }}
-        
+          VITE_LLM_INFERENCE_URL: ${{ secrets.VITE_LLM_INFERENCE_URL }}
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
         

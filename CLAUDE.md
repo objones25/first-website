@@ -21,7 +21,7 @@ Workers (each is an independent Wrangler project — run from inside `workers/<n
 - `npm run deploy` — `wrangler deploy`; not wired into any CI, always manual
 - Secrets (`TOKEN`, `WEATHER_API_KEY`) are Wrangler secrets (`wrangler secret put <NAME>`), never in `wrangler.toml`. `weather-proxy` has `.dev.vars.example`; the other two don't but need a local `.dev.vars` with `TOKEN=...`.
 
-There's no root env template — a local `.env` needs `VITE_CLERK_PUBLISHABLE_KEY`, `VITE_BRAVE_SEARCH_AGENT_URL`, `VITE_WEATHER_API_URL`, `VITE_MICROAGENT_WS_URL`, `VITE_DOCUMENT_SCANNER_URL`, `VITE_SNAKE_API_URL` (same names used as GitHub Actions secrets in `deploy.yml`).
+There's no root env template — a local `.env` needs `VITE_CLERK_PUBLISHABLE_KEY`, `VITE_BRAVE_SEARCH_AGENT_URL`, `VITE_WEATHER_API_URL`, `VITE_MICROAGENT_WS_URL`, `VITE_DOCUMENT_SCANNER_URL`, `VITE_SNAKE_API_URL`, `VITE_LLM_INFERENCE_URL` (same names used as GitHub Actions secrets in `deploy.yml`).
 
 ## Frontend architecture (`src/`)
 
@@ -34,10 +34,11 @@ There's no root env template — a local `.env` needs `VITE_CLERK_PUBLISHABLE_KE
 
 **Data as CMS**: `src/data/projects.ts` holds the canonical `Project[]` — essay-length `overview`/`challenge`/`approach`/`features` strings live directly in this TS file (no headless CMS/MDX). `src/data/archive.ts` is a separate, simpler `ArchiveProject` shape (defined locally there, not in `src/types`) for older GitHub-only projects. `src/data/navigation.ts` holds nav links. This is a portfolio site only — there is no blog/posts system despite `react-markdown` being a dependency (it's used once, to render AI answer text in `BraveSearchDemo.tsx`).
 
-**Worker proxy integration**: most demos never call upstream demo backends directly — they go through a Cloudflare Worker proxy that injects secrets server-side. Of the 6 demos, only 3 have their proxy source in this repo's `workers/`:
+**Worker proxy integration**: most demos never call upstream demo backends directly — they go through a Cloudflare Worker proxy that injects secrets server-side. Of the 7 demos, 4 have their proxy source in this repo's `workers/`:
 - `WeatherDemo.tsx` → `VITE_WEATHER_API_URL` → `workers/weather-proxy`
 - `DocumentScannerDemo.tsx` → `VITE_DOCUMENT_SCANNER_URL` → `workers/document-scanner-proxy`
 - `MicroagentDemo.tsx` → `VITE_MICROAGENT_WS_URL` (raw WebSocket) → `workers/microagent-proxy`
+- `LlmFromScratchDemo.tsx` → `VITE_LLM_INFERENCE_URL` → `workers/llm-inference-proxy`, which fronts a RunPod Serverless endpoint (not Railway like the others) — see below
 - `BraveSearchDemo.tsx` → `VITE_BRAVE_SEARCH_AGENT_URL` — worker lives in a separate repo
 - `GeminiAudioDemo.tsx` — WebSocket URL is **hardcoded** (`wss://gemini-audio-agent.owenbeckettjones.workers.dev/ws`), not a `VITE_*` var like the others; worker also lives in a separate repo. Treat this as an inconsistency, not a pattern to copy.
 - `SnakeDemo.tsx` → `VITE_SNAKE_API_URL` — calls the Railway-deployed FastAPI SSE endpoints directly; no Worker proxy exists or is needed, since that API requires no secret and already sets `CORS: *`.
@@ -50,11 +51,12 @@ Path alias `@/*` → `src/*` is configured in both `vite.config.ts` and `tsconfi
 
 ## Worker proxies (`workers/`)
 
-Three fully independent Wrangler projects (own `package.json`/`package-lock.json`/`node_modules`, no shared code, no workspace) with an identical shape: `src/index.ts` single-file `fetch` handler, `wrangler.toml` (name/main/compatibility_date only), `tsconfig.json` targeting `@cloudflare/workers-types` (missing on `weather-proxy` — never backfilled after being added elsewhere). Each exists purely to (a) inject a secret server-side that must not ship in the client bundle, and (b) enforce CORS/Origin restricted to `https://owenbeckettjones.com` (+ localhost) — a pattern hardcoded identically (not shared) in all three source files.
+Four fully independent Wrangler projects (own `package.json`/`package-lock.json`/`node_modules`, no shared code, no workspace) with an identical shape: `src/index.ts` single-file `fetch` handler, `wrangler.toml` (name/main/compatibility_date only), `tsconfig.json` targeting `@cloudflare/workers-types` (missing on `weather-proxy` — never backfilled after being added elsewhere). Each exists purely to (a) inject a secret server-side that must not ship in the client bundle, and (b) enforce CORS/Origin restricted to `https://owenbeckettjones.com` (+ localhost) — a pattern hardcoded identically (not shared) in all four source files.
 
 - `weather-proxy` — HTTP proxy → Railway weather API, injects `X-API-Key`.
 - `document-scanner-proxy` — HTTP proxy → Railway doc-scanner service, injects `Authorization: Bearer`, and strips upstream `Access-Control-*` response headers before applying its own CORS headers (prevents duplicate headers).
 - `microagent-proxy` — **WebSocket** relay → Railway microagent service, appends `?token=` to the outbound URL. Buffers client→upstream messages while the outbound socket is still in `CONNECTING` state and flushes them on `open` (fixed a message-drop bug); propagates close/error codes both directions.
+- `llm-inference-proxy` — HTTP proxy → the `llm-from-scratch` RunPod Serverless inference API (not Railway). Injects `Authorization: Bearer` with a `RUNPOD_API_KEY` secret. Single `POST /` handler: submits `{ input: <client body> }` to RunPod's `/run`, then re-streams the response body of `/stream/{id}` straight back to the client — the client never talks to RunPod directly. Cold starts (scale-to-zero) take ~100-120s; the demo surfaces that in its UI copy rather than the proxy handling it specially.
 
 Known inconsistency worth knowing about: `weather-proxy` does *not* strip upstream CORS headers before adding its own (unlike `document-scanner-proxy`), so it could exhibit the duplicate-header bug the other two were fixed for — if touching CORS handling here, apply the same filter for consistency.
 

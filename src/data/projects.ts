@@ -2,6 +2,27 @@ import type { Project } from '@/types'
 
 export const projects: Project[] = [
   {
+    slug: 'llm-from-scratch',
+    title: 'LLM From Scratch',
+    description: 'Decoder-only transformer language model, built and trained from scratch on a single rented GPU — custom tokenizer, streaming pretraining, SFT, and DPO, not a fine-tune of an existing model.',
+    year: '2026',
+    tags: ['Python', 'PyTorch', 'LLM'],
+    status: 'complete',
+    overview: 'A full LLM pipeline built from scratch: a custom decoder-only transformer and byte-level BPE tokenizer, a streaming training loop, checkpointing, and KV-cache generation. The current best checkpoint was pretrained on ~9.7B tokens of fineweb-edu, supervised-fine-tuned on smoltalk, and DPO preference-tuned on 1,403 judged pairs — all three stages, not just a fine-tune of an existing model. It\'s deployed behind a stateless streaming chat API on RunPod Serverless, which the demo below talks to through a Cloudflare Worker that keeps the RunPod key off the client.',
+    challenge: 'At 478.6M parameters this is a toy budgeted around a single rented A100 (~$160 total), so the real work was getting the most model out of that budget rather than chasing scale. Two scale-ups (75.5M → 220.2M → 431.4M non-embedding params) were each triggered by the same empirical signal: a "flat tail" in val_loss where the last few hundred steps barely move the number, reproducing almost identically across a 3x size increase — the signature of a model that\'s run out of capacity, not one that just needs more steps. A per-block residual-stream analysis (block 0 doing most of the work, blocks 1-19 barely nudging the residual stream) then settled a width-vs-depth question: the second scale-up grew width only, holding depth at 20 layers rather than gambling on near-identity pass-through layers.',
+    approach: 'The architecture follows modern open LLM practice: RoPE, RMSNorm pre-normalization, a SwiGLU MLP, grouped-query attention (20:4 heads), and weight-tied embeddings, with a KV-cache-aware forward pass that serves both full-sequence training and single-token cached decode from the same code path. Training runs Chinchilla-informed but deliberately past-optimal (LLaMA-style overtraining, since inference cost matters more than training FLOPs for a model meant to actually be run afterward), with fused cross-entropy via Liger Kernel on CUDA. The tokenizer is trained fresh from a sample of the streaming dataset at the start of every run rather than shipped as a fixed artifact.',
+    features: [
+      '478.6M-parameter decoder-only transformer (RoPE, RMSNorm, SwiGLU, grouped-query attention, weight-tied embeddings) trained from scratch: pretrained on ~9.7B tokens, then SFT\'d and DPO preference-tuned on top',
+      'Two Chinchilla-driven scale-ups driven by a reproducible "flat val_loss tail" signal, plus a per-block residual-stream cosine-similarity analysis that settled a width-vs-depth question before the second scale-up',
+      'KV-cache-aware forward pass serving both full-sequence training and single-token cached decode from one code path, with masking applied only where SDPA\'s causal mask is actually correct',
+      'Stateless streaming chat completion API on RunPod Serverless (scale-to-zero), fronted by a Cloudflare Worker that injects the RunPod key server-side and re-streams tokens to the browser',
+    ],
+    links: [
+      { label: 'GitHub', href: 'https://github.com/objones25/llm-from-scratch' },
+    ],
+    hasDemo: true,
+  },
+  {
     slug: 'snake-q-learning',
     title: 'Snake Q-Learning',
     description: 'Tabular Q-learning agent that plays Snake using a hand-designed, rotation-invariant state encoding instead of a neural network. The interesting part isn\'t the RL algorithm, it\'s the encoding.',
