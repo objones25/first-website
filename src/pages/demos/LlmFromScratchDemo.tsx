@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
+import { motion } from 'framer-motion'
 
 const BASE_URL = import.meta.env.VITE_LLM_INFERENCE_URL as string
 
@@ -9,12 +10,7 @@ interface Message {
 }
 
 type Status = 'idle' | 'connecting' | 'streaming' | 'error'
-type Mode = 'greedy' | 'creative'
-
-const TEMPERATURES: Record<Mode, number> = {
-  greedy: 0.0,
-  creative: 0.8,
-}
+type WarmStatus = 'warming' | 'ready' | 'error'
 
 interface Chunk {
   token?: string
@@ -131,19 +127,138 @@ async function streamChat(
   return { ok: true }
 }
 
-const MAX_TOKENS_OPTIONS = [64, 150, 300] as const
+// A minimal, invisible generation used purely to wake the RunPod worker before
+// the user can type — not part of the visible conversation or its history.
+function warmupChat(url: string, signal: AbortSignal): Promise<StreamResult> {
+  return streamChat(
+    url,
+    { messages: [{ role: 'user', content: 'Hi' }], max_new_tokens: 1, temperature: 0 },
+    () => {},
+    signal,
+  )
+}
+
+function WaveText({ text, className = '' }: { text: string; className?: string }) {
+  return (
+    <span className={className} aria-label={text}>
+      {text.split('').map((ch, i) => (
+        <motion.span
+          key={i}
+          className="inline-block"
+          animate={{ opacity: [0.15, 1, 0.15] }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut', delay: i * 0.06 }}
+        >
+          {ch === ' ' ? ' ' : ch}
+        </motion.span>
+      ))}
+    </span>
+  )
+}
+
+function Slider({
+  label,
+  value,
+  min,
+  max,
+  step,
+  display,
+  caption,
+  disabled,
+  onChange,
+}: {
+  label: string
+  value: number
+  min: number
+  max: number
+  step: number
+  display: string
+  caption: string
+  disabled?: boolean
+  onChange: (value: number) => void
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <span className="section-label">// {label}</span>
+        <span className="mono text-xs text-text">{display}</span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        disabled={disabled}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-full h-4 bg-transparent appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed
+          [&::-webkit-slider-runnable-track]:h-px [&::-webkit-slider-runnable-track]:bg-border-strong
+          [&::-moz-range-track]:h-px [&::-moz-range-track]:bg-border-strong
+          [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:mt-[-7px]
+          [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-text
+          [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:cursor-pointer
+          [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4
+          [&::-moz-range-thumb]:bg-text [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:rounded-none
+          [&::-moz-range-thumb]:cursor-pointer"
+      />
+      <p className="mono text-[10px] text-text-muted mt-2">// {caption}</p>
+    </div>
+  )
+}
 
 export function LlmFromScratchDemo() {
+  const [warmStatus, setWarmStatus] = useState<WarmStatus>('warming')
+  const [warmErrorMsg, setWarmErrorMsg] = useState('')
+  const [warmElapsed, setWarmElapsed] = useState(0)
+
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [status, setStatus] = useState<Status>('idle')
   const [errorMsg, setErrorMsg] = useState('')
-  const [mode, setMode] = useState<Mode>('greedy')
-  const [maxTokens, setMaxTokens] = useState<number>(150)
+  const [temperature, setTemperature] = useState(0)
+  const [maxTokens, setMaxTokens] = useState(150)
   const [streamingReply, setStreamingReply] = useState('')
 
   const controllerRef = useRef<AbortController | null>(null)
+  const warmControllerRef = useRef<AbortController | null>(null)
   const listEndRef = useRef<HTMLDivElement | null>(null)
+
+  const attemptWarmup = useCallback(async () => {
+    if (!BASE_URL) {
+      setWarmStatus('error')
+      setWarmErrorMsg('Demo not configured — VITE_LLM_INFERENCE_URL is missing')
+      return
+    }
+
+    setWarmStatus('warming')
+    setWarmErrorMsg('')
+
+    const controller = new AbortController()
+    warmControllerRef.current = controller
+
+    const result = await warmupChat(BASE_URL, controller.signal)
+
+    if (warmControllerRef.current !== controller) return // unmounted or superseded
+
+    warmControllerRef.current = null
+    setWarmStatus(result.ok ? 'ready' : 'error')
+    if (!result.ok) setWarmErrorMsg(result.message)
+  }, [])
+
+  useEffect(() => {
+    void attemptWarmup()
+    return () => {
+      warmControllerRef.current?.abort()
+      warmControllerRef.current = null
+    }
+  }, [attemptWarmup])
+
+  useEffect(() => {
+    if (warmStatus !== 'warming') return
+    const start = Date.now()
+    setWarmElapsed(0)
+    const id = setInterval(() => setWarmElapsed(Math.floor((Date.now() - start) / 1000)), 1000)
+    return () => clearInterval(id)
+  }, [warmStatus])
 
   useEffect(() => () => {
     controllerRef.current?.abort()
@@ -180,7 +295,7 @@ export function LlmFromScratchDemo() {
       {
         messages: nextMessages,
         max_new_tokens: maxTokens,
-        temperature: TEMPERATURES[mode],
+        temperature,
       },
       (token) => {
         setStatus('streaming')
@@ -202,7 +317,7 @@ export function LlmFromScratchDemo() {
       setStatus('error')
       setErrorMsg(result.message)
     }
-  }, [input, status, messages, mode, maxTokens])
+  }, [input, status, messages, temperature, maxTokens])
 
   function stop() {
     controllerRef.current?.abort()
@@ -218,114 +333,127 @@ export function LlmFromScratchDemo() {
       <h1 className="display pb-[0.3em] mb-2">LLM From Scratch</h1>
       <p className="mono text-text-muted text-sm mb-12">
         478.6M-parameter transformer, pretrained + SFT'd + DPO-tuned from scratch, served from a
-        scale-to-zero RunPod endpoint — the first reply can take 100-120s while it wakes up.
+        scale-to-zero RunPod endpoint.
       </p>
 
-      <div className="space-y-6">
-        <div>
-          <span className="section-label block mb-3">// SAMPLING</span>
-          <div className="flex gap-2">
-            {(['greedy', 'creative'] as Mode[]).map((m) => (
+      {warmStatus !== 'ready' ? (
+        <div className="border border-border-strong flex flex-col items-center justify-center gap-4 px-4 py-24">
+          {warmStatus === 'warming' ? (
+            <>
+              <WaveText text="WAKING MODEL" className="mono text-lg tracking-[0.3em] text-text" />
+              <p className="mono text-xs text-text-muted">
+                {warmElapsed}s elapsed
+                {warmElapsed >= 15 ? ' — cold start can take 100-120s, hang tight' : ''}
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="mono text-xs text-text-muted border border-dashed border-border-strong px-4 py-3 max-w-md text-center break-words">
+                // {warmErrorMsg}
+              </p>
               <button
-                key={m}
                 type="button"
-                disabled={isActive}
-                onClick={() => setMode(m)}
-                className={`mono text-xs px-4 py-2 border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
-                  mode === m
-                    ? 'border-text bg-text text-background'
-                    : 'border-border-strong text-text-muted hover:border-text hover:text-text'
-                }`}
+                onClick={() => void attemptWarmup()}
+                className="mono text-sm border border-text px-6 py-3 hover:bg-text hover:text-background transition-colors"
               >
-                [ {m === 'greedy' ? 'Greedy (temp 0)' : 'Creative (temp 0.8)'} ]
+                [ Retry ] →
               </button>
-            ))}
-          </div>
+            </>
+          )}
         </div>
+      ) : (
+        <>
+          <div className="space-y-6">
+            <Slider
+              label="TEMPERATURE"
+              value={temperature}
+              min={0}
+              max={1}
+              step={0.1}
+              display={temperature.toFixed(1)}
+              caption="0.0 = deterministic — 1.0 = more creative"
+              disabled={isActive}
+              onChange={setTemperature}
+            />
+            <Slider
+              label="MAX TOKENS"
+              value={maxTokens}
+              min={32}
+              max={300}
+              step={1}
+              display={String(maxTokens)}
+              caption="reply length cap"
+              disabled={isActive}
+              onChange={setMaxTokens}
+            />
+          </div>
 
-        <div>
-          <span className="section-label block mb-3">// MAX TOKENS</span>
-          <div className="flex gap-2">
-            {MAX_TOKENS_OPTIONS.map((n) => (
+          <div className="mt-12 border border-border-strong">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border-strong">
+              <span className="section-label">// CHAT</span>
+              {status === 'connecting' && (
+                <WaveText text="THINKING" className="mono text-xs tracking-[0.2em] text-text-muted" />
+              )}
+              {status === 'streaming' && (
+                <span className="mono text-xs text-text-muted flex items-center gap-2">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-text-muted animate-pulse" />
+                  streaming
+                </span>
+              )}
+            </div>
+
+            <div className="max-h-[480px] overflow-y-auto px-4 py-4 space-y-4">
+              {messages.length === 0 && !streamingReply && (
+                <p className="mono text-xs text-text-muted">// no messages yet — ask it something</p>
+              )}
+              {messages.map((m, i) => (
+                <ChatBubble key={i} role={m.role} content={m.content} />
+              ))}
+              {streamingReply && <ChatBubble role="assistant" content={streamingReply} />}
+              <div ref={listEndRef} />
+            </div>
+
+            <div className="flex items-center gap-2 px-4 py-3 border-t border-border-strong">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault()
+                    void send()
+                  }
+                }}
+                disabled={isActive}
+                placeholder="Ask the model something..."
+                className="flex-1 bg-transparent border border-border-strong mono text-sm px-4 py-3 text-text placeholder:text-text-muted focus:outline-none focus:border-text disabled:opacity-40"
+              />
               <button
-                key={n}
                 type="button"
-                disabled={isActive}
-                onClick={() => setMaxTokens(n)}
-                className={`mono text-xs px-4 py-2 border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
-                  maxTokens === n
-                    ? 'border-text bg-text text-background'
-                    : 'border-border-strong text-text-muted hover:border-text hover:text-text'
-                }`}
+                onClick={() => void send()}
+                disabled={isActive || !input.trim()}
+                className="mono text-sm border border-text px-6 py-3 hover:bg-text hover:text-background transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                [ {n} ]
+                {isActive ? '[ ... ]' : '[ Send ] →'}
               </button>
-            ))}
+              {isActive && (
+                <button
+                  type="button"
+                  onClick={stop}
+                  className="mono text-xs border border-border-strong text-text-muted px-4 py-2 hover:border-text hover:text-text transition-colors"
+                >
+                  [ Stop ]
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="mt-12 border border-border-strong">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border-strong">
-          <span className="section-label">// CHAT</span>
-          {isActive && (
-            <span className="mono text-xs text-text-muted flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-text-muted animate-pulse" />
-              {status === 'connecting' ? 'connecting' : 'streaming'}
-            </span>
+          {status === 'error' && (
+            <p className="mono text-xs text-text-muted border border-dashed border-border-strong px-4 py-3 mt-4 break-all">
+              // {errorMsg}
+            </p>
           )}
-        </div>
-
-        <div className="max-h-[480px] overflow-y-auto px-4 py-4 space-y-4">
-          {messages.length === 0 && !streamingReply && (
-            <p className="mono text-xs text-text-muted">// no messages yet — ask it something</p>
-          )}
-          {messages.map((m, i) => (
-            <ChatBubble key={i} role={m.role} content={m.content} />
-          ))}
-          {streamingReply && <ChatBubble role="assistant" content={streamingReply} />}
-          <div ref={listEndRef} />
-        </div>
-
-        <div className="flex items-center gap-2 px-4 py-3 border-t border-border-strong">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault()
-                void send()
-              }
-            }}
-            disabled={isActive}
-            placeholder="Ask the model something..."
-            className="flex-1 bg-transparent border border-border-strong mono text-sm px-4 py-3 text-text placeholder:text-text-muted focus:outline-none focus:border-text disabled:opacity-40"
-          />
-          <button
-            type="button"
-            onClick={() => void send()}
-            disabled={isActive || !input.trim()}
-            className="mono text-sm border border-text px-6 py-3 hover:bg-text hover:text-background transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            {isActive ? '[ ... ]' : '[ Send ] →'}
-          </button>
-          {isActive && (
-            <button
-              type="button"
-              onClick={stop}
-              className="mono text-xs border border-border-strong text-text-muted px-4 py-2 hover:border-text hover:text-text transition-colors"
-            >
-              [ Stop ]
-            </button>
-          )}
-        </div>
-      </div>
-
-      {status === 'error' && (
-        <p className="mono text-xs text-text-muted border border-dashed border-border-strong px-4 py-3 mt-4 break-all">
-          // {errorMsg}
-        </p>
+        </>
       )}
     </div>
   )
