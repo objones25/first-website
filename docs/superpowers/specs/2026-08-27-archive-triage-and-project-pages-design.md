@@ -48,25 +48,36 @@ reference-quality (images, DPO honesty, full tradeoffs narrative).
   fixes first, and those fixes belong in their own separate repos
   (`brave-search-agent`, `document-scanner`), not this Website repo. Content
   interviews for these two wait until Owen has made those fixes.
+- **`microagent`** — deferred during its own interview, not preemptively.
+  The actual gap turned out deeper than "no number was written down": the
+  eval harness's judge has no strict criteria for what makes one prompt
+  version better than another, so there isn't a trustworthy number to
+  report yet — writing one in now would risk exactly the invented-rigor
+  problem `case-study-rules.md` warns against. Owen's reflection, captured
+  verbatim for whenever this gets revisited: *"Update August: If I were to
+  come back to this project, I'd build out a more comprehensive evaluation
+  framework with more strict criteria regarding which prompt is better —
+  I'd probably rely on real benchmarks for coding tasks and use a more
+  comprehensive LLM-as-judge component."* He's now leaning toward
+  rebuilding parts of the eval harness itself before this page gets
+  touched again, not just documenting the current gap.
 
 ## 3. Active punch list
 
-4 projects, ordered lightest-to-heaviest lift. Every "what's next" gap is
-systemic — not one project in `projects.ts` has one.
+Status as of this spec's last update. Every "what's next" gap was
+systemic — not one project in `projects.ts` had one before this pass.
 
-| Project | Content gaps | Demo/interestingness note |
-|---|---|---|
-| `snake-q-learning` | No what's-next | None — this is the one demo Owen already considers genuinely interesting; use it as the bar for the other three. |
-| `microagent` | No quantified eval result despite the whole project being an eval harness; no what's-next | — |
-| `gemini-audio-agent` | Zero verification section; no what's-next | — |
-| `weather-api` | Tradeoff argument is thin ("chose FastAPI to learn FastAPI" isn't a rejected-alternative argument); no what's-next | Owen flagged this demo specifically as "not particularly interesting." It's also one of the 4 `featuredProjects` (`projects.slice(0, 4)` in `projects.ts`) — worth deciding during this interview whether it still earns that featured slot once the demo itself is reconsidered, not just whether the copy improves. |
+| Project | Status | Content gaps | Demo/interestingness note |
+|---|---|---|---|
+| `snake-q-learning` | **Done** (commit `cb89baf`) | Was: no what's-next. Also elevated the safety shield's real weight (42→79 avg score) over the state-encoding fix, which the page previously under-sold. | None — this is the one demo Owen already considers genuinely interesting; used as the bar for the rest. |
+| `gemini-audio-agent` | Not started | Zero verification section; no what's-next | — |
+| `weather-api` | Not started | Tradeoff argument is thin ("chose FastAPI to learn FastAPI" isn't a rejected-alternative argument); no what's-next | Owen flagged this demo specifically as "not particularly interesting." It's also one of the 4 `featuredProjects` (`projects.slice(0, 4)` in `projects.ts`) — worth deciding during this interview whether it still earns that featured slot once the demo itself is reconsidered, not just whether the copy improves. |
 
-Questions to actually ask (not invent an answer to) per project:
+Questions to actually ask (not invent an answer to) per remaining project:
 - **Content**: the same `case-study-rules.md` gaps as before — a real
-  what's-next line for all 4; a real judge-score/pass-rate number for
-  `microagent`; a real answer to "how do you know it works" for
-  `gemini-audio-agent`; the actual rejected alternative and its cost for
-  `weather-api`.
+  what's-next line for both; a real answer to "how do you know it works"
+  for `gemini-audio-agent`; the actual rejected alternative and its cost
+  for `weather-api`.
 - **Demo quality** (new, folded in from Owen's feedback): for each demo,
   what would make it more interesting to interact with — is it the
   interaction itself that's flat (nothing to do beyond one input/output),
