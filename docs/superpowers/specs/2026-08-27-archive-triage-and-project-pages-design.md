@@ -61,6 +61,13 @@ reference-quality (images, DPO honesty, full tradeoffs narrative).
   comprehensive LLM-as-judge component."* He's now leaning toward
   rebuilding parts of the eval harness itself before this page gets
   touched again, not just documenting the current gap.
+- **`gemini-audio-agent`** — deferred during its own interview, same shape
+  as `microagent`: asked how the dual-socket sync, barge-in handling, and
+  10-minute session cap are actually verified, and the honest answer
+  wasn't there yet. Owen's own framing, generalized beyond just this
+  project (see the new rule in section 4): several of these projects need
+  more actual engineering work before their pages can honestly claim
+  verification, not just better writing.
 
 ## 3. Active punch list
 
@@ -70,14 +77,17 @@ systemic — not one project in `projects.ts` had one before this pass.
 | Project | Status | Content gaps | Demo/interestingness note |
 |---|---|---|---|
 | `snake-q-learning` | **Done** (commit `cb89baf`) | Was: no what's-next. Also elevated the safety shield's real weight (42→79 avg score) over the state-encoding fix, which the page previously under-sold. | None — this is the one demo Owen already considers genuinely interesting; used as the bar for the rest. |
-| `gemini-audio-agent` | Not started | Zero verification section; no what's-next | — |
 | `weather-api` | Not started | Tradeoff argument is thin ("chose FastAPI to learn FastAPI" isn't a rejected-alternative argument); no what's-next | Owen flagged this demo specifically as "not particularly interesting." It's also one of the 4 `featuredProjects` (`projects.slice(0, 4)` in `projects.ts`) — worth deciding during this interview whether it still earns that featured slot once the demo itself is reconsidered, not just whether the copy improves. |
 
-Questions to actually ask (not invent an answer to) per remaining project:
-- **Content**: the same `case-study-rules.md` gaps as before — a real
-  what's-next line for both; a real answer to "how do you know it works"
-  for `gemini-audio-agent`; the actual rejected alternative and its cost
-  for `weather-api`.
+Only one project left active. Given the pattern in section 4's new rule,
+this interview should open by checking whether `weather-api`'s gap is
+really a writing gap before assuming it is — the thin tradeoff argument
+looks like one (it's about a decision already made, not a verification
+claim), but confirm rather than assume.
+
+Questions to actually ask (not invent an answer to):
+- **Content**: a real what's-next line; the actual rejected alternative
+  (not FastAPI-to-learn-FastAPI) and its cost.
 - **Demo quality** (new, folded in from Owen's feedback): for each demo,
   what would make it more interesting to interact with — is it the
   interaction itself that's flat (nothing to do beyond one input/output),
@@ -95,6 +105,17 @@ inventing, pushing back on a first answer if it's generic enough to paste
 into any other project unnoticed. Sequenced **one project at a time**, not
 batched, so each interview gets the depth the `llm-from-scratch` revision
 did rather than becoming a rushed fill-in-the-blank pass.
+
+**Defer-by-default rule, added after `microagent` and `gemini-audio-agent`
+both hit the same wall**: if an interview surfaces that a "how do you know
+it works" or "what's next" gap is actually a gap in the project itself
+(no real verification exists to report, not just unreported) — defer that
+project to section 2 rather than writing content around the gap. The
+tell: a writing gap is about a decision already made that just wasn't
+explained (`weather-api`'s thin tradeoff, `snake-q-learning`'s missing
+what's-next); an engineering gap is about something that doesn't actually
+exist yet to describe (a rigorous eval, verified barge-in handling). Only
+the first kind belongs in this spec's active list.
 
 ## Queued, not in this spec
 
