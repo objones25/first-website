@@ -142,26 +142,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: 'neural-network-library',
-    title: 'Neural Network Library',
-    description: 'Neural network framework built from scratch in NumPy with full backprop, 8 activation functions, 5 optimizers, and 373 tests.',
-    year: '2025',
-    tags: ['Python', 'NumPy', 'ML'],
-    status: 'complete',
-    overview: 'A NumPy-only neural network library built from scratch as a learning exercise in understanding what frameworks like PyTorch abstract away. Supports dense layers, 8 activation functions, 5 optimizers including Adam, L1/L2/Dropout regularization, and multiple cost functions for regression and classification.',
-    challenge: 'Implementing backpropagation and the optimizer update rules by hand — getting the gradient flow correct through each layer, handling the chain rule for different activation functions, and making sure batch operations vectorized properly. The implementation draws heavily from GeeksForGeeks and CS231n material; the value was in working through the math rather than original design.',
-    approach: 'NumPy only, by design — the goal was to understand how the operations work, not to build something production-ready. Each component (activation, optimizer, cost function, initializer) is independent and interchangeable behind a common interface, following scikit-learn\'s API conventions. A four-tier validation system catches shape mismatches and NaN/Inf values early so errors surface at configuration time rather than mid-training.',
-    features: [
-      '373 unit tests across all components — activations, optimizers, cost functions, regularization, validation',
-      'Five optimizers: SGD, Momentum, RMSprop, AdaGrad, and Adam',
-      'Xavier and He initialization with matching activation function guidance',
-      'Dropout and L1/L2/ElasticNet regularization with per-layer configuration',
-    ],
-    links: [
-      { label: 'GitHub', href: 'https://github.com/objones25/neural-network-from-scratch' },
-    ],
-  },
-  {
     slug: 'document-scanner',
     title: 'Document Scanner',
     description: 'Python CLI that extracts text from images, PDFs, and web pages and lets you have streaming AI conversations about the content.',
@@ -202,26 +182,6 @@ export const projects: Project[] = [
       { label: 'GitHub', href: 'https://github.com/objones25/brave-agent' },
     ],
     hasDemo: true,
-  },
-  {
-    slug: 'battleship',
-    title: 'Battleship',
-    description: 'Real-time multiplayer Battleship with React, Socket.io, and JWT authentication via HTTP-only cookies.',
-    year: '2025',
-    tags: ['TypeScript', 'React', 'Socket.io'],
-    status: 'complete',
-    overview: 'A real-time multiplayer Battleship game with room-based matchmaking, ship placement, and turn-based gameplay over WebSockets. Built with React and TypeScript on the frontend, Node.js and Express on the backend, and Socket.io for bidirectional real-time communication.',
-    challenge: 'Getting JWT authentication to work correctly with Socket.io was the main pain point. Storing tokens in HTTP-only cookies (to prevent XSS) means the socket connection can\'t read them from JavaScript directly — the cookie has to be parsed server-side from the socket handshake headers. Malformed token errors during the handshake were hard to trace, and getting the socket to automatically re-authenticate after login required explicit reconnection logic rather than relying on the default behavior.',
-    approach: 'Socket.io handles all game state updates — ship placement, turn changes, hit/miss results, and disconnect events — while the REST API handles authentication and room management. HTTP-only cookies carry the JWT so credentials never touch client-side JavaScript. Automatic room cleanup runs on disconnect and timeout to prevent memory leaks from abandoned sessions.',
-    features: [
-      'Real-time turn-based gameplay over WebSockets with hit/miss/win events',
-      'JWT authentication via HTTP-only cookies with automatic socket re-authentication after login',
-      'Room-based matchmaking with automatic cleanup on disconnect and timeout',
-      'Full ship placement phase with collision and boundary validation',
-    ],
-    links: [
-      { label: 'GitHub', href: 'https://github.com/objones25/battleship-game' },
-    ],
   },
   {
     slug: 'gemini-audio-agent',

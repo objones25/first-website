@@ -56,4 +56,18 @@ export const archiveProjects: ArchiveProject[] = [
     tags: ['Rust', 'Systems'],
     href: 'https://github.com/objones25/sudoku_rust',
   },
+  {
+    title: 'Neural Network Library',
+    description: 'Neural network framework built from scratch in NumPy with full backprop, 8 activation functions, 5 optimizers, and 373 tests.',
+    year: '2025',
+    tags: ['Python', 'NumPy', 'ML'],
+    href: 'https://github.com/objones25/neural-network-from-scratch',
+  },
+  {
+    title: 'Battleship',
+    description: 'Real-time multiplayer Battleship with React, Socket.io, and JWT authentication via HTTP-only cookies.',
+    year: '2025',
+    tags: ['TypeScript', 'React', 'Socket.io'],
+    href: 'https://github.com/objones25/battleship-game',
+  },
 ]
