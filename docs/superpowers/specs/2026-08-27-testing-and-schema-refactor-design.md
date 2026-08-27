@@ -5,12 +5,18 @@
 Establish a test suite and CI gate for a codebase that currently has zero
 automated tests (frontend or the 4 `workers/`), no lint, and a `deploy.yml`
 that ships straight to production on push to `main` off nothing stronger
-than `vite build` (which does not run `tsc`). Combined with a targeted
-refactor: replace the hand-written `Project`/`ArchiveProject` interfaces
+than `vite build` (which does not run `tsc`). Combined with two targeted
+refactors: replace the hand-written `Project`/`ArchiveProject` interfaces
 with a Zod schema as the single source of truth, so the exact failure class
 that risks recurring every time a project gains a new optional field (an
 `images[].src` pointing at a file that doesn't exist, a `hasDemo: true`
-with no matching `Demo.tsx` entry) is caught by a test instead of by luck.
+with no matching `Demo.tsx` entry) is caught by a test instead of by luck;
+and turn `ProjectDetail.tsx`'s hand-written JSX section blocks into a
+declarative, config-driven renderer (this was "Approach B" during
+brainstorming, initially deferred as premature and now folded back in at
+Owen's request), so each future optional field the other three specs add
+is one object in a list instead of a new block in the middle of the
+component.
 
 This is one of four specs decomposing a broader "improve the site" request
 (the others: Backend + GitHub API, Archive triage + project pages, Site
@@ -53,7 +59,55 @@ New test file, Vitest. For every entry in `projects.ts` and `archive.ts`:
   silently otherwise — `ProjectDetail.tsx` just renders whichever entry
   `findIndex` finds first).
 
-## 3. Component tests (frontend)
+## 3. `ProjectDetail` section-descriptor refactor
+
+Currently `ProjectDetail.tsx:130-211` is six hand-written blocks in two
+different shapes: Overview/Challenge/Approach/Key Features always render a
+`Section`, falling back to `<Placeholder />` when the field is empty;
+Evidence (images) and Live Demo CTA render nothing at all unless their data
+is present. Both shapes collapse into one declarative list.
+
+New file `src/pages/projectSections.tsx`:
+
+```ts
+interface ProjectSectionDef {
+  key: string
+  label: string
+  showPlaceholderWhenEmpty: boolean
+  hasContent: (project: Project) => boolean
+  render: (project: Project, ctx: { isSignedIn: boolean | undefined }) => React.ReactNode
+}
+
+export const PROJECT_SECTIONS: ProjectSectionDef[] = [
+  { key: 'overview', label: '// Overview', showPlaceholderWhenEmpty: true,
+    hasContent: p => !!p.overview, render: p => <p ...>{p.overview}</p> },
+  { key: 'challenge', label: '// The Challenge', showPlaceholderWhenEmpty: true, ... },
+  { key: 'approach', label: '// The Approach', showPlaceholderWhenEmpty: true, ... },
+  { key: 'features', label: '// Key Features', showPlaceholderWhenEmpty: true,
+    hasContent: p => (p.features?.length ?? 0) > 0, render: p => <ul>...</ul> },
+  { key: 'images', label: '// Evidence', showPlaceholderWhenEmpty: false,
+    hasContent: p => (p.images?.length ?? 0) > 0, render: p => <div>...figures...</div> },
+  { key: 'demo', label: '// Live Demo', showPlaceholderWhenEmpty: false,
+    hasContent: p => p.hasDemo === true, render: (p, ctx) => <div>...Launch Demo...</div> },
+]
+```
+
+`ProjectDetail.tsx` shrinks to: filter `PROJECT_SECTIONS` down to the ones
+that will actually render (`hasContent(project) || showPlaceholderWhenEmpty`),
+map over that filtered list computing each `Section`'s stagger `delay` from
+its position (`0.1 + i * 0.05`) instead of a hardcoded literal per block —
+this also fixes a latent bug where a hidden section (no images, no demo)
+currently leaves a gap in the stagger sequence instead of the next visible
+section closing it up. The header, breadcrumb, metadata row, and prev/next
+nav are unaffected — they aren't optional per-project content and stay as
+direct JSX.
+
+Adding a future field (a `tradeoffs` field from the Archive/pages spec, a
+GitHub-stats block from the Backend spec) becomes: add it to the Zod
+schema from section 1, add one object to `PROJECT_SECTIONS`. No edits to
+`ProjectDetail.tsx` itself.
+
+## 4. Component tests (frontend)
 
 Vitest + `@testing-library/react` + `jsdom`. One test file per demo under
 `src/pages/demos/*.tsx` (7 files) covering: initial render, a mocked
@@ -63,7 +117,17 @@ existing cold-start/error copy renders, not a crash). `ProtectedRoute` and
 `Demo.tsx`'s dispatch (`DEMOS[slug]`) also get a test each: known slug
 renders the right component, unknown slug redirects.
 
-## 4. Worker unit tests
+`ProjectDetail.test.tsx` tests the section-descriptor renderer from
+section 3 directly against fixture `Project` objects: a minimal project
+(only required fields) renders Overview/Challenge/Approach/Key Features as
+placeholders and does not render an Evidence or Live Demo section at all;
+a project with `images` renders exactly that many `<figure>` elements; a
+project with `hasDemo: false` renders no Live Demo section regardless of
+`isSignedIn`. Animation delay values themselves aren't asserted — timing
+isn't a regression risk worth pinning down, only section presence, absence,
+and order are.
+
+## 5. Worker unit tests
 
 Each of the 4 `workers/<name>/` projects is an independent package — each
 gets its own `vitest` devDependency and a `src/index.test.ts` testing the
@@ -81,7 +145,7 @@ additionally gets a test for the polling loop's chunk-forwarding logic
 `CLAUDE.md` — this is exactly the class of bug that shipped once already
 and unit tests are the right tool to pin it down).
 
-## 5. Clerk local-dev bypass (pulled in from Site-hygiene)
+## 6. Clerk local-dev bypass (pulled in from Site-hygiene)
 
 Add a dev-only escape hatch to `ProtectedRoute` gated behind
 `import.meta.env.DEV && import.meta.env.VITE_SKIP_AUTH === 'true'`, so it's
@@ -90,11 +154,11 @@ misconfiguration. Documented in `CLAUDE.md` as a local-only var, not added
 to `deploy.yml`'s secrets or GitHub Actions. This unblocks Playwright e2e
 on the demo route without weakening the real auth gate.
 
-## 6. E2E tests (Playwright)
+## 7. E2E tests (Playwright)
 
 New `e2e/` directory at repo root. One spec per top-level route
 (Home/About/Projects/Archive/Contact/ProjectDetail) plus one per demo,
-using the `VITE_SKIP_AUTH` bypass from section 5 to reach
+using the `VITE_SKIP_AUTH` bypass from section 6 to reach
 `/projects/:slug/demo` without real Clerk credentials. Network calls to
 external APIs are mocked at the Playwright route level (`page.route(...)`)
 so e2e runs don't depend on live Railway/RunPod backends being up. Assertion
@@ -103,7 +167,7 @@ state, and a mocked message round-trips into the UI — not full behavioral
 coverage of each backend, since that's out of reach without live
 integration tests (explicitly out of scope, see below).
 
-## 7. CI restructure
+## 8. CI restructure
 
 New `.github/workflows/ci.yml`, triggered on `pull_request` and on push to
 `main` (running independently of, and before, `deploy.yml` — not a
@@ -130,10 +194,9 @@ implementation touches unilaterally.
   personal site at this scale).
 - Live integration tests against the real Railway/RunPod backends (only
   the Worker proxy logic and mocked frontend paths are covered).
-- Any structural refactor of `ProjectDetail.tsx`'s section rendering
-  (considered as "Approach B" during brainstorming and explicitly rejected
-  for now — 5 conditional sections across 12 projects doesn't yet justify
-  a config-driven renderer; revisit if the Archive/pages or Backend specs
-  add enough new optional fields to make the JSX blocks unwieldy).
-- SEO/meta tags, worker CORS consistency fixes beyond what section 4's
+- Adding any *new* optional `Project` field (a `tradeoffs` field, GitHub
+  stats, SEO preview data) — section 3's refactor makes that cheap, but
+  deciding what those fields actually are belongs to the Archive/pages and
+  Backend specs, not this one.
+- SEO/meta tags, worker CORS consistency fixes beyond what section 5's
   tests require to pass, accessibility fixes — all Site-hygiene spec.
