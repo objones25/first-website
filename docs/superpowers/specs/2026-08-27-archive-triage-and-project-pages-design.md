@@ -2,71 +2,106 @@
 
 ## Scope
 
-Two parts. Archive triage is done (see below). Project-pages content
-quality is a punch list of specific, per-project gaps found by the
-site-audit fork against the `website-add-project` skill's
-`case-study-rules.md` standard — not an architecture decision, so this
-doc is a map for a sequence of real interviews, not a technical design.
+Three parts. Archive triage is done (section 1). A chunk of the original
+punch list is now deferred or blocked, not active (section 2). What's left
+is a smaller, real interview list, extended to cover demo quality/
+interestingness alongside prose (section 3) — not an architecture
+decision, so sections 2-3 are a map for a sequence of real interviews, not
+a technical design.
 
-This is the third of four specs decomposing a broader "improve the site"
-request (the others: Testing + schema refactor, Backend + GitHub API,
-Site hygiene).
+This is the third of four active specs decomposing a broader "improve the
+site" request (the others: Testing + schema refactor, Backend + GitHub
+API, Site hygiene). A fifth idea came up during this spec's revision — a
+blog/learning-notes section — and is queued, not brainstormed here (see
+"Queued, not in this spec" below).
 
 ## 1. Archive triage — done
 
-Moved to `archive.ts` (commit `b9a06ac`):
-- **neural-network-library** — tutorial-derived by its own text
-  ("value was in working through the math rather than original design"),
-  no distinct novel-decision content; `makemore` covers the same
-  "NN fundamentals from scratch" ground with real investigative findings
-  (dead-neuron diagnosis, WaveNet-vs-RNN comparison).
-- **battleship** — zero verification content, otherwise a fairly standard
-  multiplayer-over-sockets shape, despite one real wrinkle
-  (JWT-in-httpOnly-cookie vs. Socket.io handshake).
+Moved to `archive.ts`:
+- **neural-network-library** (commit `b9a06ac`) — tutorial-derived by its
+  own text ("value was in working through the math rather than original
+  design"), no distinct novel-decision content; `makemore` covered the
+  same "NN fundamentals from scratch" ground with real investigative
+  findings.
+- **battleship** (commit `b9a06ac`) — zero verification content,
+  otherwise a fairly standard multiplayer-over-sockets shape, despite one
+  real wrinkle (JWT-in-httpOnly-cookie vs. Socket.io handshake).
+- **makemore** (commit `fe694e0`) — small-scale, limited demonstration
+  capability; also specifically earmarked as material for the future
+  blog/learning-notes section (the Karpathy makemore/GPT-from-scratch
+  series), not a flagship case study. Keeping the archive card means it
+  stays discoverable via GitHub even before that section exists — a
+  future blog post can still reference it.
+- **chess** (commit `fe694e0`) — small-scale, limited demonstration
+  capability (a CLI game with no visual evidence and no demo).
 
-10 projects remain in `projects.ts`. `llm-from-scratch` is already
-reference-quality (images, DPO honesty, full tradeoffs narrative — see the
-first commit of this session). The other 9 need real content work.
+8 projects remain in `projects.ts`. `llm-from-scratch` is already
+reference-quality (images, DPO honesty, full tradeoffs narrative).
 
-## 2. Per-project punch list
+## 2. Deferred / blocked — not active right now
 
-Ordered lightest-to-heaviest lift. Every "what's next" gap is systemic —
-not one project in `projects.ts` has one, so it's listed per-project below
-rather than called out as a single line item.
+- **`computer-use-agent`** — deferred at Owen's request. He's planning to
+  build on it further and wants real demo material (a GIF or video of it
+  actually acting) before revisiting the page, not a text-only patch now.
+  Revisit once that exists.
+- **`brave-search-agent`** and **`document-scanner`** — both need code
+  fixes first, and those fixes belong in their own separate repos
+  (`brave-search-agent`, `document-scanner`), not this Website repo. Content
+  interviews for these two wait until Owen has made those fixes.
 
-| Project | Gaps | Needs a real answer from Owen on |
+## 3. Active punch list
+
+4 projects, ordered lightest-to-heaviest lift. Every "what's next" gap is
+systemic — not one project in `projects.ts` has one.
+
+| Project | Content gaps | Demo/interestingness note |
 |---|---|---|
-| `snake-q-learning` | No what's-next | What would you change, or what's the obvious next step? |
-| `document-scanner` | Numbers are count-only (135+ tests, no coverage/accuracy metric); no what's-next | Do you have an actual accuracy/coverage number, or is "verification = it ran without crashing on N documents" the honest answer? |
-| `weather-api` | Tradeoff argument is thin ("chose FastAPI to learn FastAPI" isn't a rejected-alternative argument); no what's-next | What was the actual alternative you didn't take, and what would it have cost you? |
-| `microagent` | No quantified eval result despite the whole project being an eval harness; no what's-next | What's the actual before/after judge score or pass-rate number? |
-| `brave-search-agent` | Zero verification/result section for an agentic system | How do you actually know it works — tested-query count, citation-accuracy spot-check, anything? |
-| `gemini-audio-agent` | Zero verification section | Same question — what did "I checked this works" actually consist of? |
-| `chess` | No visual evidence (CLI game); no what's-next | Is a terminal screenshot or a checkmate-sequence GIF feasible, or does this genuinely not need one? |
-| `makemore` | No visual evidence despite being literally about training diagnostics (a loss/gradient-flow chart would be the most on-theme addition on the site); no what's-next | Do you have training logs/plots from this project the way `llm-training` had for `llm-from-scratch`, or would a fresh chart need to be generated? |
-| `computer-use-agent` | Zero verification/testing mentioned; zero result quantification; no visual evidence | All three at once — heaviest lift. How do you know this actually works, what would a result number even look like for an agent like this, and is a VNC-session screenshot/GIF feasible? |
+| `snake-q-learning` | No what's-next | None — this is the one demo Owen already considers genuinely interesting; use it as the bar for the other three. |
+| `microagent` | No quantified eval result despite the whole project being an eval harness; no what's-next | — |
+| `gemini-audio-agent` | Zero verification section; no what's-next | — |
+| `weather-api` | Tradeoff argument is thin ("chose FastAPI to learn FastAPI" isn't a rejected-alternative argument); no what's-next | Owen flagged this demo specifically as "not particularly interesting." It's also one of the 4 `featuredProjects` (`projects.slice(0, 4)` in `projects.ts`) — worth deciding during this interview whether it still earns that featured slot once the demo itself is reconsidered, not just whether the copy improves. |
 
-## 3. Process
+Questions to actually ask (not invent an answer to) per project:
+- **Content**: the same `case-study-rules.md` gaps as before — a real
+  what's-next line for all 4; a real judge-score/pass-rate number for
+  `microagent`; a real answer to "how do you know it works" for
+  `gemini-audio-agent`; the actual rejected alternative and its cost for
+  `weather-api`.
+- **Demo quality** (new, folded in from Owen's feedback): for each demo,
+  what would make it more interesting to interact with — is it the
+  interaction itself that's flat (nothing to do beyond one input/output),
+  the visual presentation, or the underlying capability being
+  demonstrated? This may surface actual component-code changes to
+  `src/pages/demos/*.tsx`, not just `projects.ts` copy — treat that as an
+  acceptable outcome of the interview, not scope creep, since Owen
+  explicitly asked for this to be folded in here rather than split out.
+
+## 4. Process
 
 Each project's content gets filled via a real interview following
 `website-add-project`'s process and `case-study-rules.md` — asking, not
-inventing, and pushing back on a first answer if it's generic enough to
-paste into any other project unnoticed. Sequenced **one project at a
-time**, not batched, so each interview gets the same depth the
-`llm-from-scratch` revision did rather than becoming a rushed
-fill-in-the-blank pass across 9 projects in one sitting.
+inventing, pushing back on a first answer if it's generic enough to paste
+into any other project unnoticed. Sequenced **one project at a time**, not
+batched, so each interview gets the depth the `llm-from-scratch` revision
+did rather than becoming a rushed fill-in-the-blank pass.
 
-For the 3 projects needing new visuals (`makemore`, `chess`,
-`computer-use-agent`), the interview also needs to establish whether
-source material already exists (training logs, a way to capture a
-screenshot/GIF) before committing to adding an image — matching how
-`llm-from-scratch`'s images came from real training-run plots, not
-generated-for-the-page charts.
+## Queued, not in this spec
+
+**Blog / learning-notes section.** Owen wants a place for weekly
+reflections on what he's been learning (e.g. working through Karpathy's
+makemore/GPT-from-scratch series) — content that doesn't fit the
+project-case-study format because it's process/learning-focused rather
+than a finished, demonstrable thing. This is a genuinely new subsystem
+(new route, new content type/data model, likely a new nav entry) and
+deserves its own architectural brainstorm — queued as a fifth spec, not
+detailed here. `makemore`'s archive card (section 1) is a natural first
+cross-reference once that section exists.
 
 ## Out of scope
 
-- Any further archive-vs-flagship decisions beyond the 2 already made —
-  the remaining 9 projects all have distinct, real content (per the fork
-  audit), they need fixing, not demoting.
+- Any further archive-vs-flagship decisions beyond the 4 already made.
+- Code fixes inside `brave-search-agent`'s or `document-scanner`'s own
+  repos — that's Owen's work in those repos, not this spec.
+- The blog/learning-notes section itself — queued above.
 - SEO/meta, worker consistency, accessibility, testing/CI — the other
   three specs.
