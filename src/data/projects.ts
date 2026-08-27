@@ -81,27 +81,6 @@ export const projects: Project[] = [
     hasDemo: true,
   },
   {
-    slug: 'weather-api',
-    title: 'Weather API',
-    description: 'Async FastAPI wrapper around the Visual Crossing weather API with Redis caching, rate limiting, and SQLite request history.',
-    year: '2026',
-    tags: ['Python', 'FastAPI', 'Redis'],
-    status: 'complete',
-    overview: 'An async REST API built with FastAPI that wraps the Visual Crossing Timeline Weather API. Supports single and batch location lookups, Redis caching with configurable TTL, sliding window rate limiting, and SQLite request history. Built as a focused exercise in learning FastAPI and backend API design.',
-    challenge: 'The hardest part was learning to read and apply framework documentation rather than leaning on AI to fill in gaps. FastAPI has a lot of moving parts — lifespan-managed clients, dependency injection via Depends(), middleware registration order, async context — and understanding why things work the way they do, not just copying patterns, was the actual goal of the project.',
-    approach: 'FastAPI was chosen specifically to learn it. Redis made sense for caching given its native TTL support and the ability to implement the sliding window rate limiter using sorted sets in the same instance. All I/O is async throughout — httpx for HTTP, redis.asyncio for cache, aiosqlite for history — keeping the request path non-blocking end to end.',
-    features: [
-      '98 tests, 99% coverage; CI fails if coverage drops below 95%',
-      'Cache hits served in ~100ms vs ~400ms from the upstream API',
-      'Batch endpoint fans out up to 10 locations concurrently with asyncio.gather; partial failures return per-item errors',
-      'Sliding window rate limiting via Redis sorted sets with X-RateLimit-* headers; batch requests consume N+1 units',
-    ],
-    links: [
-      { label: 'GitHub', href: 'https://github.com/objones25/weather-api' },
-    ],
-    hasDemo: true,
-  },
-  {
     slug: 'computer-use-agent',
     title: 'Computer Use Agent',
     description: 'Autonomous desktop agent using Claude\'s Computer Use API with human-in-the-loop credential handling and CAPTCHA solving.',

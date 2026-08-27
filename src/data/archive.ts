@@ -84,4 +84,11 @@ export const archiveProjects: ArchiveProject[] = [
     tags: ['Ruby', 'OOP', 'RSpec'],
     href: 'https://github.com/objones25/chess',
   },
+  {
+    title: 'Weather API',
+    description: 'Async FastAPI wrapper around the Visual Crossing weather API with Redis caching, rate limiting, and SQLite request history.',
+    year: '2026',
+    tags: ['Python', 'FastAPI', 'Redis'],
+    href: 'https://github.com/objones25/weather-api',
+  },
 ]
