@@ -9,13 +9,30 @@ export const projects: Project[] = [
     tags: ['Python', 'PyTorch', 'LLM'],
     status: 'complete',
     overview: 'Built the whole pipeline myself: architecture, tokenizer, training, and the serving code. Pretrained on ~9.7B tokens, then fine-tuned and DPO\'d on top. Runs behind a streaming chat API, try it below.',
-    challenge: '478M parameters won\'t compete with real models. The point was squeezing what I could out of one ~$160 GPU rental. Scaled the model up twice, both times because validation loss flattened out near the end of training and flattened the same way at 3x the size, a capacity problem, not a training-time problem. Looked at how much each layer was changing the model\'s internal state and found most of it happening in the first layer, so the second scale-up went wider instead of deeper.',
+    challenge: '478M parameters won\'t compete with real models. The point was squeezing what I could out of one ~$160 GPU rental. Scaled the model up twice, both times because validation loss flattened out near the end of training and flattened the same way at 3x the size, a capacity problem, not a training-time problem. Looked at how much each layer was changing the model\'s internal state and found most of it happening in the first layer, so the second scale-up went wider instead of deeper. DPO on top of that is honest about its own ceiling too: 1,403 judged preference pairs gets reward accuracy to 0.55-0.65 against a 0.5 chance baseline, a real signal but a weak one, and it can only reshape how the base model responds, not add capability it doesn\'t have.',
     approach: 'RoPE, RMSNorm, SwiGLU, grouped-query attention, tied embeddings, standard for this kind of model. Training and generation share one code path. Trained past the compute-optimal point on purpose, since inference cost matters more than training cost once you\'re actually running the thing. Tokenizer trains fresh from the data every run instead of shipping as a fixed file.',
     features: [
       '478.6M-parameter decoder-only transformer (RoPE, RMSNorm, SwiGLU, grouped-query attention, weight-tied embeddings) trained from scratch: pretrained on ~9.7B tokens, then SFT\'d and DPO preference-tuned on top',
       'Two scale-ups, both triggered by val_loss flattening out at Chinchilla-optimal size; a cosine-similarity look at the residual stream showed most of the change happening in layer one, so the second scale-up went wider instead of deeper',
       'KV-cache-aware forward pass serving both full-sequence training and single-token cached decode from one code path, with masking applied only where SDPA\'s causal mask is actually correct',
       'Stateless streaming chat completion API on RunPod Serverless (scale-to-zero), fronted by a Cloudflare Worker that injects the RunPod key server-side and re-streams tokens to the browser',
+    ],
+    images: [
+      {
+        src: '/projects/llm-from-scratch/layer-contribution.png',
+        alt: 'Per-layer residual-stream contribution chart, pretrain vs SFT checkpoint',
+        caption: 'Per-layer residual-stream contribution, v1 pretrain vs. SFT. Block 0 does most of the work (~0.15 cosine similarity input→output); blocks 1–19 barely move the signal (0.89–0.97) — why the second scale-up went wider, not deeper.',
+      },
+      {
+        src: '/projects/llm-from-scratch/pretraining-run.png',
+        alt: 'v2 pretraining loss, learning rate, and gradient norm curves over 18,500 steps',
+        caption: 'v2 pretraining — 431.4M non-embedding params, 18,500 steps, ~9.70B tokens. Restarted from the step-13,750 checkpoint after a failure around step 13,875.',
+      },
+      {
+        src: '/projects/llm-from-scratch/dpo-run.png',
+        alt: 'DPO training run showing loss, reward margins, reward accuracy, and gradient norm',
+        caption: 'DPO on 1,403 judged preference pairs, 1 epoch. Reward margin climbs, noisily; final reward accuracy lands at 0.55–0.65 against a 0.5 chance baseline.',
+      },
     ],
     links: [
       { label: 'GitHub', href: 'https://github.com/objones25/llm-from-scratch' },

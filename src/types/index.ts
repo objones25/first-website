@@ -3,6 +3,12 @@ export interface ProjectLink {
   href: string
 }
 
+export interface ProjectImage {
+  src: string
+  alt: string
+  caption: string
+}
+
 export interface Project {
   slug: string
   title: string
@@ -15,6 +21,7 @@ export interface Project {
   challenge?: string
   approach?: string
   features?: string[]
+  images?: ProjectImage[]
   links?: ProjectLink[]
   hasDemo?: boolean
 }

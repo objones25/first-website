@@ -165,6 +165,32 @@ export default function ProjectDetail() {
             )}
           </Section>
 
+          {/* Visual Evidence */}
+          {project.images && project.images.length > 0 && (
+            <Section label="// Evidence" delay={0.27}>
+              <div className="space-y-10 max-w-2xl">
+                {project.images.map((img, i) => (
+                  <figure key={img.src}>
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      loading="lazy"
+                      className="w-full border border-border"
+                    />
+                    <figcaption className="mt-3 flex items-start gap-4">
+                      <span className="mono text-text-muted shrink-0">
+                        {String(i + 1).padStart(2, '0')} ——
+                      </span>
+                      <span className="mono text-text-muted text-xs leading-relaxed">
+                        {img.caption}
+                      </span>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </Section>
+          )}
+
           {/* Live Demo CTA */}
           {project.hasDemo && (
             <Section label="// Live Demo" delay={0.3}>
