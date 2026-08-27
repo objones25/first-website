@@ -5,24 +5,31 @@
 Establish a test suite and CI gate for a codebase that currently has zero
 automated tests (frontend or the 4 `workers/`), no lint, and a `deploy.yml`
 that ships straight to production on push to `main` off nothing stronger
-than `vite build` (which does not run `tsc`). Combined with two targeted
+than `vite build` (which does not run `tsc`). Combined with three targeted
 refactors: replace the hand-written `Project`/`ArchiveProject` interfaces
 with a Zod schema as the single source of truth, so the exact failure class
 that risks recurring every time a project gains a new optional field (an
 `images[].src` pointing at a file that doesn't exist, a `hasDemo: true`
 with no matching `Demo.tsx` entry) is caught by a test instead of by luck;
-and turn `ProjectDetail.tsx`'s hand-written JSX section blocks into a
+turn `ProjectDetail.tsx`'s hand-written JSX section blocks into a
 declarative, config-driven renderer (this was "Approach B" during
 brainstorming, initially deferred as premature and now folded back in at
 Owen's request), so each future optional field the other three specs add
 is one object in a list instead of a new block in the middle of the
-component.
+component; and close the drift that's accumulated across the 4 Worker
+proxies (three different CORS/tsconfig/`.dev.vars.example` inconsistencies,
+detailed in section 5) — also folded in at Owen's request, since writing
+tests that just pin down each worker's *current*, drifted behavior would
+mean encoding the inconsistency as correct instead of fixing it.
 
 This is one of four specs decomposing a broader "improve the site" request
 (the others: Backend + GitHub API, Archive triage + project pages, Site
-hygiene). Out of scope here: SEO/meta tags, worker CORS/tsconfig
-consistency fixes, accessibility fixes, and any new project content — those
-live in the Site-hygiene and Archive/pages specs.
+hygiene). Out of scope here: SEO/meta tags, accessibility fixes, and any
+new project content — those live in the Site-hygiene and Archive/pages
+specs. `GeminiAudioDemo.tsx`'s hardcoded WebSocket URL is a related but
+separate inconsistency (a frontend demo component pointing at a worker
+that lives in a different repo, not one of the 4 `workers/` here) and
+stays in Site-hygiene.
 
 One item pulled in from Site-hygiene because it's a hard blocker for this
 spec's e2e coverage: a Clerk local-dev auth bypass, since
@@ -127,25 +134,63 @@ project with `hasDemo: false` renders no Live Demo section regardless of
 isn't a regression risk worth pinning down, only section presence, absence,
 and order are.
 
-## 5. Worker unit tests
+## 5. Worker proxy consistency refactor
 
-Each of the 4 `workers/<name>/` projects is an independent package — each
-gets its own `vitest` devDependency and a `src/index.test.ts` testing the
-exported `fetch` handler directly with a mocked `fetch`/`env`, covering:
-CORS allow (prod origin), CORS deny (arbitrary origin), and the
-secret-injection header is present on the outbound request. These tests
-pin down each worker's *current* behavior, including the known gap that
-only `microagent-proxy` currently allows a `localhost` origin — that gap
-gets a dedicated CORS-allow-localhost test for `microagent-proxy` now, and
-the other 3 workers get the same test added once the Site-hygiene spec
-fixes their CORS allowlist (not this spec's job to fix, just to test
-whatever's actually there). `llm-inference-proxy`
+Each of the 4 `workers/<name>/` projects is an independent Wrangler
+package with no shared code (per `CLAUDE.md` — this fix keeps that
+architecture, it's a copy-paste-consistently fix across 4 independent
+files, not a new shared package/monorepo restructuring, which would be a
+bigger architectural change out of scope here). Four concrete
+inconsistencies, confirmed by direct read of all 4 `workers/*/src/index.ts`:
+
+- **CORS localhost allowance**: `microagent-proxy/src/index.ts:14` is the
+  only one that allows a local origin
+  (`origin === ALLOWED_ORIGIN || /^https?:\/\/localhost(:\d+)?$/.test(origin)`).
+  `document-scanner-proxy/src/index.ts:2`, `llm-inference-proxy/src/index.ts:2`,
+  and `weather-proxy/src/index.ts:2` all hardcode
+  `ALLOWED_ORIGIN = 'https://owenbeckettjones.com'` with no local exception —
+  meaning 3 of 4 demos can't be exercised against their real worker from
+  `npm run dev`. Fix: apply `microagent-proxy`'s exact origin-check pattern
+  to the other 3.
+- **Missing `tsconfig.json`**: `weather-proxy` has none at all (confirmed —
+  not just a missing field). `@cloudflare/workers-types` is installed as a
+  devDependency but nothing references it. Fix: copy the identical
+  `tsconfig.json` the other 3 workers already share.
+- **Upstream CORS header leakage**: `document-scanner-proxy/src/index.ts:37-39`
+  explicitly filters `access-control-*` keys out of the upstream response
+  before merging its own CORS headers; `weather-proxy/src/index.ts:33`
+  builds `{ ...Object.fromEntries(response.headers), ...CORS_HEADERS }`
+  with no filter. This doesn't currently produce the literal duplicate-header
+  bug (`CORS_HEADERS` spreads last and wins for any key upstream also
+  sends), but any upstream header with no `CORS_HEADERS` equivalent — e.g.
+  `Access-Control-Allow-Credentials` — leaks through unfiltered. Fix: apply
+  `document-scanner-proxy`'s filter to `weather-proxy` for the same
+  defense-in-depth, not because the literal bug reproduces today.
+- **Missing `.dev.vars.example`**: only `weather-proxy` and
+  `llm-inference-proxy` have one; `document-scanner-proxy` and
+  `microagent-proxy` don't (this is the opposite of what `CLAUDE.md`
+  currently claims). Fix: add one to each of the two missing workers,
+  matching the `TOKEN=...` pattern the existing ones use.
+
+`CLAUDE.md`'s "Worker proxies" section gets corrected alongside the code
+fix — its `.dev.vars.example` and CORS-localhost claims are currently
+wrong in ways this section's fixes make newly true (CORS) or that were
+already false (`.dev.vars.example`).
+
+## 6. Worker unit tests
+
+Each of the 4 `workers/<name>/` projects gets its own `vitest`
+devDependency and a `src/index.test.ts` testing the exported `fetch`
+handler directly with a mocked `fetch`/`env`, covering: CORS allow (prod
+origin), CORS allow (localhost — uniform across all 4 now that section 5
+has landed), CORS deny (arbitrary origin), and the secret-injection header
+is present on the outbound request. `llm-inference-proxy`
 additionally gets a test for the polling loop's chunk-forwarding logic
 (the "each poll's `stream` array is only new chunks" behavior documented in
 `CLAUDE.md` — this is exactly the class of bug that shipped once already
 and unit tests are the right tool to pin it down).
 
-## 6. Clerk local-dev bypass (pulled in from Site-hygiene)
+## 7. Clerk local-dev bypass (pulled in from Site-hygiene)
 
 Add a dev-only escape hatch to `ProtectedRoute` gated behind
 `import.meta.env.DEV && import.meta.env.VITE_SKIP_AUTH === 'true'`, so it's
@@ -154,11 +199,11 @@ misconfiguration. Documented in `CLAUDE.md` as a local-only var, not added
 to `deploy.yml`'s secrets or GitHub Actions. This unblocks Playwright e2e
 on the demo route without weakening the real auth gate.
 
-## 7. E2E tests (Playwright)
+## 8. E2E tests (Playwright)
 
 New `e2e/` directory at repo root. One spec per top-level route
 (Home/About/Projects/Archive/Contact/ProjectDetail) plus one per demo,
-using the `VITE_SKIP_AUTH` bypass from section 6 to reach
+using the `VITE_SKIP_AUTH` bypass from section 7 to reach
 `/projects/:slug/demo` without real Clerk credentials. Network calls to
 external APIs are mocked at the Playwright route level (`page.route(...)`)
 so e2e runs don't depend on live Railway/RunPod backends being up. Assertion
@@ -167,7 +212,7 @@ state, and a mocked message round-trips into the UI — not full behavioral
 coverage of each backend, since that's out of reach without live
 integration tests (explicitly out of scope, see below).
 
-## 8. CI restructure
+## 9. CI restructure
 
 New `.github/workflows/ci.yml`, triggered on `pull_request` and on push to
 `main` (running independently of, and before, `deploy.yml` — not a
@@ -198,5 +243,10 @@ implementation touches unilaterally.
   stats, SEO preview data) — section 3's refactor makes that cheap, but
   deciding what those fields actually are belongs to the Archive/pages and
   Backend specs, not this one.
-- SEO/meta tags, worker CORS consistency fixes beyond what section 5's
-  tests require to pass, accessibility fixes — all Site-hygiene spec.
+- SEO/meta tags and accessibility fixes — Site-hygiene spec.
+- `GeminiAudioDemo.tsx`'s hardcoded WebSocket URL — Site-hygiene spec (see
+  Scope note above on why this one stays out despite being adjacent to
+  section 5's worker-consistency fixes).
+- Any shared-package/monorepo restructuring of the 4 workers — section 5
+  keeps them independent, copy-paste-consistent files, matching the
+  existing architecture.
