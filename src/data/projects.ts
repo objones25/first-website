@@ -81,26 +81,6 @@ export const projects: Project[] = [
     hasDemo: true,
   },
   {
-    slug: 'makemore',
-    title: 'Makemore',
-    description: 'Character-level name generation model using a WaveNet-style hierarchical MLP trained on 32k names.',
-    year: '2026',
-    tags: ['Python', 'PyTorch', 'ML'],
-    status: 'complete',
-    overview: 'A character-level language model that generates plausible new names by predicting one character at a time. Built in PyTorch following Karpathy\'s makemore series, it uses a WaveNet-style hierarchical MLP that progressively fuses character context in a tree structure rather than flattening all inputs at once. Trained on ~32,000 names with a full hyperparameter search pipeline.',
-    challenge: 'The real difficulty was learning to see inside the network — understanding what healthy activations, gradient flow, and update ratios actually look like, and building the diagnostics tooling to check. An earlier RNN architecture had significant dead neuron problems that made this concrete: switching to WaveNet and LeakyReLU resolved it, but the work was in diagnosing why. The hyperparameter search across block size, hidden dim, embedding dim, and learning rate involved enough interacting variables that intuition alone wasn\'t reliable.',
-    approach: 'WaveNet\'s hierarchical flatten-consecutive architecture outperformed both a flat MLP and a vanilla RNN. The key insight is that pairing adjacent representations at each layer builds meaningful bigram, 4-gram, and 8-gram features instead of treating all context positions as equally distant. Kaiming initialization kept pre-activation distributions healthy, and BatchNorm after each hierarchical layer stabilized training across the hyperparameter search.',
-    features: [
-      'Test loss of 1.97 cross-entropy on a held-out split of 32k names',
-      'Hierarchical MLP: 8-char context window fused through bigram, 4-gram, and 8-gram layers',
-      'Training diagnostics tracking update-to-data ratios, activation saturation, gradient flow, and dead neurons per layer',
-      'Automated hyperparameter search across block size, hidden dim, and embedding dim with early stopping',
-    ],
-    links: [
-      { label: 'GitHub', href: 'https://github.com/objones25/makemore' },
-    ],
-  },
-  {
     slug: 'weather-api',
     title: 'Weather API',
     description: 'Async FastAPI wrapper around the Visual Crossing weather API with Redis caching, rate limiting, and SQLite request history.',
@@ -203,26 +183,6 @@ export const projects: Project[] = [
       { label: 'GitHub', href: 'https://github.com/objones25/gemini-audio-agent' },
     ],
     hasDemo: true,
-  },
-  {
-    slug: 'chess',
-    title: 'Chess',
-    description: 'Command-line chess in Ruby with full rule enforcement, check/checkmate/stalemate detection, and save/load. Capstone project for The Odin Project Ruby curriculum.',
-    year: '2025',
-    tags: ['Ruby', 'OOP', 'RSpec'],
-    status: 'complete',
-    overview: 'A two-player command-line chess game built as the capstone project for The Odin Project\'s Ruby curriculum. Enforces all standard chess rules including castling, en passant, and pawn promotion, with check, checkmate, and stalemate detection and a JSON save/load system.',
-    challenge: 'The special moves were the hardest to get right — castling requires tracking whether the king and rook have moved, en passant has a one-move window that has to be cleared each turn, and check detection has to run after every move to filter out any move that would leave the king in check. Getting all of those edge cases to interact correctly without breaking each other took most of the debugging time.',
-    approach: 'Each piece class implements its own movement logic and inherits shared behavior from a base Piece class. The Board class handles move validation and check detection centrally rather than spreading that logic across pieces — any candidate move is tested by applying it temporarily and checking whether the king is in check in the resulting state. This made adding special moves easier since the validation logic didn\'t have to change.',
-    features: [
-      '205 RSpec tests covering all piece movements, special rules, and game-ending conditions',
-      'Full special move support: castling, en passant, and pawn promotion',
-      'Check, checkmate, and stalemate detection after every move',
-      'JSON save/load system with timestamped files and graceful error handling',
-    ],
-    links: [
-      { label: 'GitHub', href: 'https://github.com/objones25/chess' },
-    ],
   },
 ]
 

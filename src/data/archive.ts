@@ -70,4 +70,18 @@ export const archiveProjects: ArchiveProject[] = [
     tags: ['TypeScript', 'React', 'Socket.io'],
     href: 'https://github.com/objones25/battleship-game',
   },
+  {
+    title: 'Makemore',
+    description: 'Character-level name generation model using a WaveNet-style hierarchical MLP trained on 32k names.',
+    year: '2026',
+    tags: ['Python', 'PyTorch', 'ML'],
+    href: 'https://github.com/objones25/makemore',
+  },
+  {
+    title: 'Chess',
+    description: 'Command-line chess in Ruby with full rule enforcement, check/checkmate/stalemate detection, and save/load. Capstone project for The Odin Project Ruby curriculum.',
+    year: '2025',
+    tags: ['Ruby', 'OOP', 'RSpec'],
+    href: 'https://github.com/objones25/chess',
+  },
 ]
