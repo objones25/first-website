@@ -1,3 +1,7 @@
 name = "github-stats-proxy"
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
+
+[[kv_namespaces]]
+binding = "GITHUB_STATS_CACHE"
+id = "007122d1ca814aec983812cf8c7db2d5"
