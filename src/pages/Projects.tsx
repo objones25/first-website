@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { projects } from '@/data/projects'
 import { PageTransition } from '@/components/layout/PageTransition'
+import { GithubStatsBadge } from '@/components/GithubStatsBadge'
 
 export default function Projects() {
   return (
@@ -53,9 +54,12 @@ export default function Projects() {
                     </span>
                     <span className="text-xs text-text-muted">{project.year}</span>
                   </div>
-                  <p className="text-sm text-text-muted leading-relaxed">
+                  <p className="text-sm text-text-muted leading-relaxed mb-1.5">
                     {project.description}
                   </p>
+                  <GithubStatsBadge
+                    githubUrl={project.links?.find(l => l.label === 'GitHub')?.href}
+                  />
                 </div>
 
                 <div className="flex flex-wrap gap-1.5 justify-end pt-0.5">
