@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
 import { useAuth } from '@clerk/react-router'
 import { motion } from 'framer-motion'
 import { projects } from '@/data/projects'
 import { PageTransition } from '@/components/layout/PageTransition'
+import type { DataTable } from '@/types'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -191,6 +193,17 @@ export default function ProjectDetail() {
             </Section>
           )}
 
+          {/* Data */}
+          {project.dataTables && project.dataTables.length > 0 && (
+            <Section label="// Data" delay={0.28}>
+              <div className="space-y-12">
+                {project.dataTables.map((table) => (
+                  <DataTableBlock key={table.title} table={table} />
+                ))}
+              </div>
+            </Section>
+          )}
+
           {/* Live Demo CTA */}
           {project.hasDemo && (
             <Section label="// Live Demo" delay={0.3}>
@@ -260,6 +273,88 @@ function Section({
       <span className="section-label block mb-6">{label}</span>
       {children}
     </motion.div>
+  )
+}
+
+// ── Data table block ──────────────────────────────────────────────────────────
+const TRUNCATE_AT = 90
+
+function DataTableBlock({ table }: { table: DataTable }) {
+  const [expanded, setExpanded] = useState<Set<number>>(new Set())
+
+  function toggle(rowIndex: number) {
+    setExpanded(prev => {
+      const next = new Set(prev)
+      if (next.has(rowIndex)) next.delete(rowIndex)
+      else next.add(rowIndex)
+      return next
+    })
+  }
+
+  return (
+    <div>
+      <p className="mono text-text text-sm mb-1">{table.title}</p>
+      {table.description && (
+        <p className="mono text-text-dim text-xs leading-relaxed mb-4 max-w-2xl">
+          {table.description}
+        </p>
+      )}
+      <div className="border border-border-strong overflow-x-auto max-h-[32rem] overflow-y-auto">
+        <table className="w-full text-xs mono border-collapse">
+          <thead className="sticky top-0 bg-surface">
+            <tr>
+              {table.columns.map(col => (
+                <th
+                  key={col.key}
+                  className={`text-text-muted font-normal uppercase tracking-wider px-4 py-3 border-b border-border-strong whitespace-nowrap ${
+                    col.align === 'right' ? 'text-right' : 'text-left'
+                  }`}
+                >
+                  {col.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {table.rows.map((row, i) => (
+              <tr key={i} className="hover:bg-surface transition-colors">
+                {table.columns.map(col => {
+                  const value = row[col.key]
+                  const isExpandable = table.expandableKey === col.key && typeof value === 'string'
+                  const isLong = isExpandable && value.length > TRUNCATE_AT
+                  const isOpen = expanded.has(i)
+                  return (
+                    <td
+                      key={col.key}
+                      className={`text-text-muted px-4 py-3 align-top ${
+                        col.align === 'right' ? 'text-right whitespace-nowrap' : 'text-left'
+                      } ${isExpandable ? 'min-w-[24rem]' : ''}`}
+                    >
+                      {isExpandable ? (
+                        <>
+                          <span className={isOpen ? '' : 'line-clamp-1'}>{value}</span>
+                          {isLong && (
+                            <button
+                              type="button"
+                              onClick={() => toggle(i)}
+                              className="block mt-1 text-text-dim hover:text-text-muted transition-colors"
+                            >
+                              {isOpen ? '[ collapse ]' : '[ expand ]'}
+                            </button>
+                          )}
+                        </>
+                      ) : (
+                        value
+                      )}
+                    </td>
+                  )
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   )
 }
 

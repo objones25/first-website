@@ -1,4 +1,5 @@
 import type { Project } from '@/types'
+import { judgeCalls } from './microagentJudgeCalls'
 
 export const projects: Project[] = [
   {
@@ -76,11 +77,21 @@ export const projects: Project[] = [
       'git-SHA prompt versioning, A/B-compared with McNemar\'s exact test, every run tracked in W&B with the exact prompt content logged as a versioned artifact',
       'Streaming WebSocket API (FastAPI, Pydantic-validated protocol, constant-time token auth, bounded concurrency) deployed on Railway, fronted by this site\'s Worker proxy',
     ],
-    images: [
+    dataTables: [
       {
-        src: '/projects/microagent/judge-parse-rate.png',
-        alt: 'Bar chart: judge tiebreaker response-parse success rate before and after raising max_tokens, 80.8% to 100%',
-        caption: 'The judge\'s max_tokens=1024 was truncating its own rationale before it reached the verdict field 19.2% of the time (5 of 26 calls, from an earlier prompt-comparison run). Raising it to 4096 is the only harness change between that run and the 72-call trace this pulls from — 0 parse failures since.',
+        title: 'Judge tiebreaker calls (72) — from a real W&B/Weave trace export',
+        description: 'Every judge call from the denied-write-rate follow-up run\'s A/B comparison — the pairwise tiebreaker described above, called twice per concordant pair with sides swapped. Verdict is which side (A/B) that specific call picked; rationale is the model\'s own unedited reasoning.',
+        columns: [
+          { key: 'n', label: '#', align: 'right' },
+          { key: 'verdict', label: 'Verdict' },
+          { key: 'latencyS', label: 'Latency (s)', align: 'right' },
+          { key: 'inputTokens', label: 'In tok', align: 'right' },
+          { key: 'outputTokens', label: 'Out tok', align: 'right' },
+          { key: 'thinkingTokens', label: 'Think tok', align: 'right' },
+          { key: 'rationale', label: 'Rationale' },
+        ],
+        rows: judgeCalls,
+        expandableKey: 'rationale',
       },
     ],
     links: [

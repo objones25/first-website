@@ -9,6 +9,21 @@ export interface ProjectImage {
   caption: string
 }
 
+export interface DataTableColumn {
+  key: string
+  label: string
+  align?: 'left' | 'right'
+}
+
+export interface DataTable {
+  title: string
+  description?: string
+  columns: DataTableColumn[]
+  rows: Record<string, string | number>[]
+  // key of the column whose value is long-form text, collapsed by default with a per-row toggle
+  expandableKey?: string
+}
+
 export interface Project {
   slug: string
   title: string
@@ -22,6 +37,7 @@ export interface Project {
   approach?: string
   features?: string[]
   images?: ProjectImage[]
+  dataTables?: DataTable[]
   links?: ProjectLink[]
   hasDemo?: boolean
 }
