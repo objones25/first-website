@@ -4,6 +4,8 @@ import { useAuth } from '@clerk/react-router'
 import { motion } from 'framer-motion'
 import { projects } from '@/data/projects'
 import { PageTransition } from '@/components/layout/PageTransition'
+import { useGithubStats } from '@/hooks/useGithubStats'
+import { formatRelativeTime } from '@/lib/formatRelativeTime'
 import type { DataTable } from '@/types'
 
 const ease = [0.16, 1, 0.3, 1] as const
@@ -90,6 +92,9 @@ export default function ProjectDetail() {
                     [ {link.label} ↗ ]
                   </a>
                 ))}
+                <GithubStatsFull
+                  githubUrl={project.links.find(l => l.label === 'GitHub')?.href}
+                />
               </motion.div>
             )}
           </div>
@@ -391,6 +396,23 @@ function Placeholder() {
   return (
     <div className="border border-dashed border-border-strong rounded-none p-8 max-w-2xl">
       <span className="mono text-text-muted">[ Content coming soon ]</span>
+    </div>
+  )
+}
+
+// ── Full GitHub stats block ───────────────────────────────────────────────────
+function GithubStatsFull({ githubUrl }: { githubUrl?: string }) {
+  const { data, error } = useGithubStats(githubUrl)
+
+  if (!githubUrl || error || !data) return null
+
+  return (
+    <div className="flex flex-wrap gap-x-5 gap-y-1 mono text-text-muted text-xs mt-3">
+      <span>★ {data.stars}</span>
+      <span>{data.commitCount} commits</span>
+      {data.primaryLanguage && <span>{data.primaryLanguage}</span>}
+      <span>{data.openIssues} open issues</span>
+      <span>updated {formatRelativeTime(data.lastCommitDate)}</span>
     </div>
   )
 }
