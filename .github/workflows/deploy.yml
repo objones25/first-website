@@ -42,6 +42,7 @@ jobs:
           VITE_DOCUMENT_SCANNER_URL: ${{ secrets.VITE_DOCUMENT_SCANNER_URL }}
           VITE_SNAKE_API_URL: ${{ secrets.VITE_SNAKE_API_URL }}
           VITE_LLM_INFERENCE_URL: ${{ secrets.VITE_LLM_INFERENCE_URL }}
+          VITE_GITHUB_STATS_URL: ${{ secrets.VITE_GITHUB_STATS_URL }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

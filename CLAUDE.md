@@ -21,7 +21,7 @@ Workers (each is an independent Wrangler project — run from inside `workers/<n
 - `npm run deploy` — `wrangler deploy`; not wired into any CI, always manual
 - Secrets (`TOKEN`, `WEATHER_API_KEY`) are Wrangler secrets (`wrangler secret put <NAME>`), never in `wrangler.toml`. `weather-proxy` has `.dev.vars.example`; the other two don't but need a local `.dev.vars` with `TOKEN=...`.
 
-There's no root env template — a local `.env` needs `VITE_CLERK_PUBLISHABLE_KEY`, `VITE_BRAVE_SEARCH_AGENT_URL`, `VITE_WEATHER_API_URL`, `VITE_MICROAGENT_WS_URL`, `VITE_DOCUMENT_SCANNER_URL`, `VITE_SNAKE_API_URL`, `VITE_LLM_INFERENCE_URL` (same names used as GitHub Actions secrets in `deploy.yml`).
+There's no root env template — a local `.env` needs `VITE_CLERK_PUBLISHABLE_KEY`, `VITE_BRAVE_SEARCH_AGENT_URL`, `VITE_WEATHER_API_URL`, `VITE_MICROAGENT_WS_URL`, `VITE_DOCUMENT_SCANNER_URL`, `VITE_SNAKE_API_URL`, `VITE_LLM_INFERENCE_URL`, `VITE_GITHUB_STATS_URL` (same names used as GitHub Actions secrets in `deploy.yml`).
 
 ## Frontend architecture (`src/`)
 
