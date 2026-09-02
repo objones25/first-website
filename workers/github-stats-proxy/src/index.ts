@@ -118,15 +118,15 @@ export default {
       return new Response(null, { headers })
     }
 
-    if (origin && !isAllowedOrigin(origin)) {
-      return new Response('Forbidden', { status: 403, headers })
-    }
-
     const url = new URL(request.url)
     const owner = url.searchParams.get('owner')
     const repo = url.searchParams.get('repo')
     if (!owner || !repo) {
       return jsonResponse({ error: 'owner and repo query params are required' }, 400, headers)
+    }
+
+    if (!isAllowedOrigin(origin)) {
+      return new Response('Forbidden', { status: 403, headers })
     }
 
     const cacheKey = `${owner}/${repo}`
