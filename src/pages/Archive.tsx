@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { archiveProjects } from '@/data/archive'
 import { PageTransition } from '@/components/layout/PageTransition'
+import { GithubStatsBadge } from '@/components/GithubStatsBadge'
 
 export default function Archive() {
   return (
@@ -67,9 +68,10 @@ export default function Archive() {
                     <span className="text-base font-medium">{project.title}</span>
                     <span className="text-xs text-text-muted">{project.year}</span>
                   </div>
-                  <p className="text-sm text-text-muted leading-relaxed">
+                  <p className="text-sm text-text-muted leading-relaxed mb-1.5">
                     {project.description}
                   </p>
+                  <GithubStatsBadge githubUrl={project.href} />
                 </div>
 
                 <div className="flex flex-wrap gap-1.5 justify-end pt-0.5">
