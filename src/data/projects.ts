@@ -1,5 +1,4 @@
 import type { Project } from '@/types'
-import { judgeCalls } from './microagentJudgeCalls'
 
 export const projects: Project[] = [
   {
@@ -80,18 +79,23 @@ export const projects: Project[] = [
     dataTables: [
       {
         title: 'Judge tiebreaker calls (72) — from a real W&B/Weave trace export',
-        description: 'Every judge call from the denied-write-rate follow-up run\'s A/B comparison — the pairwise tiebreaker described above, called twice per concordant pair with sides swapped. Verdict is which side (A/B) that specific call picked; rationale is the model\'s own unedited reasoning.',
+        description: 'Every judge call from the denied-write-rate follow-up run\'s A/B comparison — the pairwise tiebreaker described above, called twice per concordant pair with sides swapped (verified: within every one of the 36 pairs, call 1\'s Implementation A is exactly call 2\'s Implementation B and vice versa). Expand a row to see the actual task and both implementations the judge was comparing, not just its verdict.',
         columns: [
           { key: 'n', label: '#', align: 'right' },
+          { key: 'pair', label: 'Pair', align: 'right' },
           { key: 'verdict', label: 'Verdict' },
           { key: 'latencyS', label: 'Latency (s)', align: 'right' },
           { key: 'inputTokens', label: 'In tok', align: 'right' },
           { key: 'outputTokens', label: 'Out tok', align: 'right' },
           { key: 'thinkingTokens', label: 'Think tok', align: 'right' },
-          { key: 'rationale', label: 'Rationale' },
         ],
-        rows: judgeCalls,
-        expandableKey: 'rationale',
+        loadRows: () => import('./microagentJudgeCalls').then(m => m.judgeCalls),
+        detailFields: [
+          { key: 'task', label: 'Task' },
+          { key: 'implementationA', label: 'Implementation A', code: true },
+          { key: 'implementationB', label: 'Implementation B', code: true },
+          { key: 'rationale', label: 'Judge rationale' },
+        ],
       },
     ],
     links: [

@@ -15,13 +15,29 @@ export interface DataTableColumn {
   align?: 'left' | 'right'
 }
 
+export interface DataTableDetailField {
+  key: string
+  label: string
+  // renders in a monospace <pre> block instead of wrapped prose
+  code?: boolean
+}
+
+export type DataTableRow = Record<string, string | number>
+
 export interface DataTable {
   title: string
   description?: string
   columns: DataTableColumn[]
-  rows: Record<string, string | number>[]
-  // key of the column whose value is long-form text, collapsed by default with a per-row toggle
-  expandableKey?: string
+  // Small tables can inline their rows directly. Large ones (e.g. a full raw
+  // export) should use loadRows instead so the data is code-split into its own
+  // chunk and only fetched when this table actually renders — not bundled into
+  // every page that imports the projects list (Home, Projects, ProjectDetail
+  // all statically import '@/data/projects').
+  rows?: DataTableRow[]
+  loadRows?: () => Promise<DataTableRow[]>
+  // fields shown in a per-row expand panel rather than as a table column —
+  // for content too long/structured (code, prose) to put in a cell
+  detailFields?: DataTableDetailField[]
 }
 
 export interface Project {

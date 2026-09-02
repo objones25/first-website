@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
 import { useAuth } from '@clerk/react-router'
 import { motion } from 'framer-motion'
@@ -277,10 +277,21 @@ function Section({
 }
 
 // ── Data table block ──────────────────────────────────────────────────────────
-const TRUNCATE_AT = 90
-
 function DataTableBlock({ table }: { table: DataTable }) {
+  const [rows, setRows] = useState(table.rows ?? null)
   const [expanded, setExpanded] = useState<Set<number>>(new Set())
+  const hasDetail = !!table.detailFields?.length
+
+  useEffect(() => {
+    // Each DataTableBlock is keyed by table.title in the parent, so this
+    // instance is remounted (not re-rendered in place) if the table changes.
+    if (rows || !table.loadRows) return
+    let cancelled = false
+    table.loadRows().then(loaded => {
+      if (!cancelled) setRows(loaded)
+    })
+    return () => { cancelled = true }
+  }, [])
 
   function toggle(rowIndex: number) {
     setExpanded(prev => {
@@ -299,61 +310,78 @@ function DataTableBlock({ table }: { table: DataTable }) {
           {table.description}
         </p>
       )}
-      <div className="border border-border-strong overflow-x-auto max-h-[32rem] overflow-y-auto">
-        <table className="w-full text-xs mono border-collapse">
-          <thead className="sticky top-0 bg-surface">
-            <tr>
-              {table.columns.map(col => (
-                <th
-                  key={col.key}
-                  className={`text-text-muted font-normal uppercase tracking-wider px-4 py-3 border-b border-border-strong whitespace-nowrap ${
-                    col.align === 'right' ? 'text-right' : 'text-left'
-                  }`}
-                >
-                  {col.label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {table.rows.map((row, i) => (
-              <tr key={i} className="hover:bg-surface transition-colors">
-                {table.columns.map(col => {
-                  const value = row[col.key]
-                  const isExpandable = table.expandableKey === col.key && typeof value === 'string'
-                  const isLong = isExpandable && value.length > TRUNCATE_AT
-                  const isOpen = expanded.has(i)
-                  return (
-                    <td
-                      key={col.key}
-                      className={`text-text-muted px-4 py-3 align-top ${
-                        col.align === 'right' ? 'text-right whitespace-nowrap' : 'text-left'
-                      } ${isExpandable ? 'min-w-[24rem]' : ''}`}
-                    >
-                      {isExpandable ? (
-                        <>
-                          <span className={isOpen ? '' : 'line-clamp-1'}>{value}</span>
-                          {isLong && (
-                            <button
-                              type="button"
-                              onClick={() => toggle(i)}
-                              className="block mt-1 text-text-dim hover:text-text-muted transition-colors"
-                            >
-                              {isOpen ? '[ collapse ]' : '[ expand ]'}
-                            </button>
-                          )}
-                        </>
-                      ) : (
-                        value
-                      )}
-                    </td>
-                  )
-                })}
+      {!rows ? (
+        <p className="mono text-text-dim text-xs">[ loading… ]</p>
+      ) : (
+        <div className="border border-border-strong overflow-x-auto max-h-[36rem] overflow-y-auto">
+          <table className="w-full text-xs mono border-collapse">
+            <thead className="sticky top-0 bg-surface">
+              <tr>
+                {hasDetail && <th className="border-b border-border-strong w-8" />}
+                {table.columns.map(col => (
+                  <th
+                    key={col.key}
+                    className={`text-text-muted font-normal uppercase tracking-wider px-4 py-3 border-b border-border-strong whitespace-nowrap ${
+                      col.align === 'right' ? 'text-right' : 'text-left'
+                    }`}
+                  >
+                    {col.label}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {rows.map((row, i) => {
+                const isOpen = expanded.has(i)
+                return (
+                  <Fragment key={i}>
+                    <tr
+                      onClick={hasDetail ? () => toggle(i) : undefined}
+                      className={`hover:bg-surface transition-colors ${hasDetail ? 'cursor-pointer' : ''}`}
+                    >
+                      {hasDetail && (
+                        <td className="px-2 text-text-dim align-top pt-3">{isOpen ? '−' : '+'}</td>
+                      )}
+                      {table.columns.map(col => (
+                        <td
+                          key={col.key}
+                          className={`text-text-muted px-4 py-3 align-top ${
+                            col.align === 'right' ? 'text-right whitespace-nowrap' : 'text-left'
+                          }`}
+                        >
+                          {row[col.key]}
+                        </td>
+                      ))}
+                    </tr>
+                    {hasDetail && isOpen && (
+                      <tr>
+                        <td colSpan={table.columns.length + 1} className="px-4 py-4 bg-background space-y-4">
+                          {table.detailFields!.map(field => (
+                            <div key={field.key}>
+                              <span className="text-text-dim uppercase tracking-wider block mb-1.5">
+                                {field.label}
+                              </span>
+                              {field.code ? (
+                                <pre className="text-text-muted border border-border p-3 overflow-x-auto leading-relaxed whitespace-pre">
+                                  {row[field.key]}
+                                </pre>
+                              ) : (
+                                <p className="text-text-muted leading-relaxed whitespace-pre-wrap">
+                                  {row[field.key]}
+                                </p>
+                              )}
+                            </div>
+                          ))}
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
