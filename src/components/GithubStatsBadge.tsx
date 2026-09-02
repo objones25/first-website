@@ -6,9 +6,11 @@ export function GithubStatsBadge({ githubUrl }: { githubUrl?: string }) {
 
   if (!githubUrl || error || !data) return null
 
+  const updated = formatRelativeTime(data.lastCommitDate)
+
   return (
-    <span className="mono text-text-dim text-xs whitespace-nowrap">
-      ★ {data.stars} · updated {formatRelativeTime(data.lastCommitDate)}
+    <span className="mono text-text-muted text-xs whitespace-nowrap">
+      ★ {data.stars}{updated && ` · updated ${updated}`}
     </span>
   )
 }

@@ -406,13 +406,15 @@ function GithubStatsFull({ githubUrl }: { githubUrl?: string }) {
 
   if (!githubUrl || error || !data) return null
 
+  const updated = formatRelativeTime(data.lastCommitDate)
+
   return (
     <div className="flex flex-wrap gap-x-5 gap-y-1 mono text-text-muted text-xs mt-3">
       <span>★ {data.stars}</span>
       <span>{data.commitCount} commits</span>
       {data.primaryLanguage && <span>{data.primaryLanguage}</span>}
       <span>{data.openIssues} open issues</span>
-      <span>updated {formatRelativeTime(data.lastCommitDate)}</span>
+      {updated && <span>updated {updated}</span>}
     </div>
   )
 }

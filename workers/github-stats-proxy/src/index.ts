@@ -1,5 +1,6 @@
 const ALLOWED_ORIGIN = 'https://owenbeckettjones.com'
 const CACHE_TTL_MS = 60 * 60 * 1000 // 1 hour
+const OWNER_ALLOWLIST = new Set(['objones25'])
 
 interface Env {
   GITHUB_STATS_CACHE: KVNamespace
@@ -63,6 +64,7 @@ function corsHeaders(origin: string): Record<string, string> {
     'Access-Control-Allow-Origin': isAllowedOrigin(origin) ? origin : ALLOWED_ORIGIN,
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
+    'Vary': 'Origin',
   }
 }
 
@@ -121,12 +123,19 @@ export default {
     const url = new URL(request.url)
     const owner = url.searchParams.get('owner')
     const repo = url.searchParams.get('repo')
+    // Params are validated before the origin check (deliberately, not backwards) so a
+    // no-Origin/no-params curl request gets 400, not 403, while any request that DOES
+    // have valid params still gets rejected below if its Origin isn't allowed.
     if (!owner || !repo) {
       return jsonResponse({ error: 'owner and repo query params are required' }, 400, headers)
     }
 
     if (!isAllowedOrigin(origin)) {
       return new Response('Forbidden', { status: 403, headers })
+    }
+
+    if (!OWNER_ALLOWLIST.has(owner) || !/^[A-Za-z0-9._-]{1,100}$/.test(repo)) {
+      return jsonResponse({ error: 'unsupported repository' }, 400, headers)
     }
 
     const cacheKey = `${owner}/${repo}`
