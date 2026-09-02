@@ -1,77 +1,54 @@
 import { useState, useRef, useEffect } from 'react'
 
 const WS_BASE = import.meta.env.VITE_MICROAGENT_WS_URL as string
+const MAX_PROMPT_LENGTH = 1000
 
 // ── Server event types ────────────────────────────────────────────────────────
+// Mirrors api/protocol.py — see the microagent repo's API.md for the full reference.
 
 type ServerEvent =
-  | { type: 'phase';             phase: string }
-  | { type: 'text_delta';        text: string }
-  | { type: 'test_generated';    content: string; test_count: number }
-  | { type: 'write_line';        path: string; line: string; line_num: number }
-  | { type: 'tool_call';         tool: string; passed: boolean | null; summary: string }
-  | { type: 'coverage';          pct: number }
-  | { type: 'awaiting_approval'; content: string }
-  | { type: 'done';              success: boolean; message: string; solution?: string }
-  | { type: 'error';             message: string }
+  | { type: 'phase'; run_id: string; phase: 'test_generation' | 'implementation' }
+  | { type: 'tool_call'; run_id: string; tool: string }
+  | {
+      type: 'done'
+      run_id: string
+      passed: boolean
+      failure_category: string | null
+      solution: string | null
+      total_cost_usd: number | null
+    }
+  | { type: 'error'; run_id: string; message: string }
 
 function parseServerEvent(raw: unknown): ServerEvent | null {
   if (typeof raw !== 'object' || raw === null) return null
   const e = raw as Record<string, unknown>
   const type = e.type
-  if (typeof type !== 'string') return null
+  if (typeof type !== 'string' || typeof e.run_id !== 'string') return null
+  const run_id = e.run_id
 
   switch (type) {
     case 'phase':
-      if (typeof e.phase !== 'string') return null
-      return { type: 'phase', phase: e.phase }
-
-    case 'text_delta':
-      if (typeof e.text !== 'string') return null
-      return { type: 'text_delta', text: e.text }
-
-    case 'test_generated':
-      if (typeof e.content !== 'string' || typeof e.test_count !== 'number') return null
-      return { type: 'test_generated', content: e.content, test_count: e.test_count }
-
-    case 'write_line':
-      if (typeof e.path !== 'string' || typeof e.line !== 'string') return null
-      return {
-        type: 'write_line',
-        path: e.path,
-        line: e.line,
-        line_num: typeof e.line_num === 'number' ? e.line_num : 0,
-      }
+      if (e.phase !== 'test_generation' && e.phase !== 'implementation') return null
+      return { type: 'phase', run_id, phase: e.phase }
 
     case 'tool_call':
       if (typeof e.tool !== 'string') return null
-      return {
-        type: 'tool_call',
-        tool: e.tool,
-        passed: typeof e.passed === 'boolean' ? e.passed : null,
-        summary: typeof e.summary === 'string' ? e.summary : '',
-      }
-
-    case 'coverage':
-      if (typeof e.pct !== 'number') return null
-      return { type: 'coverage', pct: e.pct }
-
-    case 'awaiting_approval':
-      if (typeof e.content !== 'string') return null
-      return { type: 'awaiting_approval', content: e.content }
+      return { type: 'tool_call', run_id, tool: e.tool }
 
     case 'done':
-      if (typeof e.success !== 'boolean' || typeof e.message !== 'string') return null
+      if (typeof e.passed !== 'boolean') return null
       return {
         type: 'done',
-        success: e.success,
-        message: e.message,
-        solution: typeof e.solution === 'string' ? e.solution : undefined,
+        run_id,
+        passed: e.passed,
+        failure_category: typeof e.failure_category === 'string' ? e.failure_category : null,
+        solution: typeof e.solution === 'string' ? e.solution : null,
+        total_cost_usd: typeof e.total_cost_usd === 'number' ? e.total_cost_usd : null,
       }
 
     case 'error':
       if (typeof e.message !== 'string') return null
-      return { type: 'error', message: e.message }
+      return { type: 'error', run_id, message: e.message }
 
     default:
       return null
@@ -81,20 +58,15 @@ function parseServerEvent(raw: unknown): ServerEvent | null {
 // ── UI log entry types ────────────────────────────────────────────────────────
 
 type LogEntry =
-  | { kind: 'phase';              phase: string }
-  | { kind: 'thinking';           text: string }
-  | { kind: 'test_generated';     content: string; test_count: number }
-  | { kind: 'write';              path: string; lines: string[] }
-  | { kind: 'tool_call';          tool: string; passed: boolean | null; summary: string }
-  | { kind: 'coverage';           pct: number }
-  | { kind: 'awaiting_approval';  content: string }
-  | { kind: 'revision_approved' }
-  | { kind: 'done';               success: boolean; message: string }
-  | { kind: 'error_entry';        message: string }
-
-// ── Demo ──────────────────────────────────────────────────────────────────────
+  | { kind: 'phase'; phase: 'test_generation' | 'implementation' }
+  | { kind: 'tool_call'; tool: string }
 
 type Status = 'idle' | 'running' | 'done' | 'error'
+
+const MODELS = [
+  { value: 'claude-haiku-4-5-20251001', label: 'Haiku 4.5' },
+  { value: 'claude-sonnet-4-6', label: 'Sonnet 4.6' },
+]
 
 const EXAMPLES = [
   'Write a function that reverses a string',
@@ -104,18 +76,26 @@ const EXAMPLES = [
   'Write a function that finds all anagrams in a list of words',
 ]
 
+const CLOSE_CODE_MESSAGES: Record<number, string> = {
+  1008: 'Server rejected the connection (auth) — this is a proxy misconfiguration, not something you can fix here.',
+  1003: 'Server rejected the request — the prompt may be empty, over 1000 characters, or max turns is outside 1–20.',
+}
+
 export function MicroagentDemo() {
   const [prompt, setPrompt] = useState('')
-  const [maxIter, setMaxIter] = useState(10)
-  const [allowRevision, setAllowRevision] = useState(false)
-  const [autoApprove, setAutoApprove] = useState(false)
+  const [model, setModel] = useState(MODELS[0].value)
+  const [maxTurns, setMaxTurns] = useState(10)
 
   const [status, setStatus] = useState<Status>('idle')
   const [log, setLog] = useState<LogEntry[]>([])
-  const [testContent, setTestContent] = useState<string | null>(null)
-  const [solutionContent, setSolutionContent] = useState<string | null>(null)
+  const [result, setResult] = useState<{
+    passed: boolean
+    failure_category: string | null
+    solution: string | null
+    total_cost_usd: number | null
+  } | null>(null)
+  const [errorMessage, setErrorMessage] = useState('')
   const [connError, setConnError] = useState('')
-  const [pendingApproval, setPendingApproval] = useState<string | null>(null)
 
   const wsRef = useRef<WebSocket | null>(null)
   const finishedRef = useRef(false)
@@ -136,65 +116,32 @@ export function MicroagentDemo() {
       case 'phase':
         pushLog({ kind: 'phase', phase: event.phase })
         return
-
-      case 'text_delta':
-        setLog(prev => {
-          const last = prev[prev.length - 1]
-          if (last?.kind === 'thinking') {
-            return [...prev.slice(0, -1), { ...last, text: last.text + event.text }]
-          }
-          return [...prev, { kind: 'thinking', text: event.text }]
-        })
-        return
-
-      case 'test_generated':
-        setTestContent(event.content)
-        pushLog({ kind: 'test_generated', content: event.content, test_count: event.test_count })
-        return
-
-      case 'write_line':
-        setLog(prev => {
-          const last = prev[prev.length - 1]
-          if (last?.kind === 'write' && last.path === event.path) {
-            return [...prev.slice(0, -1), { ...last, lines: [...last.lines, event.line] }]
-          }
-          return [...prev, { kind: 'write', path: event.path, lines: [event.line] }]
-        })
-        return
-
       case 'tool_call':
-        pushLog({ kind: 'tool_call', tool: event.tool, passed: event.passed, summary: event.summary })
+        pushLog({ kind: 'tool_call', tool: event.tool })
         return
-
-      case 'coverage':
-        pushLog({ kind: 'coverage', pct: event.pct })
-        return
-
-      case 'awaiting_approval':
-        setPendingApproval(event.content)
-        pushLog({ kind: 'awaiting_approval', content: event.content })
-        return
-
       case 'done':
-        if (event.solution) setSolutionContent(event.solution)
-        pushLog({ kind: 'done', success: event.success, message: event.message })
+        setResult({
+          passed: event.passed,
+          failure_category: event.failure_category,
+          solution: event.solution,
+          total_cost_usd: event.total_cost_usd,
+        })
         return
-
       case 'error':
-        pushLog({ kind: 'error_entry', message: event.message })
+        setErrorMessage(event.message)
         return
     }
   }
 
   function run() {
-    if (!prompt.trim() || status === 'running') return
+    const trimmed = prompt.trim()
+    if (!trimmed || trimmed.length > MAX_PROMPT_LENGTH || status === 'running') return
 
     setStatus('running')
     setLog([])
-    setTestContent(null)
-    setSolutionContent(null)
+    setResult(null)
+    setErrorMessage('')
     setConnError('')
-    setPendingApproval(null)
     finishedRef.current = false
 
     const ws = new WebSocket(`${WS_BASE}/ws/run`)
@@ -202,12 +149,10 @@ export function MicroagentDemo() {
 
     ws.onopen = () => {
       ws.send(JSON.stringify({
-        prompt: prompt.trim(),
-        config: {
-          max_iterations: maxIter,
-          allow_test_revision: allowRevision,
-          auto_approve_revision: autoApprove,
-        },
+        protocol_version: '1',
+        task_prompt: trimmed,
+        model,
+        max_turns: maxTurns,
       }))
     }
 
@@ -221,20 +166,20 @@ export function MicroagentDemo() {
 
       processEvent(event)
 
-      if (event.type === 'done') {
+      if (event.type === 'done' || event.type === 'error') {
         finishedRef.current = true
-        setStatus(event.success ? 'done' : 'error')
-        ws.close()
-      } else if (event.type === 'error') {
-        finishedRef.current = true
-        setStatus('error')
+        setStatus(event.type === 'done' ? (event.passed ? 'done' : 'error') : 'error')
         ws.close()
       }
     }
 
-    ws.onclose = () => {
+    ws.onclose = (e) => {
       wsRef.current = null
-      if (!finishedRef.current) setStatus('idle')
+      if (finishedRef.current) return
+      // Raw close with no terminal event: either a deliberate rejection (1008/1003) or a dropped connection.
+      finishedRef.current = true
+      setConnError(CLOSE_CODE_MESSAGES[e.code] ?? 'Connection closed unexpectedly — server may be starting up, try again in a moment')
+      setStatus('error')
     }
 
     ws.onerror = () => {
@@ -249,14 +194,6 @@ export function MicroagentDemo() {
     wsRef.current?.close()
     wsRef.current = null
     setStatus('idle')
-    setPendingApproval(null)
-  }
-
-  function approveRevision() {
-    if (wsRef.current?.readyState !== WebSocket.OPEN) return
-    wsRef.current.send(JSON.stringify({ type: 'hint', hint: null }))
-    setPendingApproval(null)
-    pushLog({ kind: 'revision_approved' })
   }
 
   function downloadFile(filename: string, content: string) {
@@ -272,14 +209,14 @@ export function MicroagentDemo() {
   }
 
   const isRunning = status === 'running'
-  const canDownload = solutionContent !== null && testContent !== null
+  const promptTooLong = prompt.trim().length > MAX_PROMPT_LENGTH
 
   return (
     <div className="max-w-4xl mx-auto px-6 pt-16 pb-32">
       <span className="section-label block mb-4">// Live Demo — Microagent</span>
       <h1 className="display pb-[0.3em] mb-2">Microagent</h1>
       <p className="mono text-text-muted text-sm mb-12">
-        Test-first AI coding agent. Describe a function — Claude generates a locked test suite, then iterates on an implementation until all tests pass.
+        Test-first AI coding agent. Describe a function — Claude generates a locked pytest file, then iterates on an implementation until all tests pass. Verified by an independent pytest run, not the model's own claim.
       </p>
 
       <div className="space-y-6">
@@ -303,7 +240,12 @@ export function MicroagentDemo() {
 
         {/* Prompt */}
         <div>
-          <span className="section-label block mb-3">// PROMPT</span>
+          <div className="flex items-center justify-between mb-3">
+            <span className="section-label">// PROMPT</span>
+            <span className={`mono text-xs ${promptTooLong ? 'text-red-400' : 'text-text-dim'}`}>
+              {prompt.trim().length} / {MAX_PROMPT_LENGTH}
+            </span>
+          </div>
           <textarea
             value={prompt}
             onChange={e => setPrompt(e.target.value)}
@@ -317,16 +259,37 @@ export function MicroagentDemo() {
         {/* Config row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <span className="section-label block mb-3">// MAX ITERATIONS</span>
+            <span className="section-label block mb-3">// MODEL</span>
+            <div className="flex gap-2">
+              {MODELS.map(m => (
+                <button
+                  key={m.value}
+                  type="button"
+                  disabled={isRunning}
+                  onClick={() => setModel(m.value)}
+                  className={`mono text-xs px-4 py-2 border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
+                    model === m.value
+                      ? 'border-text bg-text text-background'
+                      : 'border-border-strong text-text-muted hover:border-text hover:text-text'
+                  }`}
+                >
+                  [ {m.label} ]
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <span className="section-label block mb-3">// MAX TURNS</span>
             <div className="flex gap-2">
               {[5, 10, 15, 20].map(n => (
                 <button
                   key={n}
                   type="button"
                   disabled={isRunning}
-                  onClick={() => setMaxIter(n)}
+                  onClick={() => setMaxTurns(n)}
                   className={`mono text-xs px-4 py-2 border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
-                    maxIter === n
+                    maxTurns === n
                       ? 'border-text bg-text text-background'
                       : 'border-border-strong text-text-muted hover:border-text hover:text-text'
                   }`}
@@ -336,52 +299,13 @@ export function MicroagentDemo() {
               ))}
             </div>
           </div>
-
-          <div>
-            <span className="section-label block mb-3">// TEST REVISION</span>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                disabled={isRunning}
-                onClick={() => {
-                  const next = !allowRevision
-                  setAllowRevision(next)
-                  if (!next) setAutoApprove(false)
-                }}
-                className={`mono text-xs px-4 py-2 border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
-                  allowRevision
-                    ? 'border-text bg-text text-background'
-                    : 'border-border-strong text-text-muted hover:border-text hover:text-text'
-                }`}
-              >
-                [ Allow ]
-              </button>
-              <button
-                type="button"
-                disabled={isRunning || !allowRevision}
-                onClick={() => setAutoApprove(v => !v)}
-                className={`mono text-xs px-4 py-2 border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
-                  autoApprove && allowRevision
-                    ? 'border-text bg-text text-background'
-                    : 'border-border-strong text-text-muted hover:border-text hover:text-text'
-                }`}
-              >
-                [ Auto Approve ]
-              </button>
-            </div>
-            {allowRevision && !autoApprove && (
-              <p className="mono text-xs text-text-muted mt-2">
-                You will be prompted to approve test changes.
-              </p>
-            )}
-          </div>
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-4">
           <button
             onClick={run}
-            disabled={isRunning || !prompt.trim()}
+            disabled={isRunning || !prompt.trim() || promptTooLong}
             className="mono text-sm border border-text px-6 py-3 hover:bg-text hover:text-background transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {isRunning ? '[ Running... ]' : '[ Run Agent ] →'}
@@ -418,13 +342,10 @@ export function MicroagentDemo() {
 
           <div className="border border-border-strong divide-y divide-[rgba(255,255,255,0.04)]">
             {log.map((entry, i) => (
-              <LogEntryView
-                key={i}
-                entry={entry}
-                isPendingApproval={entry.kind === 'awaiting_approval' && pendingApproval !== null}
-                onApprove={approveRevision}
-              />
+              <LogEntryView key={i} entry={entry} />
             ))}
+            {errorMessage && <ErrorEntry message={errorMessage} />}
+            {result && <ResultEntry {...result} />}
           </div>
 
           <div ref={logEndRef} />
@@ -432,23 +353,18 @@ export function MicroagentDemo() {
       )}
 
       {/* Downloads */}
-      {canDownload && (
+      {result?.solution && (
         <div className="mt-10">
-          <span className="section-label block mb-4">// DOWNLOAD FILES</span>
-          <div className="flex gap-3 flex-wrap">
-            <button
-              onClick={() => downloadFile('solution.py', solutionContent!)}
-              className="mono text-sm border border-text px-5 py-2.5 hover:bg-text hover:text-background transition-colors"
-            >
-              [ solution.py ] ↓
-            </button>
-            <button
-              onClick={() => downloadFile('solution_test.py', testContent!)}
-              className="mono text-sm border border-border-strong text-text-muted px-5 py-2.5 hover:border-text hover:text-text transition-colors"
-            >
-              [ solution_test.py ] ↓
-            </button>
-          </div>
+          <span className="section-label block mb-4">// DOWNLOAD</span>
+          <p className="mono text-xs text-text-dim mb-3">
+            The generated test file isn't returned by the API — only the final implementation is.
+          </p>
+          <button
+            onClick={() => downloadFile('solution.py', result.solution!)}
+            className="mono text-sm border border-text px-5 py-2.5 hover:bg-text hover:text-background transition-colors"
+          >
+            [ solution.py ] ↓
+          </button>
         </div>
       )}
     </div>
@@ -457,176 +373,56 @@ export function MicroagentDemo() {
 
 // ── Log entry dispatcher ──────────────────────────────────────────────────────
 
-function LogEntryView({
-  entry,
-  isPendingApproval,
-  onApprove,
-}: {
-  entry: LogEntry
-  isPendingApproval: boolean
-  onApprove: () => void
-}) {
+function LogEntryView({ entry }: { entry: LogEntry }) {
   switch (entry.kind) {
     case 'phase':
       return <PhaseEntry phase={entry.phase} />
-    case 'thinking':
-      return <ThinkingEntry text={entry.text} />
-    case 'test_generated':
-      return <TestGeneratedEntry content={entry.content} test_count={entry.test_count} />
-    case 'write':
-      return <WriteEntry path={entry.path} lines={entry.lines} />
     case 'tool_call':
-      return <ToolCallEntry tool={entry.tool} passed={entry.passed} summary={entry.summary} />
-    case 'coverage':
-      return <CoverageEntry pct={entry.pct} />
-    case 'awaiting_approval':
-      return <AwaitingApprovalEntry content={entry.content} pending={isPendingApproval} onApprove={onApprove} />
-    case 'revision_approved':
-      return <RevisionApprovedEntry />
-    case 'done':
-      return <DoneEntry success={entry.success} message={entry.message} />
-    case 'error_entry':
-      return <ErrorEntry message={entry.message} />
+      return <ToolCallEntry tool={entry.tool} />
   }
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function PhaseEntry({ phase }: { phase: string }) {
+function PhaseEntry({ phase }: { phase: 'test_generation' | 'implementation' }) {
+  const label = phase === 'test_generation' ? 'PHASE 1 — TEST GENERATION' : 'PHASE 2 — IMPLEMENTATION (test file locked)'
   return (
     <div className="px-5 py-4 bg-surface flex items-center gap-4">
-      <span className="section-label text-text">// {phase.replace(/_/g, ' ').toUpperCase()}</span>
+      <span className="section-label text-text">// {label}</span>
       <div className="flex-1 h-px bg-border-strong" />
     </div>
   )
 }
 
-function ThinkingEntry({ text }: { text: string }) {
+function ToolCallEntry({ tool }: { tool: string }) {
   return (
-    <div className="px-5 py-4">
-      <p className="mono text-xs text-text-muted leading-relaxed whitespace-pre-wrap">{text}</p>
+    <div className="px-5 py-2.5 flex items-center gap-4">
+      <span className="mono text-xs text-text-dim">[ tool call ]</span>
+      <span className="mono text-xs text-text-muted flex-1">{tool}</span>
     </div>
   )
 }
 
-function TestGeneratedEntry({ content, test_count }: { content: string; test_count: number }) {
-  const [expanded, setExpanded] = useState(false)
-  return (
-    <div className="px-5 py-4 space-y-3">
-      <div className="flex items-center justify-between">
-        <span className="section-label text-text">// TESTS GENERATED — {test_count} tests</span>
-        <button
-          onClick={() => setExpanded(v => !v)}
-          className="mono text-xs text-text-muted hover:text-text transition-colors"
-        >
-          {expanded ? '[ collapse ]' : '[ view file ]'}
-        </button>
-      </div>
-      {expanded && (
-        <pre className="mono text-xs text-text-muted border border-border-strong p-4 overflow-auto max-h-80 leading-relaxed bg-surface">
-          {content}
-        </pre>
-      )}
-    </div>
-  )
-}
-
-function WriteEntry({ path, lines }: { path: string; lines: string[] }) {
-  return (
-    <div className="px-5 py-4">
-      <div className="flex items-center gap-3 mb-3">
-        <span className="mono text-xs text-text-dim">[ write ]</span>
-        <span className="mono text-xs text-text">{path}</span>
-        <span className="mono text-xs text-text-dim">{lines.length} lines</span>
-      </div>
-      <div className="border border-border overflow-auto max-h-64 bg-surface">
-        {lines.map((line, i) => (
-          <div key={i} className="flex items-start hover:bg-surface-raised transition-colors">
-            <span className="mono text-xs text-text-dim select-none w-10 shrink-0 text-right pr-3 py-0.5 border-r border-border leading-5">
-              {i + 1}
-            </span>
-            <span className="mono text-xs text-text-muted px-3 py-0.5 whitespace-pre leading-5 flex-1">
-              {line || ' '}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function ToolCallEntry({ tool, passed, summary }: { tool: string; passed: boolean | null; summary: string }) {
-  const icon = passed === true ? '✓' : passed === false ? '✗' : '·'
-  const iconColor = passed === true ? 'text-green-500' : passed === false ? 'text-red-400' : 'text-text-muted'
-  return (
-    <div className="px-5 py-2.5 flex items-start gap-4">
-      <span className="mono text-xs text-text-dim shrink-0 w-32">[ {tool} ]</span>
-      <span className="mono text-xs text-text-muted flex-1 leading-relaxed">{summary}</span>
-      <span className={`mono text-xs shrink-0 font-bold ${iconColor}`}>{icon}</span>
-    </div>
-  )
-}
-
-function CoverageEntry({ pct }: { pct: number }) {
-  return (
-    <div className="px-5 py-3">
-      <span className="section-label text-text-muted">// COVERAGE — {pct.toFixed(1)}%</span>
-    </div>
-  )
-}
-
-function AwaitingApprovalEntry({
-  content,
-  pending,
-  onApprove,
+function ResultEntry({
+  passed,
+  failure_category,
+  total_cost_usd,
 }: {
-  content: string
-  pending: boolean
-  onApprove: () => void
+  passed: boolean
+  failure_category: string | null
+  solution: string | null
+  total_cost_usd: number | null
 }) {
-  const [expanded, setExpanded] = useState(false)
   return (
-    <div className="px-5 py-5 space-y-4 border-l-2 border-text">
-      <div className="flex items-center justify-between">
-        <span className="section-label text-text">// REVISION PROPOSED — review test changes</span>
-        <button
-          onClick={() => setExpanded(v => !v)}
-          className="mono text-xs text-text-muted hover:text-text transition-colors"
-        >
-          {expanded ? '[ collapse ]' : '[ view proposed file ]'}
-        </button>
-      </div>
-      {expanded && (
-        <pre className="mono text-xs text-text-muted border border-border-strong p-4 overflow-auto max-h-80 leading-relaxed bg-surface">
-          {content}
-        </pre>
-      )}
-      {pending && (
-        <button
-          onClick={onApprove}
-          className="mono text-sm border border-text px-5 py-2 hover:bg-text hover:text-background transition-colors"
-        >
-          [ Approve Revision ] →
-        </button>
-      )}
-    </div>
-  )
-}
-
-function RevisionApprovedEntry() {
-  return (
-    <div className="px-5 py-3">
-      <span className="section-label text-text-muted">// REVISION APPROVED — continuing</span>
-    </div>
-  )
-}
-
-function DoneEntry({ success, message }: { success: boolean; message: string }) {
-  return (
-    <div className={`px-5 py-5 ${success ? 'bg-[rgba(34,197,94,0.05)]' : 'bg-[rgba(239,68,68,0.05)]'}`}>
-      <span className={`section-label ${success ? 'text-green-500' : 'text-red-400'}`}>
-        // {success ? 'SUCCESS' : 'FAILED'} — {message}
+    <div className={`px-5 py-5 space-y-1 ${passed ? 'bg-[rgba(34,197,94,0.05)]' : 'bg-[rgba(239,68,68,0.05)]'}`}>
+      <span className={`section-label block ${passed ? 'text-green-500' : 'text-red-400'}`}>
+        // {passed ? 'PASSED' : 'FAILED'}{failure_category ? ` — ${failure_category}` : ''}
       </span>
+      {total_cost_usd !== null && (
+        <span className="mono text-xs text-text-dim block">
+          cost: ${total_cost_usd.toFixed(4)}
+        </span>
+      )}
     </div>
   )
 }
