@@ -40,6 +40,47 @@ export const projects: Project[] = [
     hasDemo: true,
   },
   {
+    slug: 'llm-reward',
+    title: 'LLM Response Classifier',
+    description: 'Three architectures of increasing cost — an LSTM trained from scratch, a fully fine-tuned 0.5B model, and a LoRA-tuned 7B model — compared on one shared pipeline to predict which of two LLM responses a human judge preferred, for a Kaggle Code Competition I built as plain Python instead of the notebook it actually requires.',
+    year: '2026',
+    tags: ['Python', 'PyTorch', 'LLM'],
+    status: 'active',
+    overview: 'Kaggle\'s LLM Classification Finetuning competition asks you to predict which of two LLM responses a human judge preferred — winner_model_a, winner_model_b, or a genuine tie, not the binary call "reward modeling" implies. I wanted an actual Kaggle entry, and the real question underneath it was whether a bigger, already-instruction-tuned model actually predicts human preference better than something trained from nothing, and by how much. Instead of committing to one architecture, I built one shared data pipeline, training loop, and eval path, and ran three variants through it in increasing cost order: an LSTM trained from scratch, Qwen2.5-0.5B full-fine-tuned with a classification head, and Qwen2.5-7B tuned with LoRA on a rented GPU.',
+    challenge: 'The real constraint wasn\'t the hypothesis, it was memory. Full fine-tuning a 7B model means holding gradients and optimizer state for all 7B parameters at once, so the medium variant uses LoRA instead — only the adapter and a small classification head are trainable. That choice came back to cost me directly: my checkpoint-saving code didn\'t know about it yet, and kept writing the full model state dict on every save, frozen 7B base included. Against a RunPod pod with a 50GB persistent volume and no separate network volume, that filled the disk and crashed the run twice before I diagnosed it and fixed checkpointing to save only the adapter and head. Resuming from the last checkpoint meant the crashes cost time rather than the run itself, but the run still took over two days on a rented RTX PRO 6000 (~$138 in RunPod spend) — long enough that I\'m not casually repeating a run at that scale. The other real decision was about data, not architecture: after training the LSTM once, val accuracy plateaued early while train accuracy kept climbing — a clear overfitting signal on the competition\'s own training data alone. Every run after that appends lmarena-ai\'s arena-human-preference-100k dataset (CC-BY-4.0, permitted under the competition\'s External Data rule) onto train.csv, mapping its schema onto mine — including a real gotcha where its "tie" and "tie (bothbad)" are two separate strings that both need to collapse to my single winner_tie label.',
+    approach: 'train.py, evaluate.py, and submit.py never branch on which model is active — a small registry maps a config name to a model-builder function, and that registry is the only place all three variants are named. Adding a fourth variant would mean one new model file and one registry entry, not touching the shared pipeline. The two Hugging Face-backed variants get chat-template-formatted input (real `<|im_start|>`/`<|im_end|>` role tokens), not bare concatenated text — Qwen2.5-Instruct was trained to treat those as turn boundaries, and a hand-picked delimiter tokenizes into meaningless subword fragments it was never trained to notice. The transformer internals inside Qwen2.5 (RoPE, RMSNorm, SwiGLU) are Alibaba\'s, not mine; what I built is the classification head, the LoRA wiring, and the shared data/eval path around them.',
+    features: [
+      'One shared data pipeline, training loop, and eval path across three architectures via a single model-registry seam — 153 tests, 95% coverage, all against synthetic fixtures, no network or GPU needed to run the suite',
+      'Val accuracy on a 16.4K-row held-out split (33% random baseline): 38.6% (LSTM) → 47.9% (Qwen2.5-0.5B, full fine-tune) → 53.0% (Qwen2.5-7B, LoRA) — accuracy climbs cleanly with cost, though none of the three variants has had real hyperparameter tuning yet',
+      'Best-checkpoint criterion is val_loss, not accuracy — which caught a real trap: the LSTM\'s lowest-val_loss checkpoint turned out to be from epoch 0, before the model had learned to predict winner_model_b at all',
+      'arena-human-preference-100k (CC-BY-4.0) appended onto the competition\'s own train.csv after the first LSTM run showed clear overfitting, with its 4-way winner schema (model_a / model_b / tie / tie (bothbad)) mapped onto the competition\'s 3-way one',
+      'LoRA checkpoints save only the adapter + classification head, not the frozen 7B base — a fix made after the opposite behavior filled a RunPod pod\'s 50GB volume and crashed the run twice',
+      'submit.py builds a Kaggle-format submission.csv from any checkpoint, reordering to sample_submission.csv\'s id order and asserting the id sets match exactly rather than trusting row order — but this is a Code Competition requiring a notebook submission, and this repo is plain Python, so nothing has been submitted to the real leaderboard yet',
+    ],
+    images: [
+      {
+        src: '/projects/llm-reward/lstm-confusion-matrix.png',
+        alt: 'LSTM baseline confusion matrix across training epochs, epoch 0 through epoch 4',
+        caption: 'LSTM baseline, epoch 0 vs. epoch 4. At epoch 0 — the checkpoint val_loss actually picked as "best" — the model never once predicts winner_model_b (the whole "b" column is zero); by epoch 4 it predicts all three classes, but val_loss had already started drifting back up.',
+      },
+      {
+        src: '/projects/llm-reward/small-sft-head-accuracy.png',
+        alt: 'Small SFT head train vs. validation accuracy over training steps',
+        caption: 'Qwen2.5-0.5B, full fine-tune. Train accuracy climbs to ~62% while val accuracy plateaus around 48% then dips — overfitting by the second epoch, which is why val_loss (not accuracy) picks the checkpoint.',
+      },
+      {
+        src: '/projects/llm-reward/medium-lora-accuracy.png',
+        alt: 'Medium LoRA train vs. validation accuracy over training steps',
+        caption: 'Qwen2.5-7B, LoRA. The best of the three, and still climbing cleanly, with no overfitting gap yet, when the run was stopped at just over two days on a rented RTX PRO 6000.',
+      },
+    ],
+    links: [
+      { label: 'GitHub', href: 'https://github.com/objones25/llm-classification-tuning' },
+      { label: 'Kaggle competition', href: 'https://www.kaggle.com/competitions/llm-classification-finetuning' },
+    ],
+    hasDemo: false,
+  },
+  {
     slug: 'snake-q-learning',
     title: 'Snake Q-Learning',
     description: 'Tabular Q-learning agent that plays Snake using a hand-designed, rotation-invariant state encoding instead of a neural network. The interesting part isn\'t the RL algorithm, it\'s the encoding.',
