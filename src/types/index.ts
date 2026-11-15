@@ -40,6 +40,20 @@ export interface DataTable {
   detailFields?: DataTableDetailField[]
 }
 
+export interface VideoChapter {
+  label: string
+  timeS: number
+}
+
+export interface ProjectVideo {
+  src: string
+  poster: string
+  caption: string
+  // must be sorted by timeS ascending — the active chapter is the last one
+  // whose timeS <= the video's currentTime
+  chapters: VideoChapter[]
+}
+
 export interface Project {
   slug: string
   title: string
@@ -52,6 +66,7 @@ export interface Project {
   challenge?: string
   approach?: string
   features?: string[]
+  video?: ProjectVideo
   images?: ProjectImage[]
   dataTables?: DataTable[]
   links?: ProjectLink[]
