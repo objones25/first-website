@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
 import { useAuth } from '@clerk/react-router'
 import { motion } from 'framer-motion'
@@ -6,7 +6,7 @@ import { projects } from '@/data/projects'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { useGithubStats } from '@/hooks/useGithubStats'
 import { formatRelativeTime } from '@/lib/formatRelativeTime'
-import type { DataTable } from '@/types'
+import type { DataTable, ProjectVideo } from '@/types'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -132,6 +132,13 @@ export default function ProjectDetail() {
 
         {/* ── Content sections ── */}
         <div className="space-y-20">
+
+          {/* Video */}
+          {project.video && (
+            <Section label="// The Run" delay={0.05}>
+              <ProjectVideoBlock video={project.video} />
+            </Section>
+          )}
 
           {/* Overview */}
           <Section label="// Overview" delay={0.1}>
@@ -278,6 +285,80 @@ function Section({
       <span className="section-label block mb-6">{label}</span>
       {children}
     </motion.div>
+  )
+}
+
+// ── Video block ───────────────────────────────────────────────────────────────
+function formatTimestamp(totalS: number) {
+  const s = Math.floor(totalS)
+  return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
+}
+
+function ProjectVideoBlock({ video }: { video: ProjectVideo }) {
+  const ref = useRef<HTMLVideoElement>(null)
+  const [currentS, setCurrentS] = useState(0)
+
+  let activeIndex = -1
+  video.chapters.forEach((c, i) => { if (c.timeS <= currentS) activeIndex = i })
+
+  function seek(timeS: number) {
+    const el = ref.current
+    if (!el) return
+    const go = () => {
+      el.currentTime = timeS
+      // Autoplay policy can reject play() (NotAllowedError), and a pause or
+      // navigation while play is pending interrupts it (AbortError). In both
+      // the seek still happened. Anything else is a real error.
+      el.play().catch((err: unknown) => {
+        const benign = err instanceof DOMException && (err.name === 'NotAllowedError' || err.name === 'AbortError')
+        if (!benign) throw err
+      })
+    }
+    // With preload="metadata" the duration may not be known yet on first click;
+    // setting currentTime before metadata loads is ignored by some browsers.
+    if (el.readyState === 0) {
+      el.addEventListener('loadedmetadata', go, { once: true })
+      el.load()
+    } else {
+      go()
+    }
+  }
+
+  return (
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_16rem] items-start">
+      <figure>
+        <video
+          ref={ref}
+          src={video.src}
+          poster={video.poster}
+          controls
+          preload="metadata"
+          playsInline
+          onTimeUpdate={e => setCurrentS(e.currentTarget.currentTime)}
+          className="w-full max-h-[75vh] object-contain border border-border bg-black [image-rendering:pixelated]"
+        />
+        <figcaption className="mt-3 mono text-text-muted text-xs leading-relaxed max-w-2xl">
+          {video.caption}
+        </figcaption>
+      </figure>
+
+      <ol className="space-y-1 lg:max-h-[36rem] lg:overflow-y-auto">
+        {video.chapters.map((c, i) => (
+          <li key={c.label}>
+            <button
+              type="button"
+              onClick={() => seek(c.timeS)}
+              className={`mono text-xs text-left w-full flex gap-3 py-1 transition-colors duration-200 hover:text-text ${
+                i === activeIndex ? 'text-text' : 'text-text-muted'
+              }`}
+            >
+              <span className="shrink-0 tabular-nums">{formatTimestamp(c.timeS)} ——</span>
+              <span>{c.label}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+    </div>
   )
 }
 
