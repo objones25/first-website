@@ -306,10 +306,12 @@ function ProjectVideoBlock({ video }: { video: ProjectVideo }) {
     if (!el) return
     const go = () => {
       el.currentTime = timeS
-      // Autoplay policy can reject play(); the seek still happened, and the
-      // user can press play themselves. Anything else is a real error.
+      // Autoplay policy can reject play() (NotAllowedError), and a pause or
+      // navigation while play is pending interrupts it (AbortError). In both
+      // the seek still happened. Anything else is a real error.
       el.play().catch((err: unknown) => {
-        if (!(err instanceof DOMException && err.name === 'NotAllowedError')) throw err
+        const benign = err instanceof DOMException && (err.name === 'NotAllowedError' || err.name === 'AbortError')
+        if (!benign) throw err
       })
     }
     // With preload="metadata" the duration may not be known yet on first click;
