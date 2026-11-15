@@ -103,7 +103,7 @@ export const projects: Project[] = [
     ],
     links: [
       { label: 'GitHub', href: 'https://github.com/objones25/pokemon-red-ppo' },
-      { label: 'PokemonRedExperiments', href: 'https://github.com/PWhiddy/PokemonRedExperiments' },
+      { label: 'Upstream', href: 'https://github.com/PWhiddy/PokemonRedExperiments' },
     ],
     hasDemo: false,
   },

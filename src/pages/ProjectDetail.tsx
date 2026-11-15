@@ -333,7 +333,7 @@ function ProjectVideoBlock({ video }: { video: ProjectVideo }) {
           preload="metadata"
           playsInline
           onTimeUpdate={e => setCurrentS(e.currentTarget.currentTime)}
-          className="w-full border border-border bg-black [image-rendering:pixelated]"
+          className="w-full max-h-[75vh] object-contain border border-border bg-black [image-rendering:pixelated]"
         />
         <figcaption className="mt-3 mono text-text-muted text-xs leading-relaxed max-w-2xl">
           {video.caption}
