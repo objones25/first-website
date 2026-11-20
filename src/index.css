@@ -128,37 +128,4 @@
   .scroll-hide::-webkit-scrollbar {
     display: none;
   }
-
-  /* Marquee */
-  .marquee-track {
-    display: flex;
-    width: max-content;
-    animation: marquee 20s linear infinite;
-  }
-
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-
-  /* Project card hover marquee */
-  .card-marquee {
-    display: flex;
-    width: max-content;
-    animation: marquee 8s linear infinite;
-    animation-play-state: paused;
-  }
-
-  .project-card:hover .card-marquee {
-    animation-play-state: running;
-  }
-
-  .project-card:hover .card-marquee-wrap {
-    opacity: 1;
-  }
-
-  .card-marquee-wrap {
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
 }
