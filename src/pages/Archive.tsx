@@ -35,8 +35,7 @@ export default function Archive() {
           </div>
           <Reveal delay={0.16}>
             <p className="lead text-text-muted max-w-xl">
-              Earlier projects. Most are API integrations and tutorial-scale builds from before I
-              moved to reinforcement learning. Pages and demos still work.
+              Earlier projects.
             </p>
           </Reveal>
         </div>

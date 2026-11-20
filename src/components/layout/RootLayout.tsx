@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
 import { markEntrancePlayed } from '@/lib/entrance'
@@ -15,10 +15,6 @@ export function RootLayout() {
     return () => clearTimeout(timer)
   }, [])
 
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [location.pathname])
-
   return (
     <>
       <Navbar />
@@ -26,6 +22,7 @@ export function RootLayout() {
         <Outlet />
       </main>
       <Footer />
+      <ScrollRestoration />
     </>
   )
 }

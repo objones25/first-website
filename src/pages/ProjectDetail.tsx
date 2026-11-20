@@ -7,9 +7,9 @@ import { Reveal, ClipReveal } from '@/components/motion/Reveal'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
 import { useGithubStats } from '@/hooks/useGithubStats'
 import { formatRelativeTime } from '@/lib/formatRelativeTime'
-import type { DataTable, ProjectVideo } from '@/types'
+import type { DataTable, Project, ProjectVideo } from '@/types'
 
-const statusLabel: Record<string, string> = {
+const statusLabel: Record<Project['status'], string> = {
   active:   'Active',
   stable:   'Stable',
   complete: 'Complete',
@@ -362,7 +362,7 @@ function ProjectVideoBlock({ video }: { video: ProjectVideo }) {
               type="button"
               onClick={() => seek(c.timeS)}
               aria-current={i === activeIndex ? 'true' : undefined}
-              className={`mono inline-flex min-h-11 items-center gap-2 whitespace-nowrap px-3 border border-border lg:w-full lg:border-0 lg:px-0 lg:whitespace-normal lg:text-left transition-colors duration-200 hover:text-text ${
+              className={`mono inline-flex min-h-11 items-center gap-2 whitespace-nowrap px-3 border border-border lg:w-full lg:border-0 lg:px-0 lg:whitespace-normal lg:text-left transition-colors duration-200 hover:text-text focus-visible:-outline-offset-2 ${
                 i === activeIndex ? 'text-accent' : 'text-text-muted'
               }`}
             >
@@ -452,7 +452,7 @@ function DataTableBlock({ table }: { table: DataTable }) {
                               e.stopPropagation()
                               toggle(i)
                             }}
-                            className={`inline-flex min-h-11 min-w-11 items-center justify-center ${isOpen ? 'text-accent' : 'text-text-muted'}`}
+                            className={`inline-flex min-h-11 min-w-11 items-center justify-center focus-visible:-outline-offset-2 ${isOpen ? 'text-accent' : 'text-text-muted'}`}
                           >
                             {isOpen ? '−' : '+'}
                           </button>

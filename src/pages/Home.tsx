@@ -4,16 +4,13 @@ import { activeProjects } from '@/data/projects'
 import { ProjectRow } from '@/components/ProjectRow'
 import { Reveal, ClipReveal } from '@/components/motion/Reveal'
 import { PageTransition } from '@/components/layout/PageTransition'
-import { SITE_TITLE, useDocumentMeta } from '@/hooks/useDocumentMeta'
-
-const DESCRIPTION =
-  "CS master's student at UC Santa Barbara working on reinforcement learning and robot learning. Open to summer 2027 internships."
+import { SITE_DESCRIPTION, SITE_TITLE, useDocumentMeta } from '@/hooks/useDocumentMeta'
 
 const buttonBase =
   'inline-flex min-h-12 items-center justify-center px-5 mono uppercase transition-colors duration-150'
 
 export default function Home() {
-  useDocumentMeta(SITE_TITLE, DESCRIPTION)
+  useDocumentMeta(SITE_TITLE, SITE_DESCRIPTION)
 
   const [featured, ...rest] = activeProjects
 
@@ -29,7 +26,6 @@ export default function Home() {
           <p className="mono text-text-muted mt-6 flex flex-wrap items-center gap-x-3 gap-y-1">
             <span className="size-1.5 rounded-full bg-accent" />
             <span>{profile.availability}</span>
-            <span>·</span>
             <span>{profile.location}</span>
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

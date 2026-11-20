@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { ClipReveal, Reveal } from '@/components/motion/Reveal'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
@@ -51,7 +52,7 @@ export default function About() {
                         className="py-3 flex flex-col gap-1 sm:grid sm:grid-cols-[8rem_1fr_auto] sm:gap-4 sm:items-baseline"
                       >
                         <span className="mono text-text">{course.code}</span>
-                        <span className="text-text-muted">{course.title !== '' ? course.title : null}</span>
+                        <span className="text-text-muted">{course.title}</span>
                         <span>
                           {course.role === 'TA' && (
                             <span className="mono inline-block border border-accent px-2 py-0.5">TA</span>
@@ -86,7 +87,7 @@ export default function About() {
                 </a>
               </dd>
               {profile.links.map(link => (
-                <div key={link.label} className="contents">
+                <Fragment key={link.label}>
                   <dt className="mono text-text-muted uppercase">{link.label}</dt>
                   <dd className="text-text break-words">
                     <a
@@ -98,7 +99,7 @@ export default function About() {
                       {readableUrl(link.href)}
                     </a>
                   </dd>
-                </div>
+                </Fragment>
               ))}
               {profile.cvHref && (
                 <>
@@ -110,7 +111,7 @@ export default function About() {
                       rel="noopener noreferrer"
                       className="underline underline-offset-4 inline-flex min-h-11 items-center"
                     >
-                      Download
+                      {readableUrl(profile.cvHref)}
                     </a>
                   </dd>
                 </>

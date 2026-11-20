@@ -43,7 +43,7 @@ export function ClipReveal({ children, as = 'span', delay = 0, className }: Clip
   const Tag = CLIP_TAGS[as]
 
   return (
-    <span className="clip block">
+    <div className="clip">
       <Tag
         className={className ? `${className} block` : 'block'}
         initial={play ? { y: '105%' } : false}
@@ -52,6 +52,6 @@ export function ClipReveal({ children, as = 'span', delay = 0, className }: Clip
       >
         {children}
       </Tag>
-    </span>
+    </div>
   )
 }
