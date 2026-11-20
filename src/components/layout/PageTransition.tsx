@@ -1,15 +1,18 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { hasEntrancePlayed } from '@/lib/entrance'
 
 interface Props {
   children: React.ReactNode
 }
 
 export function PageTransition({ children }: Props) {
+  const [play] = useState(() => !hasEntrancePlayed())
+
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1, transition: { duration: 0.3, ease: 'easeOut' } }}
-      exit={{ opacity: 0, transition: { duration: 0.15, ease: 'easeIn' } }}
+      initial={play ? { opacity: 0 } : false}
+      animate={{ opacity: 1, transition: { duration: 0.2, ease: 'easeOut' } }}
     >
       {children}
     </motion.div>

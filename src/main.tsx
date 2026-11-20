@@ -1,5 +1,6 @@
 import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
+import { MotionConfig } from 'framer-motion'
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom'
 import { ClerkProvider, AuthenticateWithRedirectCallback } from '@clerk/react-router'
 import { RootLayout } from './components/layout/RootLayout'
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
           { path: 'sign-in/sso-callback', element: <AuthenticateWithRedirectCallback /> },
           { path: 'sign-up', element: <Suspense><SignUpPage /></Suspense> },
           { path: 'sign-up/sso-callback', element: <AuthenticateWithRedirectCallback /> },
+          { path: '*', element: <NotFound /> },
         ],
       },
     ],
@@ -66,6 +68,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <MotionConfig reducedMotion="user">
+      <RouterProvider router={router} />
+    </MotionConfig>
   </StrictMode>
 )
