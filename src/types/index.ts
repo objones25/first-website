@@ -52,15 +52,26 @@ export interface ProjectVideo {
   // must be sorted by timeS ascending — the active chapter is the last one
   // whose timeS <= the video's currentTime
   chapters: VideoChapter[]
+  speedLabel?: string
+}
+
+export interface ProjectResult {
+  value: string
+  label: string
 }
 
 export interface Project {
   slug: string
   title: string
+  // <= 140 characters; shown on cards and under the page title
+  tagline?: string
   description: string
   year: string
+  period?: string
   tags: string[]
-  status: 'active' | 'stable' | 'complete' | 'planned'
+  status: 'active' | 'stable' | 'complete' | 'planned' | 'paused'
+  archived?: boolean
+  results?: ProjectResult[]
   // Detail page fields — all optional until content is added
   overview?: string
   challenge?: string

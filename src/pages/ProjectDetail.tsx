@@ -15,6 +15,7 @@ const statusLabel: Record<string, string> = {
   stable:   'Stable',
   complete: 'Complete',
   planned:  'Planned',
+  paused:   'Paused',
 }
 
 export default function ProjectDetail() {

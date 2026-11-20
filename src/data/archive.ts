@@ -8,34 +8,6 @@ export interface ArchiveProject {
 
 export const archiveProjects: ArchiveProject[] = [
   {
-    title: 'Browserbase Agent',
-    description: 'Cloudflare Worker exposing browser automation as a REST API, powered by Stagehand and Cloudflare Browser Rendering.',
-    year: '2025',
-    tags: ['TypeScript', 'Cloudflare', 'Agents'],
-    href: 'https://github.com/objones25/browserbase-agent',
-  },
-  {
-    title: 'Gemini Chat Agent',
-    description: 'AI chat agent on Cloudflare Workers with SSE streaming, code execution, thinking mode, and KV-persisted chat history. Built as a precursor to the Gemini Audio Agent.',
-    year: '2025',
-    tags: ['TypeScript', 'Cloudflare', 'Gemini'],
-    href: 'https://github.com/objones25/gemini-chat-agent',
-  },
-  {
-    title: 'YouTube Transcript MCP Server',
-    description: 'Serverless MCP server on Cloudflare Workers for extracting YouTube transcripts.',
-    year: '2025',
-    tags: ['TypeScript', 'Cloudflare', 'MCP'],
-    href: 'https://github.com/objones25/remote-cloudflare-youtube-transcript-mcp-server',
-  },
-  {
-    title: 'MCP Research Tool',
-    description: 'AI research orchestration service on Cloudflare Workers that fans out queries across 10+ tools (Brave, Tavily, GitHub, arXiv, etc.) and synthesizes cited results.',
-    year: '2025',
-    tags: ['TypeScript', 'Cloudflare', 'MCP'],
-    href: 'https://github.com/objones25/mcp-research-tool',
-  },
-  {
     title: 'Shorelark',
     description: 'React frontend for Patryk Wychowaniec\'s evolution simulation — neural networks, genetic algorithms, and WebAssembly.',
     year: '2025',
@@ -62,33 +34,5 @@ export const archiveProjects: ArchiveProject[] = [
     year: '2025',
     tags: ['Python', 'NumPy', 'ML'],
     href: 'https://github.com/objones25/neural-network-from-scratch',
-  },
-  {
-    title: 'Battleship',
-    description: 'Real-time multiplayer Battleship with React, Socket.io, and JWT authentication via HTTP-only cookies.',
-    year: '2025',
-    tags: ['TypeScript', 'React', 'Socket.io'],
-    href: 'https://github.com/objones25/battleship-game',
-  },
-  {
-    title: 'Makemore',
-    description: 'Character-level name generation model using a WaveNet-style hierarchical MLP trained on 32k names.',
-    year: '2026',
-    tags: ['Python', 'PyTorch', 'ML'],
-    href: 'https://github.com/objones25/makemore',
-  },
-  {
-    title: 'Chess',
-    description: 'Command-line chess in Ruby with full rule enforcement, check/checkmate/stalemate detection, and save/load. Capstone project for The Odin Project Ruby curriculum.',
-    year: '2025',
-    tags: ['Ruby', 'OOP', 'RSpec'],
-    href: 'https://github.com/objones25/chess',
-  },
-  {
-    title: 'Weather API',
-    description: 'Async FastAPI wrapper around the Visual Crossing weather API with Redis caching, rate limiting, and SQLite request history.',
-    year: '2026',
-    tags: ['Python', 'FastAPI', 'Redis'],
-    href: 'https://github.com/objones25/weather-api',
   },
 ]
