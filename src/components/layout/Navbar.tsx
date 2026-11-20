@@ -16,25 +16,34 @@ export function Navbar() {
         scrolled && 'border-b border-border'
       )}
     >
-      <div className="max-w-6xl mx-auto px-6 h-12 flex items-center justify-between">
-        <Link to="/" className="mono text-text-muted hover:text-text transition-colors duration-200 uppercase tracking-wider">
+      <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+        <Link
+          to="/"
+          className="inline-flex min-h-11 items-center px-1 mono text-text-muted hover:text-text transition-colors duration-200 uppercase tracking-wider"
+        >
           OJ
         </Link>
 
-        <div className="flex items-center gap-8">
-          <nav className="flex items-center gap-8">
-            {navLinks.map(({ label, href }) => (
-              <Link
-                key={href}
-                to={href}
-                className={cn(
-                  'mono uppercase tracking-wider transition-colors duration-200',
-                  pathname === href ? 'text-text' : 'text-text-muted hover:text-text'
-                )}
-              >
-                {label}
-              </Link>
-            ))}
+        <div className="flex items-center gap-3 sm:gap-8">
+          <nav aria-label="Primary" className="flex items-center gap-3 sm:gap-8">
+            {navLinks.map(({ label, href }) => {
+              const active = pathname === href || pathname.startsWith(href + '/')
+              return (
+                <Link
+                  key={href}
+                  to={href}
+                  aria-current={active ? 'page' : undefined}
+                  className={cn(
+                    'inline-flex min-h-11 items-center px-1 mono uppercase tracking-wider transition-colors duration-200',
+                    active
+                      ? 'text-text underline decoration-accent decoration-2 underline-offset-8'
+                      : 'text-text-muted hover:text-text'
+                  )}
+                >
+                  {label}
+                </Link>
+              )
+            })}
           </nav>
 
           {isSignedIn ? (
@@ -48,7 +57,7 @@ export function Navbar() {
           ) : (
             <Link
               to="/sign-in"
-              className="mono text-text-muted hover:text-text transition-colors duration-200"
+              className="inline-flex min-h-11 items-center px-1 mono text-text-muted hover:text-text transition-colors duration-200"
             >
               [ Sign In ]
             </Link>
