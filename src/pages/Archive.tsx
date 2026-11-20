@@ -1,119 +1,117 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { archiveProjects } from '@/data/archive'
+import { archivedProjects } from '@/data/projects'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { GithubStatsBadge } from '@/components/GithubStatsBadge'
+import { ProjectRow } from '@/components/ProjectRow'
+import { ClipReveal, Reveal } from '@/components/motion/Reveal'
+import { useDocumentMeta } from '@/hooks/useDocumentMeta'
+
+const REPO_ROW_CLASS =
+  'block py-6 -mx-4 px-4 md:grid md:grid-cols-[3rem_1fr_auto] md:gap-6'
+const REPO_LINK_CLASS = `${REPO_ROW_CLASS} hover:bg-surface transition-colors duration-150`
 
 export default function Archive() {
+  useDocumentMeta('Archive', 'Earlier projects.')
+
   return (
     <PageTransition>
       <div className="max-w-6xl mx-auto px-6 pt-20 pb-32">
+        <Link
+          to="/projects"
+          className="mono inline-flex min-h-11 items-center text-text-muted hover:text-text transition-colors duration-150"
+        >
+          ← All Projects
+        </Link>
 
-        {/* Header */}
-        <div className="mb-6">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Link
-              to="/projects"
-              className="mono text-text-muted hover:text-text transition-colors duration-200"
-            >
-              ← All Projects
-            </Link>
-          </motion.div>
-        </div>
-
-        <div className="mb-16">
-          <span className="clip block mb-6">
-            <motion.span
-              initial={{ y: '105%' }}
-              animate={{ y: '0%' }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="label block"
-            >
-              Archive
-            </motion.span>
-          </span>
-          <span className="clip block mb-6">
-            <motion.h1
-              initial={{ y: '105%' }}
-              animate={{ y: '0%' }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
-              className="heading-lg"
-            >
+        <div className="mt-6 mb-16">
+          <div className="mb-6">
+            <ClipReveal className="section-label">Archive</ClipReveal>
+          </div>
+          <div className="mb-6">
+            <ClipReveal as="h1" delay={0.08} className="heading-lg">
               Older Work
-            </motion.h1>
-          </span>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-text-muted max-w-xl leading-relaxed"
-          >
-            Older projects I still find interesting but don't need on the main page.
-          </motion.p>
+            </ClipReveal>
+          </div>
+          <Reveal delay={0.16}>
+            <p className="lead text-text-muted max-w-xl">
+              Earlier projects. Most are API integrations and tutorial-scale builds from before I
+              moved to reinforcement learning. Pages and demos still work.
+            </p>
+          </Reveal>
         </div>
 
-        {/* Archive List */}
-        <div className="divide-y divide-border">
-          {archiveProjects.map((project, i) => {
-            const inner = (
-              <>
-                <span className="label pt-0.5">{String(i + 1).padStart(3, '0')}</span>
+        <Reveal delay={0.1}>
+          <h2 className="section-label mb-4">// Project pages</h2>
+          <div className="divide-y divide-border mb-16">
+            {archivedProjects.map((project, i) => (
+              <ProjectRow key={project.slug} project={project} index={i + 1} showDemoMarker />
+            ))}
+          </div>
 
-                <div>
-                  <div className="flex items-center gap-3 mb-1.5">
-                    <span className="text-base font-medium">{project.title}</span>
-                    <span className="text-xs text-text-muted">{project.year}</span>
+          <h2 className="section-label mb-4">// Repositories</h2>
+          <div className="divide-y divide-border">
+            {archiveProjects.map((project, i) => {
+              const inner = (
+                <>
+                  <div className="mono text-text-muted mb-2 md:mb-0 md:pt-1">
+                    <span>{String(i + 1).padStart(3, '0')}</span>
+                    <span className="md:hidden"> · {project.year}</span>
                   </div>
-                  <p className="text-sm text-text-muted leading-relaxed mb-1.5">
-                    {project.description}
-                  </p>
-                  <GithubStatsBadge githubUrl={project.href} />
-                </div>
 
-                <div className="flex flex-wrap gap-1.5 justify-end pt-0.5">
-                  {project.tags.map(tag => (
-                    <span
-                      key={tag}
-                      className="text-xs text-text-muted border border-border px-2 py-0.5"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </>
-            )
-
-            return (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.1 + i * 0.04 }}
-              >
-                {project.href ? (
-                  <a
-                    href={project.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="grid grid-cols-[3rem_1fr_auto] gap-6 py-6 items-start hover:bg-surface transition-colors duration-200 -mx-4 px-4"
-                  >
-                    {inner}
-                  </a>
-                ) : (
-                  <div className="grid grid-cols-[3rem_1fr_auto] gap-6 py-6 items-start">
-                    {inner}
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <span className="text-lg font-medium break-words min-w-0">
+                        {project.title}
+                      </span>
+                      <span className="mono text-text-muted hidden md:inline">{project.year}</span>
+                    </div>
+                    <p className="text-sm text-text-muted leading-relaxed mt-1.5">
+                      {project.description}
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-1.5 md:hidden">
+                      <RepoTags tags={project.tags} />
+                    </div>
+                    <GithubStatsBadge githubUrl={project.href} />
                   </div>
-                )}
-              </motion.div>
-            )
-          })}
-        </div>
 
+                  <div className="hidden md:flex md:flex-wrap md:justify-end md:content-start md:gap-1.5 md:max-w-56">
+                    <RepoTags tags={project.tags} />
+                  </div>
+                </>
+              )
+
+              return project.href ? (
+                <a
+                  key={project.title}
+                  href={project.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={REPO_LINK_CLASS}
+                >
+                  {inner}
+                </a>
+              ) : (
+                <div key={project.title} className={REPO_ROW_CLASS}>
+                  {inner}
+                </div>
+              )
+            })}
+          </div>
+        </Reveal>
       </div>
     </PageTransition>
+  )
+}
+
+function RepoTags({ tags }: { tags: string[] }) {
+  return (
+    <>
+      {tags.map(tag => (
+        <span key={tag} className="mono text-text-muted border border-border px-2 py-0.5">
+          {tag}
+        </span>
+      ))}
+    </>
   )
 }
