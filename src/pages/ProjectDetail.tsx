@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useId, useRef, useState } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
 import { useAuth } from '@clerk/react-router'
 import { projects, activeProjects, archivedProjects } from '@/data/projects'
@@ -89,24 +89,24 @@ export default function ProjectDetail() {
 
           {/* Metadata row */}
           <Reveal delay={0.24} className="flex flex-wrap items-center gap-x-6 gap-y-3">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="section-label">Year</span>
               <span className="mono text-text-muted">——</span>
-              <span className="mono text-text-muted">{project.year}</span>
+              <span className="mono min-w-0 break-words text-text-muted">{project.year}</span>
             </div>
 
             {project.period && (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="section-label">Period</span>
                 <span className="mono text-text-muted">——</span>
-                <span className="mono text-text-muted">{project.period}</span>
+                <span className="mono min-w-0 break-words text-text-muted">{project.period}</span>
               </div>
             )}
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="section-label">Status</span>
               <span className="mono text-text-muted">——</span>
-              <span className="flex items-center gap-2 mono text-text-muted">
+              <span className="flex min-w-0 items-center gap-2 break-words mono text-text-muted">
                 <span
                   aria-hidden="true"
                   className={`inline-block size-2 rounded-full ${
@@ -260,17 +260,17 @@ export default function ProjectDetail() {
               <span className="mono text-text-muted group-hover:text-text transition-colors duration-200">← Prev</span>
               <span className="mono min-w-0 break-words text-text-muted group-hover:text-text transition-colors duration-200 uppercase tracking-wider">{prev.title}</span>
             </Link>
-          ) : <div />}
+          ) : null}
 
           {next ? (
             <Link
               to={`/projects/${next.slug}`}
-              className="group flex min-h-11 min-w-0 flex-col gap-1 sm:items-end sm:text-right"
+              className="group flex min-h-11 min-w-0 flex-col gap-1 sm:ml-auto sm:items-end sm:text-right"
             >
               <span className="mono text-text-muted group-hover:text-text transition-colors duration-200">Next →</span>
               <span className="mono min-w-0 break-words text-text-muted group-hover:text-text transition-colors duration-200 uppercase tracking-wider">{next.title}</span>
             </Link>
-          ) : <div />}
+          ) : null}
         </div>
 
       </div>
@@ -381,6 +381,7 @@ function DataTableBlock({ table }: { table: DataTable }) {
   const [rows, setRows] = useState(table.rows ?? null)
   const [expanded, setExpanded] = useState<Set<number>>(new Set())
   const hasDetail = !!table.detailFields?.length
+  const tableId = useId()
 
   useEffect(() => {
     // Each DataTableBlock is keyed by table.title in the parent, so this
@@ -433,23 +434,29 @@ function DataTableBlock({ table }: { table: DataTable }) {
             <tbody className="divide-y divide-border">
               {rows.map((row, i) => {
                 const isOpen = expanded.has(i)
+                const detailId = `${tableId}-detail-${i}`
                 return (
                   <Fragment key={i}>
                     <tr
                       onClick={hasDetail ? () => toggle(i) : undefined}
-                      onKeyDown={hasDetail ? e => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
-                          toggle(i)
-                        }
-                      } : undefined}
-                      tabIndex={hasDetail ? 0 : undefined}
-                      role={hasDetail ? 'button' : undefined}
-                      aria-expanded={hasDetail ? isOpen : undefined}
                       className={`hover:bg-surface transition-colors ${hasDetail ? 'cursor-pointer' : ''}`}
                     >
                       {hasDetail && (
-                        <td className={`px-2 align-top pt-3 ${isOpen ? 'text-accent' : 'text-text-muted'}`}>{isOpen ? '−' : '+'}</td>
+                        <td className="px-0 align-top">
+                          <button
+                            type="button"
+                            aria-expanded={isOpen}
+                            aria-controls={detailId}
+                            aria-label={isOpen ? 'Hide details' : 'Show details'}
+                            onClick={e => {
+                              e.stopPropagation()
+                              toggle(i)
+                            }}
+                            className={`inline-flex min-h-11 min-w-11 items-center justify-center ${isOpen ? 'text-accent' : 'text-text-muted'}`}
+                          >
+                            {isOpen ? '−' : '+'}
+                          </button>
+                        </td>
                       )}
                       {table.columns.map(col => (
                         <td
@@ -463,7 +470,7 @@ function DataTableBlock({ table }: { table: DataTable }) {
                       ))}
                     </tr>
                     {hasDetail && isOpen && (
-                      <tr>
+                      <tr id={detailId}>
                         <td colSpan={table.columns.length + 1} className="px-4 py-4 bg-background space-y-4">
                           {table.detailFields!.map(field => (
                             <div key={field.key}>
