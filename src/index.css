@@ -6,12 +6,14 @@
   --color-surface-raised: #1C1C1C;
   --color-text: #E8E8E4;
   --color-text-muted: #A8A8A4;
-  --color-text-dim: #2A2A2A;
-  --color-border: rgba(255, 255, 255, 0.07);
-  --color-border-strong: rgba(255, 255, 255, 0.12);
+  --color-text-dim: #7B7B78;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+  --color-accent: #FFB200;
+  --color-accent-hover: #FFC64D;
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'Space Mono', ui-monospace, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 }
 
 @layer base {
@@ -23,6 +25,7 @@
 
   html {
     -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
   }
 
   body {
@@ -37,46 +40,75 @@
   }
 
   ::selection {
-    background: var(--color-text);
+    background: var(--color-accent);
     color: var(--color-background);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1, h2, h3, .display, .heading-lg {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
 @layer utilities {
   /* Display type */
   .display {
-    font-size: clamp(3.5rem, 8vw, 7rem);
-    font-weight: 300;
-    letter-spacing: -0.03em;
-    line-height: 0.95;
+    font-size: clamp(2.5rem, 1.2rem + 5.5vw, 5.5rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1;
     font-family: var(--font-sans);
   }
 
   .heading-lg {
-    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-    font-weight: 300;
+    font-size: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
+    font-weight: 500;
     letter-spacing: -0.02em;
     line-height: 1.1;
+  }
+
+  .lead {
+    font-size: clamp(1.125rem, 1rem + 0.6vw, 1.375rem);
+    line-height: 1.5;
+    color: var(--color-text-muted);
   }
 
   /* Monospace / terminal style */
   .mono {
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.06em;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums slashed-zero;
   }
 
   .mono-lg {
     font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    letter-spacing: 0.04em;
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
   }
 
   /* Section label: // LABEL */
   .section-label {
     font-family: var(--font-mono);
-    font-size: 0.625rem;
-    letter-spacing: 0.12em;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-text-muted);
   }
