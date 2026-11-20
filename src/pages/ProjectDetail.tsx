@@ -1,14 +1,13 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
 import { useAuth } from '@clerk/react-router'
-import { motion } from 'framer-motion'
-import { projects } from '@/data/projects'
+import { projects, activeProjects, archivedProjects } from '@/data/projects'
 import { PageTransition } from '@/components/layout/PageTransition'
+import { Reveal, ClipReveal } from '@/components/motion/Reveal'
+import { useDocumentMeta } from '@/hooks/useDocumentMeta'
 import { useGithubStats } from '@/hooks/useGithubStats'
 import { formatRelativeTime } from '@/lib/formatRelativeTime'
 import type { DataTable, ProjectVideo } from '@/types'
-
-const ease = [0.16, 1, 0.3, 1] as const
 
 const statusLabel: Record<string, string> = {
   active:   'Active',
@@ -21,74 +20,62 @@ const statusLabel: Record<string, string> = {
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>()
   const { isSignedIn } = useAuth()
-  const index = projects.findIndex(p => p.slug === slug)
-  const project = projects[index]
+  const project = projects.find(p => p.slug === slug)
+
+  // Hooks run before the early return, so pass fallbacks while project is undefined.
+  useDocumentMeta(project?.title ?? 'Project', project?.tagline ?? project?.description)
 
   if (!project) return <Navigate to="/projects" replace />
 
-  const prev = projects[index - 1]
-  const next = projects[index + 1]
+  const group = project.archived ? archivedProjects : activeProjects
+  const groupIndex = group.findIndex(p => p.slug === project.slug)
+  const prev = group[groupIndex - 1]
+  const next = group[groupIndex + 1]
+  const indexLabel = project.archived
+    ? '// Archive'
+    : `// ${String(groupIndex + 1).padStart(3, '0')}`
 
   return (
     <PageTransition>
-      <div className="max-w-6xl mx-auto px-6 pt-16 pb-32">
+      <div className="max-w-6xl mx-auto px-6 pt-10 md:pt-16 pb-24 md:pb-32">
 
         {/* ── Back nav ── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          className="mb-16"
-        >
+        <Reveal className="mb-8 md:mb-16">
           <Link
-            to="/projects"
-            className="mono text-text-muted hover:text-text transition-colors duration-200"
+            to={project.archived ? '/archive' : '/projects'}
+            className="mono inline-flex min-h-11 items-center text-text-muted hover:text-text transition-colors duration-200"
           >
-            ← All Projects
+            {project.archived ? '← Archive' : '← All Projects'}
           </Link>
-        </motion.div>
+        </Reveal>
 
         {/* ── Header ── */}
-        <div className="mb-16 border-b border-border pb-12">
-          <div className="flex items-start justify-between gap-8 mb-8">
-            <div>
-              <span className="clip block mb-4">
-                <motion.span
-                  initial={{ y: '105%' }}
-                  animate={{ y: '0%' }}
-                  transition={{ duration: 0.9, ease }}
-                  className="section-label block"
-                >
-                  // {String(index + 1).padStart(3, '0')} ——
-                </motion.span>
-              </span>
-              <span className="clip block">
-                <motion.h1
-                  initial={{ y: '105%' }}
-                  animate={{ y: '0%' }}
-                  transition={{ duration: 0.9, ease, delay: 0.06 }}
-                  className="display pb-[0.3em]"
-                >
-                  {project.title}
-                </motion.h1>
-              </span>
+        <div className="mb-12 md:mb-16 border-b border-border pb-10 md:pb-12">
+          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between md:gap-8 mb-8">
+            <div className="min-w-0">
+              <ClipReveal as="span" className="section-label mb-4">
+                {indexLabel}
+              </ClipReveal>
+              <ClipReveal as="h1" delay={0.06} className="display break-words pb-[0.15em]">
+                {project.title}
+              </ClipReveal>
+              {project.tagline && (
+                <Reveal delay={0.12}>
+                  <p className="lead mt-4 max-w-2xl">{project.tagline}</p>
+                </Reveal>
+              )}
             </div>
 
             {/* Links */}
             {project.links && project.links.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="flex flex-col gap-2 shrink-0 pt-2"
-              >
+              <Reveal delay={0.18} className="flex flex-col items-start gap-1 md:shrink-0 md:pt-2">
                 {project.links.map(link => (
                   <a
                     key={link.href}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mono text-text-muted hover:text-text transition-colors duration-200 uppercase tracking-wider"
+                    className="mono inline-flex min-h-11 items-center text-text-muted hover:text-text transition-colors duration-200 uppercase tracking-wider"
                   >
                     [ {link.label} ↗ ]
                   </a>
@@ -96,107 +83,132 @@ export default function ProjectDetail() {
                 <GithubStatsFull
                   githubUrl={project.links.find(l => l.label === 'GitHub')?.href}
                 />
-              </motion.div>
+              </Reveal>
             )}
           </div>
 
           {/* Metadata row */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-wrap items-center gap-6"
-          >
+          <Reveal delay={0.24} className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <div className="flex items-center gap-2">
               <span className="section-label">Year</span>
               <span className="mono text-text-muted">——</span>
               <span className="mono text-text-muted">{project.year}</span>
             </div>
 
+            {project.period && (
+              <div className="flex items-center gap-2">
+                <span className="section-label">Period</span>
+                <span className="mono text-text-muted">——</span>
+                <span className="mono text-text-muted">{project.period}</span>
+              </div>
+            )}
+
             <div className="flex items-center gap-2">
               <span className="section-label">Status</span>
               <span className="mono text-text-muted">——</span>
-              <span className="mono text-text-muted">{statusLabel[project.status]}</span>
+              <span className="flex items-center gap-2 mono text-text-muted">
+                <span
+                  aria-hidden="true"
+                  className={`inline-block size-2 rounded-full ${
+                    project.status === 'active' ? 'bg-accent' : 'bg-text-muted'
+                  }`}
+                />
+                {statusLabel[project.status]}
+              </span>
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
               <span className="section-label">Stack</span>
               <span className="mono text-text-muted">——</span>
               {project.tags.map(tag => (
-                <span key={tag} className="mono text-text-muted border border-border px-1.5 py-0.5">
+                <span key={tag} className="mono text-text-muted border border-border px-1.5 py-0.5 break-words">
                   {tag}
                 </span>
               ))}
             </div>
-          </motion.div>
+          </Reveal>
         </div>
 
+        {/* ── Results strip ── */}
+        {project.results && project.results.length > 0 && (
+          <dl className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12 md:mb-16">
+            {project.results.map(r => (
+              <div key={r.label} className="flex flex-col-reverse">
+                <dt className="mono text-text-muted mt-1">{r.label}</dt>
+                <dd className="text-3xl font-medium tracking-tight break-words">{r.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
         {/* ── Content sections ── */}
-        <div className="space-y-20">
+        <div className="space-y-16 md:space-y-20">
 
           {/* Video */}
           {project.video && (
-            <Section label="// The Run" delay={0.05}>
+            <Section label="// The Run">
               <ProjectVideoBlock video={project.video} />
             </Section>
           )}
 
-          {/* Overview */}
-          <Section label="// Overview" delay={0.1}>
-            {project.overview
-              ? <p className="text-text-muted leading-relaxed max-w-2xl">{project.overview}</p>
-              : <Placeholder />}
-          </Section>
+          {project.overview && (
+            <Section label="// Overview">
+              <p className="text-text-muted leading-relaxed max-w-2xl">{project.overview}</p>
+            </Section>
+          )}
 
-          {/* Challenge */}
-          <Section label="// The Challenge" delay={0.15}>
-            {project.challenge
-              ? <p className="text-text-muted leading-relaxed max-w-2xl">{project.challenge}</p>
-              : <Placeholder />}
-          </Section>
+          {project.challenge && (
+            <Section label="// The Challenge">
+              <p className="text-text-muted leading-relaxed max-w-2xl">{project.challenge}</p>
+            </Section>
+          )}
 
-          {/* Approach */}
-          <Section label="// The Approach" delay={0.2}>
-            {project.approach
-              ? <p className="text-text-muted leading-relaxed max-w-2xl">{project.approach}</p>
-              : <Placeholder />}
-          </Section>
+          {project.approach && (
+            <Section label="// The Approach">
+              <p className="text-text-muted leading-relaxed max-w-2xl">{project.approach}</p>
+            </Section>
+          )}
 
-          {/* Key Features */}
-          <Section label="// Key Features" delay={0.25}>
-            {project.features && project.features.length > 0 ? (
+          {project.features && project.features.length > 0 && (
+            <Section label="// Key Features">
               <ul className="space-y-3 max-w-2xl">
                 {project.features.map((f, i) => (
                   <li key={i} className="flex items-start gap-4">
                     <span className="mono text-text-muted shrink-0">
                       {String(i + 1).padStart(2, '0')} ——
                     </span>
-                    <span className="text-text-muted leading-relaxed">{f}</span>
+                    <span className="min-w-0 text-text-muted leading-relaxed">{f}</span>
                   </li>
                 ))}
               </ul>
-            ) : (
-              <Placeholder />
-            )}
-          </Section>
+            </Section>
+          )}
 
           {/* Visual Evidence */}
           {project.images && project.images.length > 0 && (
-            <Section label="// Evidence" delay={0.27}>
+            <Section label="// Evidence">
               <div className="space-y-10 max-w-2xl">
                 {project.images.map((img, i) => (
                   <figure key={img.src}>
-                    <img
-                      src={img.src}
-                      alt={img.alt}
-                      loading="lazy"
-                      className="w-full border border-border"
-                    />
+                    <a
+                      href={img.src}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Open full-size figure: ${img.alt}`}
+                      className="block"
+                    >
+                      <img
+                        src={img.src}
+                        alt={img.alt}
+                        loading="lazy"
+                        className="w-full border border-border"
+                      />
+                    </a>
                     <figcaption className="mt-3 flex items-start gap-4">
                       <span className="mono text-text-muted shrink-0">
                         {String(i + 1).padStart(2, '0')} ——
                       </span>
-                      <span className="mono text-text-muted text-xs leading-relaxed">
+                      <span className="min-w-0 text-sm text-text-muted leading-relaxed">
                         {img.caption}
                       </span>
                     </figcaption>
@@ -208,7 +220,7 @@ export default function ProjectDetail() {
 
           {/* Data */}
           {project.dataTables && project.dataTables.length > 0 && (
-            <Section label="// Data" delay={0.28}>
+            <Section label="// Data">
               <div className="space-y-12">
                 {project.dataTables.map((table) => (
                   <DataTableBlock key={table.title} table={table} />
@@ -219,17 +231,17 @@ export default function ProjectDetail() {
 
           {/* Live Demo CTA */}
           {project.hasDemo && (
-            <Section label="// Live Demo" delay={0.3}>
+            <Section label="// Live Demo">
               <div className="flex flex-col gap-3">
                 <Link
                   to={`/projects/${project.slug}/demo`}
-                  className="mono border border-border px-4 py-2 hover:border-border-strong transition-colors duration-200 inline-block w-fit"
+                  className="mono inline-flex min-h-11 items-center border border-border px-4 hover:border-border-strong transition-colors duration-200 w-fit"
                 >
                   [ Launch Demo ] →
                 </Link>
                 {!isSignedIn && (
-                  <p className="mono text-text-muted text-xs">
-                    Sign in required — free account, no card needed.
+                  <p className="mono text-text-muted">
+                    Sign in with GitHub required.
                   </p>
                 )}
               </div>
@@ -239,24 +251,24 @@ export default function ProjectDetail() {
         </div>
 
         {/* ── Prev / Next navigation ── */}
-        <div className="mt-32 pt-8 border-t border-border flex items-center justify-between">
+        <div className="mt-24 md:mt-32 pt-8 border-t border-border flex flex-col gap-4 sm:flex-row sm:justify-between">
           {prev ? (
             <Link
               to={`/projects/${prev.slug}`}
-              className="group flex flex-col gap-1"
+              className="group flex min-h-11 min-w-0 flex-col gap-1"
             >
               <span className="mono text-text-muted group-hover:text-text transition-colors duration-200">← Prev</span>
-              <span className="mono text-text-muted group-hover:text-text transition-colors duration-200 uppercase tracking-wider">{prev.title}</span>
+              <span className="mono min-w-0 break-words text-text-muted group-hover:text-text transition-colors duration-200 uppercase tracking-wider">{prev.title}</span>
             </Link>
           ) : <div />}
 
           {next ? (
             <Link
               to={`/projects/${next.slug}`}
-              className="group flex flex-col items-end gap-1"
+              className="group flex min-h-11 min-w-0 flex-col gap-1 sm:items-end sm:text-right"
             >
               <span className="mono text-text-muted group-hover:text-text transition-colors duration-200">Next →</span>
-              <span className="mono text-text-muted group-hover:text-text transition-colors duration-200 uppercase tracking-wider">{next.title}</span>
+              <span className="mono min-w-0 break-words text-text-muted group-hover:text-text transition-colors duration-200 uppercase tracking-wider">{next.title}</span>
             </Link>
           ) : <div />}
         </div>
@@ -267,25 +279,12 @@ export default function ProjectDetail() {
 }
 
 // ── Section wrapper ───────────────────────────────────────────────────────────
-function Section({
-  label,
-  delay,
-  children,
-}: {
-  label: string
-  delay: number
-  children: React.ReactNode
-}) {
+function Section({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.5, delay, ease: 'easeOut' }}
-    >
-      <span className="section-label block mb-6">{label}</span>
+    <Reveal inView>
+      <h2 className="section-label mb-6">{label}</h2>
       {children}
-    </motion.div>
+    </Reveal>
   )
 }
 
@@ -326,31 +325,45 @@ function ProjectVideoBlock({ video }: { video: ProjectVideo }) {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_16rem] items-start">
-      <figure>
-        <video
-          ref={ref}
-          src={video.src}
-          poster={video.poster}
-          controls
-          preload="metadata"
-          playsInline
-          onTimeUpdate={e => setCurrentS(e.currentTarget.currentTime)}
-          className="w-full max-h-[75vh] object-contain border border-border bg-black [image-rendering:pixelated]"
-        />
-        <figcaption className="mt-3 mono text-text-muted text-xs leading-relaxed max-w-2xl">
+    <div className="grid min-w-0 gap-6 lg:gap-8 lg:grid-cols-[minmax(0,1fr)_16rem] items-start">
+      <figure className="min-w-0">
+        <div className="relative">
+          <video
+            ref={ref}
+            src={video.src}
+            poster={video.poster}
+            controls
+            preload="metadata"
+            playsInline
+            onTimeUpdate={e => setCurrentS(e.currentTarget.currentTime)}
+            className="w-full max-h-[75dvh] object-contain border border-border bg-black [image-rendering:pixelated]"
+          />
+          {video.speedLabel && (
+            <span
+              aria-hidden="true"
+              className="absolute right-2 top-2 mono bg-background/70 px-1.5 py-0.5 text-text pointer-events-none"
+            >
+              {video.speedLabel}
+            </span>
+          )}
+        </div>
+        {video.speedLabel && (
+          <span className="sr-only">Playback speed {video.speedLabel}</span>
+        )}
+        <figcaption className="mt-3 text-sm text-text-muted leading-relaxed max-w-2xl">
           {video.caption}
         </figcaption>
       </figure>
 
-      <ol className="space-y-1 lg:max-h-[36rem] lg:overflow-y-auto">
+      <ol className="flex gap-2 overflow-x-auto scroll-hide pb-2 lg:block lg:space-y-1 lg:max-h-[36rem] lg:overflow-y-auto lg:pb-0">
         {video.chapters.map((c, i) => (
-          <li key={c.label}>
+          <li key={c.label} className="shrink-0 lg:shrink">
             <button
               type="button"
               onClick={() => seek(c.timeS)}
-              className={`mono text-xs text-left w-full flex gap-3 py-1 transition-colors duration-200 hover:text-text ${
-                i === activeIndex ? 'text-text' : 'text-text-muted'
+              aria-current={i === activeIndex ? 'true' : undefined}
+              className={`mono inline-flex min-h-11 items-center gap-2 whitespace-nowrap px-3 border border-border lg:w-full lg:border-0 lg:px-0 lg:whitespace-normal lg:text-left transition-colors duration-200 hover:text-text ${
+                i === activeIndex ? 'text-accent' : 'text-text-muted'
               }`}
             >
               <span className="shrink-0 tabular-nums">{formatTimestamp(c.timeS)} ——</span>
@@ -393,14 +406,14 @@ function DataTableBlock({ table }: { table: DataTable }) {
     <div>
       <p className="mono text-text text-sm mb-1">{table.title}</p>
       {table.description && (
-        <p className="mono text-text-dim text-xs leading-relaxed mb-4 max-w-2xl">
+        <p className="text-sm text-text-muted leading-relaxed mb-4 max-w-2xl">
           {table.description}
         </p>
       )}
       {!rows ? (
-        <p className="mono text-text-dim text-xs">[ loading… ]</p>
+        <p className="mono text-text-muted">[ loading… ]</p>
       ) : (
-        <div className="border border-border-strong overflow-x-auto max-h-[36rem] overflow-y-auto">
+        <div className="border border-border-strong overflow-x-auto lg:max-h-[36rem] lg:overflow-y-auto">
           <table className="w-full text-xs mono border-collapse">
             <thead className="sticky top-0 bg-surface">
               <tr>
@@ -424,10 +437,19 @@ function DataTableBlock({ table }: { table: DataTable }) {
                   <Fragment key={i}>
                     <tr
                       onClick={hasDetail ? () => toggle(i) : undefined}
+                      onKeyDown={hasDetail ? e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          toggle(i)
+                        }
+                      } : undefined}
+                      tabIndex={hasDetail ? 0 : undefined}
+                      role={hasDetail ? 'button' : undefined}
+                      aria-expanded={hasDetail ? isOpen : undefined}
                       className={`hover:bg-surface transition-colors ${hasDetail ? 'cursor-pointer' : ''}`}
                     >
                       {hasDetail && (
-                        <td className="px-2 text-text-dim align-top pt-3">{isOpen ? '−' : '+'}</td>
+                        <td className={`px-2 align-top pt-3 ${isOpen ? 'text-accent' : 'text-text-muted'}`}>{isOpen ? '−' : '+'}</td>
                       )}
                       {table.columns.map(col => (
                         <td
@@ -445,7 +467,7 @@ function DataTableBlock({ table }: { table: DataTable }) {
                         <td colSpan={table.columns.length + 1} className="px-4 py-4 bg-background space-y-4">
                           {table.detailFields!.map(field => (
                             <div key={field.key}>
-                              <span className="text-text-dim uppercase tracking-wider block mb-1.5">
+                              <span className="text-text-muted uppercase tracking-wider block mb-1.5">
                                 {field.label}
                               </span>
                               {field.code ? (
@@ -473,15 +495,6 @@ function DataTableBlock({ table }: { table: DataTable }) {
   )
 }
 
-// ── Placeholder block ─────────────────────────────────────────────────────────
-function Placeholder() {
-  return (
-    <div className="border border-dashed border-border-strong rounded-none p-8 max-w-2xl">
-      <span className="mono text-text-muted">[ Content coming soon ]</span>
-    </div>
-  )
-}
-
 // ── Full GitHub stats block ───────────────────────────────────────────────────
 function GithubStatsFull({ githubUrl }: { githubUrl?: string }) {
   const { data, error } = useGithubStats(githubUrl)
@@ -492,10 +505,10 @@ function GithubStatsFull({ githubUrl }: { githubUrl?: string }) {
 
   return (
     <div className="flex flex-wrap gap-x-5 gap-y-1 mono text-text-muted text-xs mt-3">
-      <span>★ {data.stars}</span>
+      {data.stars > 0 && <span>★ {data.stars}</span>}
       <span>{data.commitCount} commits</span>
       {data.primaryLanguage && <span>{data.primaryLanguage}</span>}
-      <span>{data.openIssues} open issues</span>
+      {data.openIssues > 0 && <span>{data.openIssues} open issues</span>}
       {updated && <span>updated {updated}</span>}
     </div>
   )
