@@ -24,7 +24,7 @@ export function Navbar({ account }: { account?: ReactNode }) {
   return (
     <header
       className={clsx(
-        'fixed top-0 left-0 right-0 z-50 bg-background transition-colors duration-300',
+        'fixed top-0 left-0 right-0 z-50 bg-background transition-colors duration-300 print:hidden',
         scrolled && 'border-b border-border'
       )}
     >

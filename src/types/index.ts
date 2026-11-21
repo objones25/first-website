@@ -3,11 +3,22 @@ export interface ProjectLink {
   href: string
 }
 
-export interface ProjectImage {
+export interface ProjectFigure {
   src: string
   alt: string
   caption: string
 }
+
+// Stands in for a picture that does not exist yet. `placeholder` says what
+// will go there; the page draws a frame that is plainly unfinished.
+export interface PlaceholderImage {
+  placeholder: string
+}
+
+export type ProjectImage = ProjectFigure | PlaceholderImage
+
+// The small picture on a project's row (Home, Projects).
+export type ProjectThumb = { src: string; alt: string; pixelated?: boolean } | PlaceholderImage
 
 export interface DataTableColumn {
   key: string
@@ -53,6 +64,8 @@ export interface ProjectVideo {
   // whose timeS <= the video's currentTime
   chapters: VideoChapter[]
   speedLabel?: string
+  // A few silent seconds cut from the video, played on a loop on Home.
+  loop?: string
 }
 
 export interface ProjectResult {
@@ -107,6 +120,7 @@ export interface Project {
   credits?: ProjectCredit[]
   video?: ProjectVideo
   images?: ProjectImage[]
+  thumb?: ProjectThumb
   dataTables?: DataTable[]
   links?: ProjectLink[]
   hasDemo?: boolean

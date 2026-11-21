@@ -14,6 +14,7 @@ const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const Archive = lazy(() => import('./pages/Archive'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Skills = lazy(() => import('./pages/Skills'))
+const Now = lazy(() => import('./pages/Now'))
 
 // Everything that imports Clerk lives behind these lazy imports, so the public
 // pages above never download it.
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
       { path: 'projects/agent-skills', element: <Navigate to="/skills" replace /> },
       { path: 'projects/:slug', element: <Suspense><ProjectDetail /></Suspense> },
       { path: 'skills', element: <Suspense><Skills /></Suspense> },
+      { path: 'now', element: <Suspense><Now /></Suspense> },
       { path: 'archive', element: <Suspense><Archive /></Suspense> },
       { path: 'contact', element: <Suspense><Contact /></Suspense> },
       { path: '*', element: <NotFound /> },

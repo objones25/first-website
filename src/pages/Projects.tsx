@@ -4,12 +4,10 @@ import { PageTransition } from '@/components/layout/PageTransition'
 import { ProjectRow } from '@/components/ProjectRow'
 import { ClipReveal, Reveal } from '@/components/motion/Reveal'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
+import { pageMeta } from '@/data/pageMeta'
 
 export default function Projects() {
-  useDocumentMeta(
-    'Projects',
-    'Projects in reinforcement learning, robot learning and language models.',
-  )
+  useDocumentMeta(pageMeta.projects.title, pageMeta.projects.description)
 
   return (
     <PageTransition>

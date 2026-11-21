@@ -6,13 +6,14 @@ import { GithubStatsBadge } from '@/components/GithubStatsBadge'
 import { ProjectRow } from '@/components/ProjectRow'
 import { ClipReveal, Reveal } from '@/components/motion/Reveal'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
+import { pageMeta } from '@/data/pageMeta'
 
 const REPO_ROW_CLASS =
   'block py-6 -mx-4 px-4 md:grid md:grid-cols-[3rem_1fr_auto] md:gap-6'
 const REPO_LINK_CLASS = `${REPO_ROW_CLASS} hover:bg-surface transition-colors duration-150`
 
 export default function Archive() {
-  useDocumentMeta('Archive', 'Earlier projects.')
+  useDocumentMeta(pageMeta.archive.title, pageMeta.archive.description)
 
   return (
     <PageTransition>

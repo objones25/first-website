@@ -17,6 +17,7 @@ export const projects: Project[] = [
     video: {
       src: '/projects/pokemon-red-ppo/run9-seed0.mp4',
       poster: '/projects/pokemon-red-ppo/run9-seed0-poster.png',
+      loop: '/projects/pokemon-red-ppo/run9-seed0-loop.mp4',
       caption: 'One full episode from the final policy (run9, 400M training steps, seed 0), with actions sampled and the weights frozen. The video shows one frame per agent decision, and each decision is 24 game frames, so it plays at 24x game speed: 4.6 minutes of video for about 1.9 hours of play. Nothing is cut. The chapters are the milestones the run recorded.',
       speedLabel: '24x',
       chapters: [
@@ -121,6 +122,10 @@ export const projects: Project[] = [
       { label: 'GitHub', href: 'https://github.com/objones25/pokemon-red-ppo' },
       { label: 'Upstream', href: 'https://github.com/PWhiddy/PokemonRedExperiments' },
     ],
+    thumb: { src: '/projects/pokemon-red-ppo/run9-seed0-poster.png', alt: "A frame from the agent's final run", pixelated: true },
+    images: [
+      { placeholder: 'Learning curves for the nine runs: furthest milestone reached against training steps.' },
+    ],
     hasDemo: false,
   },
   {
@@ -131,6 +136,8 @@ export const projects: Project[] = [
     year: '2026',
     tags: ['Robotics', 'Imitation Learning'],
     status: 'active',
+    thumb: { placeholder: 'Photo of the printed follower arm.' },
+    images: [{ placeholder: 'Photo of the printed follower arm.' }],
     overview: 'In progress. The follower arm is printed and the leader arm is next. The plan is teleoperation first, then a recorded demonstration dataset, then an imitation-learning policy with a success rate measured over repeated trials, including the failures. This page will be filled in as each step produces something to show.',
     credits: [
       { label: 'SO-ARM100', href: 'https://github.com/TheRobotStudio/SO-ARM100', note: 'The open-hardware arm design.' },
@@ -145,6 +152,8 @@ export const projects: Project[] = [
     year: '2026',
     tags: ['Python', 'PyTorch', 'Reinforcement Learning', 'Information Retrieval'],
     status: 'active',
+    thumb: { placeholder: 'Chart of retrieval scores under normal BM25 and under BM25 that ignores repeated query terms.' },
+    images: [{ placeholder: 'Chart of retrieval scores under normal BM25 and under BM25 that ignores repeated query terms.' }],
     overview: 'In progress. BM25 as implemented in Pyserini scores a term once for every time it appears in the query, so a rewriter can raise its score by repeating words. The experiment trains the same model twice, once rewarded by normal BM25 and once by a version that counts each query term once, then scores both models under both. The training runs have not finished, so there are no results here yet.',
     facts: [
       { label: 'Course', value: 'CMPSC 291A' },
@@ -195,7 +204,12 @@ export const projects: Project[] = [
         alt: 'DPO training run showing loss, reward margins, reward accuracy, and gradient norm',
         caption: 'DPO on 1,403 judged preference pairs, 1 epoch. Reward margin climbs, noisily; final reward accuracy lands at 0.55–0.65 against a 0.5 chance baseline.',
       },
+      { placeholder: 'Screen recording of the chat demo answering a prompt, for readers who do not sign in.' },
     ],
+    thumb: {
+      src: '/projects/llm-from-scratch/pretraining-run.png',
+      alt: 'v2 pretraining loss, learning rate, and gradient norm curves over 18,500 steps',
+    },
     links: [
       { label: 'GitHub', href: 'https://github.com/objones25/llm-from-scratch' },
     ],

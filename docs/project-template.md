@@ -55,7 +55,7 @@ Prose fields (`overview`, `challenge`, `approach`) can hold several paragraphs: 
 },
 ```
 
-Delete the fields you are not using. Then add `https://owenbeckettjones.com/projects/<slug>` to `public/sitemap.xml`.
+Delete the fields you are not using. Then run `npm run og` and commit the new share image in `public/og/` (the build fails without it). For a picture you do not have yet, use `{ placeholder: 'what will go here' }` in `images` or `thumb`.
 
 ## Rules
 

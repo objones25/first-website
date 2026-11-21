@@ -1,3 +1,4 @@
+import { Placeholder } from '@/components/Placeholder'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { PageTransition } from '@/components/layout/PageTransition'
@@ -176,7 +177,9 @@ export function ProjectPage({ project, indexLabel, back, prev, next, guide, bann
             {project.images && project.images.length > 0 && (
               <Section id="evidence" guide={guide}>
                 <div className="space-y-10 max-w-2xl">
-                  {project.images.map((img, i) => (
+                  {project.images.map((img, i) => 'placeholder' in img ? (
+                    <Placeholder key={img.placeholder} label={img.placeholder} className="aspect-[16/9]" />
+                  ) : (
                     <figure key={img.src}>
                       <a
                         href={img.src}

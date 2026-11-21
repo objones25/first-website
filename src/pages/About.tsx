@@ -1,14 +1,17 @@
 import { Fragment } from 'react'
+import { Link } from 'react-router-dom'
+import { Placeholder } from '@/components/Placeholder'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { ClipReveal, Reveal } from '@/components/motion/Reveal'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
 import { profile } from '@/data/profile'
+import { pageMeta } from '@/data/pageMeta'
 
 // Link values show the URL without its scheme and trailing slash.
 const readableUrl = (href: string) => href.replace(/^https?:\/\//, '').replace(/\/$/, '')
 
 export default function About() {
-  useDocumentMeta('About', profile.lead)
+  useDocumentMeta(pageMeta.about.title, pageMeta.about.description)
 
   return (
     <PageTransition>
@@ -22,6 +25,7 @@ export default function About() {
 
         <div className="space-y-12">
           <Reveal>
+            <Placeholder label="Photo of Owen." className="mb-8 aspect-[4/3] w-full max-w-sm" />
             <p className="lead max-w-2xl">
               I'm a first-year CS master's student at UC Santa Barbara, with an applied math degree from UCLA. The largest project on this site is a PPO agent for Pokemon Red, trained over nine runs, where most of the work was finding out what each reward term actually taught the agent. I'm now building an SO-101 arm to start on imitation learning with real hardware.
             </p>
@@ -37,6 +41,12 @@ export default function About() {
               </ul>
               <p className="mono text-text-muted mt-4">Last updated {profile.nowUpdated}</p>
             </div>
+            <Link
+              to="/now"
+              className="mono mt-2 inline-flex min-h-11 items-center text-text-muted hover:text-text transition-colors duration-150"
+            >
+              Now page →
+            </Link>
           </Reveal>
 
           <Reveal delay={0.16}>

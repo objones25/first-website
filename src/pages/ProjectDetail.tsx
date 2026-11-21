@@ -2,13 +2,15 @@ import { useParams, Navigate } from 'react-router-dom'
 import { projects, activeProjects, archivedProjects } from '@/data/projects'
 import { ProjectPage } from '@/components/project/ProjectPage'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
+import { projectMeta } from '@/data/pageMeta'
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>()
   const project = projects.find(p => p.slug === slug)
 
   // Hooks run before the early return, so pass fallbacks while project is undefined.
-  useDocumentMeta(project?.title ?? 'Project', project?.tagline ?? project?.description)
+  const meta = project && projectMeta(project)
+  useDocumentMeta(meta?.title ?? 'Project', meta?.description)
 
   if (!project) return <Navigate to="/projects" replace />
 

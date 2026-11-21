@@ -3,14 +3,12 @@ import { skills, skillsSource, type Skill, type SkillDemo } from '@/data/skills'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { ClipReveal, Reveal } from '@/components/motion/Reveal'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
+import { pageMeta } from '@/data/pageMeta'
 
 const pad = (n: number) => String(n).padStart(3, '0')
 
 export default function Skills() {
-  useDocumentMeta(
-    'Skills',
-    'Claude Code skills I develop and maintain, shown with the output of the scripts they ship.',
-  )
+  useDocumentMeta(pageMeta.skills.title, pageMeta.skills.description)
 
   return (
     <PageTransition>

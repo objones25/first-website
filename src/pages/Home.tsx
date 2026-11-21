@@ -2,15 +2,17 @@ import { Link } from 'react-router-dom'
 import { profile } from '@/data/profile'
 import { activeProjects } from '@/data/projects'
 import { ProjectRow } from '@/components/ProjectRow'
+import { LoopingClip } from '@/components/LoopingClip'
 import { Reveal, ClipReveal } from '@/components/motion/Reveal'
 import { PageTransition } from '@/components/layout/PageTransition'
-import { SITE_DESCRIPTION, SITE_TITLE, useDocumentMeta } from '@/hooks/useDocumentMeta'
+import { useDocumentMeta } from '@/hooks/useDocumentMeta'
+import { pageMeta } from '@/data/pageMeta'
 
 const buttonBase =
   'inline-flex min-h-12 items-center justify-center px-5 mono uppercase transition-colors duration-150'
 
 export default function Home() {
-  useDocumentMeta(SITE_TITLE, SITE_DESCRIPTION)
+  useDocumentMeta(pageMeta.home.title, pageMeta.home.description)
 
   const [featured, ...rest] = activeProjects
 
@@ -52,7 +54,14 @@ export default function Home() {
               to={`/projects/${featured.slug}`}
               className="grid gap-6 md:grid-cols-2 md:items-center"
             >
-              {featured.video && (
+              {featured.video?.loop ? (
+                <LoopingClip
+                  src={featured.video.loop}
+                  poster={featured.video.poster}
+                  alt="Eight seconds of the agent's final run, playing on a loop"
+                  className="w-full border border-border [image-rendering:pixelated]"
+                />
+              ) : featured.video && (
                 <img
                   src={featured.video.poster}
                   alt="A frame from the agent's final run"

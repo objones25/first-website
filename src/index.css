@@ -164,3 +164,42 @@
     display: none;
   }
 }
+
+/* Hatching behind a Placeholder frame (src/components/Placeholder.tsx). */
+@layer utilities {
+  .placeholder-hatch {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent 0 10px,
+      var(--color-border) 10px 11px
+    );
+  }
+}
+
+/* Printing: dark text on white, so a project page prints as a readable
+   handout. The navbar and footer carry print:hidden. */
+@media print {
+  :root {
+    --color-background: #ffffff;
+    --color-surface: #ffffff;
+    --color-surface-raised: #ffffff;
+    --color-text: #000000;
+    --color-text-muted: #333333;
+    --color-text-dim: #555555;
+    --color-border: #cccccc;
+    --color-border-strong: #999999;
+    --color-accent: #000000;
+  }
+  main {
+    padding-top: 0;
+    min-height: 0;
+  }
+  video {
+    display: none;
+  }
+  .anim-rise,
+  .anim-clip,
+  .anim-fade {
+    animation: none;
+  }
+}
