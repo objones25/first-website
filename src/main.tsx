@@ -1,15 +1,11 @@
 import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
-import { MotionConfig } from 'framer-motion'
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom'
-import { ClerkProvider, AuthenticateWithRedirectCallback } from '@clerk/react-router'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { RootLayout } from './components/layout/RootLayout'
 import NotFound from './pages/NotFound'
-import { ProtectedRoute } from './components/auth/ProtectedRoute'
+import '@fontsource-variable/inter/wght.css'
+import '@fontsource-variable/jetbrains-mono/wght.css'
 import './index.css'
-
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
-if (!PUBLISHABLE_KEY) throw new Error('VITE_CLERK_PUBLISHABLE_KEY is not set')
 
 const Home = lazy(() => import('./pages/Home'))
 const About = lazy(() => import('./pages/About'))
@@ -17,59 +13,47 @@ const Projects = lazy(() => import('./pages/Projects'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const Archive = lazy(() => import('./pages/Archive'))
 const Contact = lazy(() => import('./pages/Contact'))
-const SignInPage = lazy(() => import('./pages/SignIn'))
-const SignUpPage = lazy(() => import('./pages/SignUp'))
-const Demo = lazy(() => import('./pages/Demo'))
 
-// ClerkProvider must be inside the router so it has access to useNavigate()
-function ClerkRoot() {
-  return (
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <Outlet />
-    </ClerkProvider>
-  )
+// Everything that imports Clerk lives behind these lazy imports, so the public
+// pages above never download it.
+const ClerkLayout = lazy(() => import('./components/auth/ClerkLayout'))
+const AuthRoutes = {
+  SignIn: lazy(() => import('./pages/SignIn')),
+  SignUp: lazy(() => import('./pages/SignUp')),
+  SsoCallback: lazy(() => import('./components/auth/SsoCallback')),
+  Demo: lazy(() => import('./pages/ProtectedDemo')),
 }
 
 const router = createBrowserRouter([
   {
-    element: <ClerkRoot />,
+    path: '/',
+    element: <RootLayout />,
+    errorElement: <NotFound />,
     children: [
-      {
-        path: '/',
-        element: <RootLayout />,
-        errorElement: <NotFound />,
-        children: [
-          { index: true, element: <Suspense><Home /></Suspense> },
-          { path: 'about', element: <Suspense><About /></Suspense> },
-          { path: 'projects', element: <Suspense><Projects /></Suspense> },
-          { path: 'projects/:slug', element: <Suspense><ProjectDetail /></Suspense> },
-          {
-            path: 'projects/:slug/demo',
-            element: (
-              <Suspense>
-                <ProtectedRoute>
-                  <Demo />
-                </ProtectedRoute>
-              </Suspense>
-            ),
-          },
-          { path: 'archive', element: <Suspense><Archive /></Suspense> },
-          { path: 'contact', element: <Suspense><Contact /></Suspense> },
-          { path: 'sign-in', element: <Suspense><SignInPage /></Suspense> },
-          { path: 'sign-in/sso-callback', element: <AuthenticateWithRedirectCallback /> },
-          { path: 'sign-up', element: <Suspense><SignUpPage /></Suspense> },
-          { path: 'sign-up/sso-callback', element: <AuthenticateWithRedirectCallback /> },
-          { path: '*', element: <NotFound /> },
-        ],
-      },
+      { index: true, element: <Suspense><Home /></Suspense> },
+      { path: 'about', element: <Suspense><About /></Suspense> },
+      { path: 'projects', element: <Suspense><Projects /></Suspense> },
+      { path: 'projects/:slug', element: <Suspense><ProjectDetail /></Suspense> },
+      { path: 'archive', element: <Suspense><Archive /></Suspense> },
+      { path: 'contact', element: <Suspense><Contact /></Suspense> },
+      { path: '*', element: <NotFound /> },
+    ],
+  },
+  {
+    element: <Suspense><ClerkLayout /></Suspense>,
+    errorElement: <NotFound />,
+    children: [
+      { path: '/projects/:slug/demo', element: <Suspense><AuthRoutes.Demo /></Suspense> },
+      { path: '/sign-in', element: <Suspense><AuthRoutes.SignIn /></Suspense> },
+      { path: '/sign-in/sso-callback', element: <Suspense><AuthRoutes.SsoCallback /></Suspense> },
+      { path: '/sign-up', element: <Suspense><AuthRoutes.SignUp /></Suspense> },
+      { path: '/sign-up/sso-callback', element: <Suspense><AuthRoutes.SsoCallback /></Suspense> },
     ],
   },
 ])
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <MotionConfig reducedMotion="user">
-      <RouterProvider router={router} />
-    </MotionConfig>
+    <RouterProvider router={router} />
   </StrictMode>
 )

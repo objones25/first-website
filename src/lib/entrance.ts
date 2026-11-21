@@ -1,5 +1,3 @@
-export const EASE = [0.16, 1, 0.3, 1] as const
-
 const STORAGE_KEY = 'entrance-played'
 
 // sessionStorage can throw (private mode, blocked storage). The entrance is cosmetic,

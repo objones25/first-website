@@ -5,7 +5,7 @@ import { clerkAppearance } from '@/lib/clerkTheme'
 export default function SignUpPage() {
   return (
     <PageTransition>
-      <div className="min-h-screen flex items-center justify-center py-20">
+      <div className="min-h-dvh flex items-center justify-center py-20">
         <SignUp
           appearance={clerkAppearance}
           fallbackRedirectUrl="/projects"

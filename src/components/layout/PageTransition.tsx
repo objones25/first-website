@@ -1,20 +1,7 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useState, type ReactNode } from 'react'
 import { hasEntrancePlayed } from '@/lib/entrance'
 
-interface Props {
-  children: React.ReactNode
-}
-
-export function PageTransition({ children }: Props) {
+export function PageTransition({ children }: { children: ReactNode }) {
   const [play] = useState(() => !hasEntrancePlayed())
-
-  return (
-    <motion.div
-      initial={play ? { opacity: 0 } : false}
-      animate={{ opacity: 1, transition: { duration: 0.2, ease: 'easeOut' } }}
-    >
-      {children}
-    </motion.div>
-  )
+  return <div className={play ? 'anim-fade' : undefined}>{children}</div>
 }

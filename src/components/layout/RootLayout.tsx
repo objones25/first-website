@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
@@ -7,7 +7,7 @@ import { markEntrancePlayed } from '@/lib/entrance'
 // Long enough for the first page's own entrance animations to finish.
 const ENTRANCE_MS = 1200
 
-export function RootLayout() {
+export function RootLayout({ account }: { account?: ReactNode }) {
   const location = useLocation()
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export function RootLayout() {
 
   return (
     <>
-      <Navbar />
+      <Navbar account={account} />
       <main key={location.pathname} className="min-h-dvh pt-14">
         <Outlet />
       </main>

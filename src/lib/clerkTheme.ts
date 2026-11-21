@@ -10,7 +10,7 @@ export const clerkAppearance = {
     colorTextSecondary: '#A8A8A4',
     colorNeutral: '#A8A8A4',
     borderRadius: '0px',
-    fontFamily: '"Inter", system-ui, sans-serif',
-    fontFamilyButtons: '"JetBrains Mono", ui-monospace, monospace',
+    fontFamily: '"Inter Variable", system-ui, sans-serif',
+    fontFamilyButtons: '"JetBrains Mono Variable", ui-monospace, monospace',
   },
 }

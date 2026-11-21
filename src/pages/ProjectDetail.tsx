@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useId, useRef, useState } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
-import { useAuth } from '@clerk/react-router'
 import { projects, activeProjects, archivedProjects } from '@/data/projects'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { Reveal, ClipReveal } from '@/components/motion/Reveal'
@@ -19,7 +18,6 @@ const statusLabel: Record<Project['status'], string> = {
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>()
-  const { isSignedIn } = useAuth()
   const project = projects.find(p => p.slug === slug)
 
   // Hooks run before the early return, so pass fallbacks while project is undefined.
@@ -239,11 +237,9 @@ export default function ProjectDetail() {
                 >
                   [ Launch Demo ] →
                 </Link>
-                {!isSignedIn && (
-                  <p className="mono text-text-muted">
-                    Sign in with GitHub required.
-                  </p>
-                )}
+                <p className="mono text-text-muted">
+                  Sign in with GitHub required.
+                </p>
               </div>
             </Section>
           )}

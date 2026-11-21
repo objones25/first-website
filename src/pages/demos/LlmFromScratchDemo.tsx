@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { motion } from 'framer-motion'
 
 const BASE_URL = import.meta.env.VITE_LLM_INFERENCE_URL as string
 
@@ -142,14 +141,9 @@ function WaveText({ text, className = '' }: { text: string; className?: string }
   return (
     <span className={className} aria-label={text}>
       {text.split('').map((ch, i) => (
-        <motion.span
-          key={i}
-          className="inline-block"
-          animate={{ opacity: [0.15, 1, 0.15] }}
-          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut', delay: i * 0.06 }}
-        >
+        <span key={i} className="anim-wave" style={{ animationDelay: `${i * 0.06}s` }}>
           {ch === ' ' ? ' ' : ch}
-        </motion.span>
+        </span>
       ))}
     </span>
   )

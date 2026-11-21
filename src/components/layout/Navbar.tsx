@@ -1,17 +1,29 @@
+import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useAuth, UserButton } from '@clerk/react-router'
 import { navLinks } from '@/data/navigation'
 import { useScrolled } from '@/hooks/useScrolled'
-import { cn } from '@/lib/utils'
+import { clsx } from 'clsx'
 
-export function Navbar() {
+export function SignInLink() {
+  return (
+    <Link
+      to="/sign-in"
+      className="inline-flex min-h-11 items-center px-1 mono text-text-muted hover:text-text transition-colors duration-200"
+    >
+      [ Sign In ]
+    </Link>
+  )
+}
+
+// `account` is the right-hand slot. Public routes leave it unset and get the
+// plain sign-in link; the auth layout passes a Clerk-aware control.
+export function Navbar({ account }: { account?: ReactNode }) {
   const { pathname } = useLocation()
   const scrolled = useScrolled()
-  const { isSignedIn } = useAuth()
 
   return (
     <header
-      className={cn(
+      className={clsx(
         'fixed top-0 left-0 right-0 z-50 bg-background transition-colors duration-300',
         scrolled && 'border-b border-border'
       )}
@@ -33,7 +45,7 @@ export function Navbar() {
                   key={href}
                   to={href}
                   aria-current={active ? 'page' : undefined}
-                  className={cn(
+                  className={clsx(
                     'inline-flex min-h-11 items-center px-1 mono uppercase tracking-wider transition-colors duration-200',
                     active
                       ? 'text-text underline decoration-accent decoration-2 underline-offset-8'
@@ -46,22 +58,7 @@ export function Navbar() {
             })}
           </nav>
 
-          {isSignedIn ? (
-            <UserButton
-              appearance={{
-                elements: {
-                  avatarBox: 'w-7 h-7',
-                },
-              }}
-            />
-          ) : (
-            <Link
-              to="/sign-in"
-              className="inline-flex min-h-11 items-center px-1 mono text-text-muted hover:text-text transition-colors duration-200"
-            >
-              [ Sign In ]
-            </Link>
-          )}
+          {account ?? <SignInLink />}
         </div>
       </div>
     </header>

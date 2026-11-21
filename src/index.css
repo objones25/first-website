@@ -12,8 +12,10 @@
   --color-accent: #FFB200;
   --color-accent-hover: #FFC64D;
 
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --font-sans: 'Inter Variable', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
 }
 
 @layer base {
@@ -59,9 +61,24 @@
   }
 }
 
+@keyframes anim-rise {
+  from { opacity: 0; transform: translateY(8px); }
+}
+@keyframes anim-clip {
+  from { transform: translateY(105%); }
+}
+@keyframes anim-fade {
+  from { opacity: 0; }
+}
+@keyframes anim-wave {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
@@ -118,6 +135,24 @@
     overflow: hidden;
     display: block;
     padding-bottom: 0.12em;
+  }
+
+  /* Entrance animations. Reveal.tsx and PageTransition.tsx add these classes on
+     the first page of a session only. `both` holds the start state through the
+     delay, so nothing flashes before it animates. */
+  .anim-rise {
+    animation: anim-rise 0.3s var(--ease-out-expo) both;
+  }
+  .anim-clip {
+    animation: anim-clip 0.5s var(--ease-out-expo) both;
+  }
+  .anim-fade {
+    animation: anim-fade 0.2s ease-out both;
+  }
+  /* Looping per-letter pulse for "waiting" text; delay is set per letter. */
+  .anim-wave {
+    display: inline-block;
+    animation: anim-wave 1.4s ease-in-out infinite;
   }
 
   /* Horizontal scroll — hide scrollbar */

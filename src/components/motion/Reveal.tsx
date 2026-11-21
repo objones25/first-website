@@ -1,11 +1,18 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { EASE, hasEntrancePlayed } from '@/lib/entrance'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { hasEntrancePlayed } from '@/lib/entrance'
 
+// The animations themselves are CSS keyframes in index.css (.anim-rise,
+// .anim-clip). These components only decide whether to play them: once per
+// session, and for `inView` only after the element scrolls into view.
 const DELAY_MAX_S = 0.24
 
+function delayStyle(delay: number): CSSProperties | undefined {
+  if (delay <= 0) return undefined
+  return { animationDelay: `${Math.min(delay, DELAY_MAX_S)}s` }
+}
+
 interface RevealProps {
-  children: React.ReactNode
+  children: ReactNode
   delay?: number
   className?: string
   inView?: boolean
@@ -13,42 +20,47 @@ interface RevealProps {
 
 export function Reveal({ children, delay = 0, className, inView = false }: RevealProps) {
   const [play] = useState(() => !hasEntrancePlayed())
-  const target = { opacity: 1, y: 0 }
+  const waitForView = play && inView
+  const [seen, setSeen] = useState(!waitForView)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (seen || !el) return
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries.some(e => e.isIntersecting)) setSeen(true)
+      },
+      { rootMargin: '-40px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [seen])
+
+  const state = !play ? '' : seen ? 'anim-rise' : 'opacity-0'
 
   return (
-    <motion.div
-      className={className}
-      initial={play ? { opacity: 0, y: 8 } : false}
-      animate={inView && play ? undefined : target}
-      whileInView={inView && play ? target : undefined}
-      viewport={inView && play ? { once: true, margin: '-40px' } : undefined}
-      transition={{ duration: 0.3, delay: Math.min(delay, DELAY_MAX_S), ease: EASE }}
-    >
+    <div ref={ref} className={[className, state].filter(Boolean).join(' ') || undefined} style={play ? delayStyle(delay) : undefined}>
       {children}
-    </motion.div>
+    </div>
   )
 }
 
-const CLIP_TAGS = { h1: motion.h1, h2: motion.h2, span: motion.span }
-
 interface ClipRevealProps {
-  children: React.ReactNode
-  as?: keyof typeof CLIP_TAGS
+  children: ReactNode
+  as?: 'h1' | 'h2' | 'span'
   delay?: number
   className?: string
 }
 
-export function ClipReveal({ children, as = 'span', delay = 0, className }: ClipRevealProps) {
+export function ClipReveal({ children, as: Tag = 'span', delay = 0, className }: ClipRevealProps) {
   const [play] = useState(() => !hasEntrancePlayed())
-  const Tag = CLIP_TAGS[as]
 
   return (
     <div className="clip">
       <Tag
-        className={className ? `${className} block` : 'block'}
-        initial={play ? { y: '105%' } : false}
-        animate={{ y: '0%' }}
-        transition={{ duration: 0.5, delay: Math.min(delay, DELAY_MAX_S), ease: EASE }}
+        className={[className, 'block', play && 'anim-clip'].filter(Boolean).join(' ')}
+        style={play ? delayStyle(delay) : undefined}
       >
         {children}
       </Tag>
