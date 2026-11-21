@@ -32,13 +32,16 @@ const graphql = () =>
 function setup(respond: () => Response | Promise<Response> = graphql) {
   const kv = new FakeKV()
   const calls = recordUpstream(vi.stubGlobal, respond)
-  const env = { GITHUB_STATS_CACHE: kv, GITHUB_TOKEN: 'gh-secret' } as unknown as Env
+  const limiterKeys: string[] = []
+  const limiter = { allow: true, limit: async ({ key }: { key: string }) => { limiterKeys.push(key); return { success: limiter.allow } } }
+  const env = { GITHUB_STATS_CACHE: kv, GITHUB_TOKEN: 'gh-secret', RATE_LIMITER: limiter } as unknown as Env
   const get = (query: string, init: { origin?: string | null; method?: string } = {}) => {
     const headers = new Headers()
     if (init.origin !== null) headers.set('Origin', init.origin ?? SITE_ORIGIN)
+    headers.set('CF-Connecting-IP', '203.0.113.7')
     return worker.fetch(new Request(`https://stats.test/repo-stats${query}`, { method: init.method ?? 'GET', headers }), env)
   }
-  return { kv, calls, get }
+  return { kv, calls, get, limiter, limiterKeys }
 }
 
 const REPO = '?owner=objones25&repo=my-skills'
@@ -75,6 +78,23 @@ describe('github-stats-proxy', () => {
     const res = await get(REPO)
     expect(res.status).toBe(502)
     expect(await res.text()).toBe('{"error":"Could not load repository stats"}')
+  })
+
+  it('answers 429 without calling GitHub when the caller is over the rate limit', async () => {
+    const { calls, get, limiter, limiterKeys } = setup()
+    limiter.allow = false
+    const res = await get(REPO)
+    expect(res.status).toBe(429)
+    expect(res.headers.get('Retry-After')).toBe('60')
+    expect(calls).toHaveLength(0)
+    expect(limiterKeys).toEqual(['203.0.113.7'])
+  })
+
+  it('does not spend the rate limit on a cache hit', async () => {
+    const { kv, get, limiterKeys } = setup()
+    kv.store.set('objones25/my-skills', JSON.stringify({ payload: stats, fetchedAt: Date.now() }))
+    expect((await get(REPO)).status).toBe(200)
+    expect(limiterKeys).toEqual([])
   })
 
   it('keeps the stale entry long enough to outlive the refresh window', () => {

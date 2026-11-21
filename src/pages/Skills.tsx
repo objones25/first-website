@@ -145,13 +145,12 @@ function DemoPanel({ skill }: { skill: Skill }) {
   return (
     <div>
       {skill.demos.length > 1 && (
-        <div role="tablist" aria-label={`${skill.name} demonstrations`} className="flex flex-wrap gap-2 mb-3">
+        <div role="group" aria-label={`${skill.name} demonstrations`} className="flex flex-wrap gap-2 mb-3">
           {skill.demos.map((d, i) => (
             <button
               key={d.command}
               type="button"
-              role="tab"
-              aria-selected={i === selected}
+              aria-pressed={i === selected}
               aria-controls={panelId}
               onClick={() => {
                 setSelected(i)
@@ -167,7 +166,7 @@ function DemoPanel({ skill }: { skill: Skill }) {
         </div>
       )}
 
-      <div id={panelId} role={skill.demos.length > 1 ? 'tabpanel' : undefined} className="border border-border-strong bg-surface">
+      <div id={panelId} className="border border-border-strong bg-surface">
         <p className="mono border-b border-border px-4 py-3 text-text break-words">
           <span aria-hidden="true" className="text-text-muted select-none">$ </span>
           {demo.command}
@@ -223,8 +222,10 @@ function Output({ text }: { text: string }) {
   const tabular = text.includes('-+-')
   return (
     <pre
+      // Focusable only when it scrolls sideways, so a keyboard can scroll it.
       tabIndex={tabular ? 0 : undefined}
-      aria-label="Script output"
+      role={tabular ? 'region' : undefined}
+      aria-label={tabular ? 'Script output, scrolls sideways' : undefined}
       className={`mono px-4 py-3 text-text leading-relaxed ${
         tabular ? 'overflow-x-auto whitespace-pre' : 'whitespace-pre-wrap break-words'
       }`}

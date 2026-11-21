@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { profile } from '@/data/profile'
 import { activeProjects } from '@/data/projects'
-import { skillsSource } from '@/data/skills'
 import { ProjectRow } from '@/components/ProjectRow'
 import { Reveal, ClipReveal } from '@/components/motion/Reveal'
 import { PageTransition } from '@/components/layout/PageTransition'
@@ -107,7 +106,7 @@ export default function Home() {
           >
             <span className="text-lg font-medium">Claude Code skills</span>
             <p className="text-sm text-text-muted leading-relaxed mt-1.5 max-w-2xl">
-              {skillsSource.intro} Six of them, shown with the output of the scripts they ship.
+              Claude Code skills I develop and maintain. Six of them, shown with the output of the scripts they ship.
             </p>
             <span className="mono text-text-muted mt-3 inline-block">See the skills →</span>
           </Link>

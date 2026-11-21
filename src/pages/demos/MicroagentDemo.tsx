@@ -108,7 +108,13 @@ export function MicroagentDemo() {
     logEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }, [log])
 
-  useEffect(() => () => { wsRef.current?.close() }, [])
+  // Marking the run finished matters as much as closing the socket: if the
+  // page is left while run() is still waiting for its token, there is no socket
+  // yet, and this flag is what stops run() from opening one afterwards.
+  useEffect(() => () => {
+    finishedRef.current = true
+    wsRef.current?.close()
+  }, [])
 
   function pushLog(entry: LogEntry) {
     setLog(prev => [...prev, entry])
@@ -200,7 +206,10 @@ export function MicroagentDemo() {
 
     ws.onerror = () => {
       finishedRef.current = true
-      setConnError('WebSocket connection failed — server may be starting up, try again in a moment')
+      // The proxy turns away a bad sign-in, a blocked origin or too many runs
+      // before the connection opens, and the browser reports all of those, and
+      // a server that is down, the same way.
+      setConnError('Could not connect. The server may be starting up, or you have started more than 5 runs in a minute. Wait a moment and try again; if it keeps failing, reload and sign in again.')
       setStatus('error')
     }
   }

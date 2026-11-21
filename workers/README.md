@@ -8,7 +8,7 @@ Five Cloudflare Workers that sit between the site and its demo backends. They ar
 | `document-scanner-proxy` | Clerk session token | `POST /api/sessions`, `POST /api/sessions/{id}/summary`, `POST /api/sessions/{id}/chat`, `DELETE /api/sessions/{id}` |
 | `llm-inference-proxy` | Clerk session token | `POST /` |
 | `microagent-proxy` | Clerk session token (in `?auth=`) | WebSocket `GET /ws/run` |
-| `github-stats-proxy` | none (public pages call it) | `GET /repo-stats` |
+| `github-stats-proxy` | none (public pages call it); cache misses are rate-limited per IP | `GET /repo-stats` |
 
 Every gated worker runs the same checks in `shared/src/gate.ts` before it calls an upstream: allowed origin (the site or `localhost`), method, a valid Clerk session token, then a per-user rate limit. Only allowlisted paths, query parameters and headers are forwarded.
 

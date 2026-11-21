@@ -4,6 +4,7 @@ import type { DataTable } from '@/types'
 export function DataTableBlock({ table }: { table: DataTable }) {
   const [rows, setRows] = useState(table.rows ?? null)
   const [expanded, setExpanded] = useState<Set<number>>(new Set())
+  const [failed, setFailed] = useState(false)
   const hasDetail = !!table.detailFields?.length
   const tableId = useId()
 
@@ -12,9 +13,15 @@ export function DataTableBlock({ table }: { table: DataTable }) {
     // instance is remounted (not re-rendered in place) if the table changes.
     if (rows || !table.loadRows) return
     let cancelled = false
-    table.loadRows().then(loaded => {
-      if (!cancelled) setRows(loaded)
-    })
+    table.loadRows().then(
+      loaded => {
+        if (!cancelled) setRows(loaded)
+      },
+      () => {
+        // The rows are a separate chunk; a dropped connection can lose it.
+        if (!cancelled) setFailed(true)
+      },
+    )
     return () => { cancelled = true }
   }, [])
 
@@ -36,13 +43,19 @@ export function DataTableBlock({ table }: { table: DataTable }) {
         </p>
       )}
       {!rows ? (
-        <p className="mono text-text-muted">[ loading… ]</p>
+        <p role="status" className="mono text-text-muted">
+          {failed ? '[ could not load this table; reload the page to try again ]' : '[ loading… ]'}
+        </p>
       ) : (
         <div className="border border-border-strong overflow-x-auto lg:max-h-[36rem] lg:overflow-y-auto">
           <table className="w-full text-xs mono border-collapse">
             <thead className="sticky top-0 bg-surface">
               <tr>
-                {hasDetail && <th className="border-b border-border-strong w-8" />}
+                {hasDetail && (
+                  <th className="border-b border-border-strong w-8">
+                    <span className="sr-only">Details</span>
+                  </th>
+                )}
                 {table.columns.map(col => (
                   <th
                     key={col.key}

@@ -1,4 +1,5 @@
 import { UpstreamTimeoutError, fetchWithTimeout, jsonError } from '../../shared/src/http'
+import type { RateLimiter } from '../../shared/src/gate'
 import { corsHeaders, isAllowedOrigin } from '../../shared/src/origin'
 
 export const CACHE_TTL_MS = 60 * 60 * 1000 // 1 hour
@@ -12,6 +13,7 @@ const OWNER_ALLOWLIST = new Set(['objones25'])
 export interface Env {
   GITHUB_STATS_CACHE: KVNamespace
   GITHUB_TOKEN: string
+  RATE_LIMITER: RateLimiter
 }
 
 interface RepoStats {
@@ -133,6 +135,16 @@ export default {
 
     if (cached && Date.now() - cached.fetchedAt < CACHE_TTL_MS) {
       return Response.json(cached.payload, { headers })
+    }
+
+    // This worker is public and the Origin header can be forged, so a script
+    // could ask for endless made-up repository names and spend the GitHub
+    // token's hourly quota. Only requests that would reach GitHub count against
+    // the limit; cache hits above are free.
+    const caller = request.headers.get('CF-Connecting-IP') ?? 'unknown'
+    const { success } = await env.RATE_LIMITER.limit({ key: caller })
+    if (!success) {
+      return jsonError('Too many requests, try again in a minute', 429, { ...headers, 'Retry-After': '60' })
     }
 
     try {

@@ -4,6 +4,8 @@ import { readErrorMessage } from '@/lib/workerError'
 
 const BASE_URL = import.meta.env.VITE_LLM_INFERENCE_URL as string
 const MAX_HISTORY = 49
+// The proxy rejects a message longer than this.
+const MAX_MESSAGE_CHARS = 4000
 
 type Role = 'user' | 'assistant'
 interface Message {
@@ -310,13 +312,21 @@ export function LlmFromScratchDemo() {
 
     controllerRef.current = null
 
-    if (result.ok) {
+    if (result.ok && reply !== '') {
       setStatus('idle')
       setStreamingReply('')
       setMessages((prev) => [...prev, { role: 'assistant', content: reply }])
     } else {
+      // Take the unanswered message back out of the history and return it to
+      // the input. Left in, it would be resent with every later message: a
+      // message the proxy rejected would be rejected again each time, and an
+      // empty reply would be stored as an empty assistant turn, which the
+      // proxy also rejects.
+      setMessages(messages)
+      setInput(text)
+      setStreamingReply('')
       setStatus('error')
-      setErrorMsg(result.message)
+      setErrorMsg(result.ok ? 'The model returned an empty reply. Try again.' : result.message)
     }
   }, [input, status, messages, temperature, maxTokens, getToken])
 
@@ -426,6 +436,7 @@ export function LlmFromScratchDemo() {
                   }
                 }}
                 disabled={isActive}
+                maxLength={MAX_MESSAGE_CHARS}
                 placeholder="Ask the model something..."
                 className="flex-1 bg-transparent border border-border-strong mono text-sm px-4 py-3 text-text placeholder:text-text-muted focus:outline-none focus:border-text disabled:opacity-40"
               />
