@@ -1,6 +1,6 @@
 import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { RootLayout } from './components/layout/RootLayout'
 import NotFound from './pages/NotFound'
 import '@fontsource-variable/inter/wght.css'
@@ -13,6 +13,7 @@ const Projects = lazy(() => import('./pages/Projects'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const Archive = lazy(() => import('./pages/Archive'))
 const Contact = lazy(() => import('./pages/Contact'))
+const Skills = lazy(() => import('./pages/Skills'))
 
 // Everything that imports Clerk lives behind these lazy imports, so the public
 // pages above never download it.
@@ -33,7 +34,19 @@ const router = createBrowserRouter([
       { index: true, element: <Suspense><Home /></Suspense> },
       { path: 'about', element: <Suspense><About /></Suspense> },
       { path: 'projects', element: <Suspense><Projects /></Suspense> },
+      // Placeholder-filled preview of the project page format. The condition is
+      // a build-time constant, so the production bundle contains neither the
+      // route nor its text.
+      ...(import.meta.env.DEV
+        ? [{
+            path: 'projects/_template',
+            lazy: () => import('./pages/ProjectTemplatePreview').then(m => ({ Component: m.default })),
+          }]
+        : []),
+      // The skills used to be a placeholder project page; keep old links working.
+      { path: 'projects/agent-skills', element: <Navigate to="/skills" replace /> },
       { path: 'projects/:slug', element: <Suspense><ProjectDetail /></Suspense> },
+      { path: 'skills', element: <Suspense><Skills /></Suspense> },
       { path: 'archive', element: <Suspense><Archive /></Suspense> },
       { path: 'contact', element: <Suspense><Contact /></Suspense> },
       { path: '*', element: <NotFound /> },

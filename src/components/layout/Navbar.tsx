@@ -15,8 +15,8 @@ export function SignInLink() {
   )
 }
 
-// `account` is the right-hand slot. Public routes leave it unset and get the
-// plain sign-in link; the auth layout passes a Clerk-aware control.
+// `account` is the right-hand slot. Public routes leave it empty (sign-in is
+// reached by launching a demo); the auth layout passes a Clerk-aware control.
 export function Navbar({ account }: { account?: ReactNode }) {
   const { pathname } = useLocation()
   const scrolled = useScrolled()
@@ -58,7 +58,7 @@ export function Navbar({ account }: { account?: ReactNode }) {
             })}
           </nav>
 
-          {account ?? <SignInLink />}
+          {account}
         </div>
       </div>
     </header>

@@ -60,6 +60,25 @@ export interface ProjectResult {
   label: string
 }
 
+// A labelled row in the facts sheet, e.g. { label: 'Compute', value: 'One rented A100' }.
+export interface ProjectFact {
+  label: string
+  value: string
+}
+
+// Something that was tried and did not work, and what it showed.
+export interface ProjectFailure {
+  title: string
+  detail: string
+}
+
+// Work this project builds on or borrows from.
+export interface ProjectCredit {
+  label: string
+  href?: string
+  note: string
+}
+
 export interface Project {
   slug: string
   title: string
@@ -72,11 +91,20 @@ export interface Project {
   status: 'active' | 'stable' | 'complete' | 'planned' | 'paused'
   archived?: boolean
   results?: ProjectResult[]
-  // Detail page fields — all optional until content is added
-  overview?: string
-  challenge?: string
-  approach?: string
-  features?: string[]
+  // Extra rows for the facts sheet (role, team, compute, cost). Year, period,
+  // status and stack are added automatically.
+  facts?: ProjectFact[]
+  // Detail page sections. Each renders only when present; see
+  // docs/project-template.md for what belongs in each. Prose fields may hold
+  // several paragraphs separated by a blank line.
+  overview?: string   // "Summary"
+  challenge?: string  // "Problem"
+  approach?: string   // "Approach"
+  features?: string[] // "Highlights"
+  failures?: ProjectFailure[]
+  limits?: string[]
+  next?: string[]
+  credits?: ProjectCredit[]
   video?: ProjectVideo
   images?: ProjectImage[]
   dataTables?: DataTable[]
