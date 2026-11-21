@@ -1,0 +1,28 @@
+{
+  "name": "site-workers",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "weather-proxy",
+    "document-scanner-proxy",
+    "microagent-proxy",
+    "llm-inference-proxy",
+    "github-stats-proxy"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "npm run typecheck --workspaces && tsc --noEmit -p tsconfig.test.json",
+    "build:check": "npm run build:check --workspaces"
+  },
+  "dependencies": {
+    "jose": "^6.2.18"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261121.1",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.1",
+    "wrangler": "^4.166.0"
+  }
+}
