@@ -2,14 +2,15 @@ import { SignIn } from '@clerk/react-router'
 import { useSearchParams } from 'react-router-dom'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { clerkAppearance } from '@/lib/clerkTheme'
+import { safeRedirectPath } from '@/lib/safeRedirect'
 
 export default function SignInPage() {
   const [params] = useSearchParams()
-  const redirectUrl = params.get('redirect_url') ?? '/projects'
+  const redirectUrl = safeRedirectPath(params.get('redirect_url'), '/projects')
 
   return (
     <PageTransition>
-      <div className="min-h-screen flex items-center justify-center py-20">
+      <div className="min-h-dvh flex items-center justify-center py-20">
         <SignIn
           appearance={clerkAppearance}
           fallbackRedirectUrl={redirectUrl}

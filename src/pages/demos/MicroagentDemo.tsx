@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { useSessionToken } from '@/hooks/useSessionToken'
 
 const WS_BASE = import.meta.env.VITE_MICROAGENT_WS_URL as string
 const MAX_PROMPT_LENGTH = 1000
@@ -78,10 +79,12 @@ const EXAMPLES = [
 
 const CLOSE_CODE_MESSAGES: Record<number, string> = {
   1008: 'Server rejected the connection (auth) — this is a proxy misconfiguration, not something you can fix here.',
+  1009: 'A message was too large for the proxy, or too many were sent before the server connected.',
   1003: 'Server rejected the request — the prompt may be empty, over 1000 characters, or max turns is outside 1–20.',
 }
 
 export function MicroagentDemo() {
+  const getToken = useSessionToken()
   const [prompt, setPrompt] = useState('')
   const [model, setModel] = useState(MODELS[0].value)
   const [maxTurns, setMaxTurns] = useState(10)
@@ -105,7 +108,13 @@ export function MicroagentDemo() {
     logEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }, [log])
 
-  useEffect(() => () => { wsRef.current?.close() }, [])
+  // Marking the run finished matters as much as closing the socket: if the
+  // page is left while run() is still waiting for its token, there is no socket
+  // yet, and this flag is what stops run() from opening one afterwards.
+  useEffect(() => () => {
+    finishedRef.current = true
+    wsRef.current?.close()
+  }, [])
 
   function pushLog(entry: LogEntry) {
     setLog(prev => [...prev, entry])
@@ -133,7 +142,7 @@ export function MicroagentDemo() {
     }
   }
 
-  function run() {
+  async function run() {
     const trimmed = prompt.trim()
     if (!trimmed || trimmed.length > MAX_PROMPT_LENGTH || status === 'running') return
 
@@ -144,7 +153,20 @@ export function MicroagentDemo() {
     setConnError('')
     finishedRef.current = false
 
-    const ws = new WebSocket(`${WS_BASE}/ws/run`)
+    // A WebSocket cannot carry an Authorization header, so the short-lived
+    // session token goes in the query string; the proxy strips it.
+    let token: string
+    try {
+      token = await getToken()
+    } catch (err) {
+      finishedRef.current = true
+      setConnError(err instanceof Error ? err.message : 'Could not get a sign-in token')
+      setStatus('error')
+      return
+    }
+    if (finishedRef.current) return // cancelled while the token was loading
+
+    const ws = new WebSocket(`${WS_BASE}/ws/run?auth=${encodeURIComponent(token)}`)
     wsRef.current = ws
 
     ws.onopen = () => {
@@ -184,7 +206,10 @@ export function MicroagentDemo() {
 
     ws.onerror = () => {
       finishedRef.current = true
-      setConnError('WebSocket connection failed — server may be starting up, try again in a moment')
+      // The proxy turns away a bad sign-in, a blocked origin or too many runs
+      // before the connection opens, and the browser reports all of those, and
+      // a server that is down, the same way.
+      setConnError('Could not connect. The server may be starting up, or you have started more than 5 runs in a minute. Wait a moment and try again; if it keeps failing, reload and sign in again.')
       setStatus('error')
     }
   }
@@ -304,7 +329,7 @@ export function MicroagentDemo() {
         {/* Actions */}
         <div className="flex items-center gap-4">
           <button
-            onClick={run}
+            onClick={() => void run()}
             disabled={isRunning || !prompt.trim() || promptTooLong}
             className="mono text-sm border border-text px-6 py-3 hover:bg-text hover:text-background transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >

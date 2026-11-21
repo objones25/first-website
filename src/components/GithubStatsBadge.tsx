@@ -8,9 +8,8 @@ export function GithubStatsBadge({ githubUrl }: { githubUrl?: string }) {
 
   const updated = formatRelativeTime(data.lastCommitDate)
 
-  return (
-    <span className="mono text-text-muted text-xs whitespace-nowrap">
-      ★ {data.stars}{updated && ` · updated ${updated}`}
-    </span>
-  )
+  const parts = [data.stars > 0 ? `★ ${data.stars}` : '', updated ? `updated ${updated}` : ''].filter(Boolean)
+  if (parts.length === 0) return null
+
+  return <span className="mono text-text-muted text-xs block mt-2">{parts.join(' · ')}</span>
 }

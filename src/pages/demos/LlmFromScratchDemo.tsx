@@ -1,7 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useSessionToken } from '@/hooks/useSessionToken'
+import { readErrorMessage } from '@/lib/workerError'
 
 const BASE_URL = import.meta.env.VITE_LLM_INFERENCE_URL as string
+const MAX_HISTORY = 49
+// The proxy rejects a message longer than this.
+const MAX_MESSAGE_CHARS = 4000
 
 type Role = 'user' | 'assistant'
 interface Message {
@@ -75,6 +79,7 @@ type StreamResult = { ok: true; error?: string } | { ok: false; message: string 
 
 async function streamChat(
   url: string,
+  getToken: () => Promise<string>,
   body: unknown,
   onToken: (token: string) => void,
   signal: AbortSignal,
@@ -83,7 +88,7 @@ async function streamChat(
   try {
     res = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${await getToken()}` },
       body: JSON.stringify(body),
       signal,
     })
@@ -95,9 +100,7 @@ async function streamChat(
   }
 
   if (!res.ok || !res.body) {
-    const text = await res.text().catch(() => '')
-    const short = text.length > 300 ? text.slice(0, 300) + '…' : text
-    return { ok: false, message: `${res.status}: ${short || res.statusText}` }
+    return { ok: false, message: `${res.status}: ${await readErrorMessage(res)}` }
   }
 
   const reader = res.body.getReader()
@@ -129,9 +132,10 @@ async function streamChat(
 
 // A minimal, invisible generation used purely to wake the RunPod worker before
 // the user can type — not part of the visible conversation or its history.
-function warmupChat(url: string, signal: AbortSignal): Promise<StreamResult> {
+function warmupChat(url: string, getToken: () => Promise<string>, signal: AbortSignal): Promise<StreamResult> {
   return streamChat(
     url,
+    getToken,
     { messages: [{ role: 'user', content: 'Hi' }], max_new_tokens: 1, temperature: 0 },
     () => {},
     signal,
@@ -142,14 +146,9 @@ function WaveText({ text, className = '' }: { text: string; className?: string }
   return (
     <span className={className} aria-label={text}>
       {text.split('').map((ch, i) => (
-        <motion.span
-          key={i}
-          className="inline-block"
-          animate={{ opacity: [0.15, 1, 0.15] }}
-          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut', delay: i * 0.06 }}
-        >
+        <span key={i} className="anim-wave" style={{ animationDelay: `${i * 0.06}s` }}>
           {ch === ' ' ? ' ' : ch}
-        </motion.span>
+        </span>
       ))}
     </span>
   )
@@ -206,6 +205,7 @@ function Slider({
 }
 
 export function LlmFromScratchDemo() {
+  const getToken = useSessionToken()
   const [warmStatus, setWarmStatus] = useState<WarmStatus>('warming')
   const [warmErrorMsg, setWarmErrorMsg] = useState('')
   const [warmElapsed, setWarmElapsed] = useState(0)
@@ -235,14 +235,14 @@ export function LlmFromScratchDemo() {
     const controller = new AbortController()
     warmControllerRef.current = controller
 
-    const result = await warmupChat(BASE_URL, controller.signal)
+    const result = await warmupChat(BASE_URL, getToken, controller.signal)
 
     if (warmControllerRef.current !== controller) return // unmounted or superseded
 
     warmControllerRef.current = null
     setWarmStatus(result.ok ? 'ready' : 'error')
     if (!result.ok) setWarmErrorMsg(result.message)
-  }, [])
+  }, [getToken])
 
   useEffect(() => {
     void attemptWarmup()
@@ -292,8 +292,11 @@ export function LlmFromScratchDemo() {
     let reply = ''
     const result = await streamChat(
       BASE_URL,
+      getToken,
       {
-        messages: nextMessages,
+        // The proxy accepts at most 50 messages. An odd count keeps the window
+        // starting on a user turn.
+        messages: nextMessages.slice(-MAX_HISTORY),
         max_new_tokens: maxTokens,
         temperature,
       },
@@ -309,15 +312,23 @@ export function LlmFromScratchDemo() {
 
     controllerRef.current = null
 
-    if (result.ok) {
+    if (result.ok && reply !== '') {
       setStatus('idle')
       setStreamingReply('')
       setMessages((prev) => [...prev, { role: 'assistant', content: reply }])
     } else {
+      // Take the unanswered message back out of the history and return it to
+      // the input. Left in, it would be resent with every later message: a
+      // message the proxy rejected would be rejected again each time, and an
+      // empty reply would be stored as an empty assistant turn, which the
+      // proxy also rejects.
+      setMessages(messages)
+      setInput(text)
+      setStreamingReply('')
       setStatus('error')
-      setErrorMsg(result.message)
+      setErrorMsg(result.ok ? 'The model returned an empty reply. Try again.' : result.message)
     }
-  }, [input, status, messages, temperature, maxTokens])
+  }, [input, status, messages, temperature, maxTokens, getToken])
 
   function stop() {
     controllerRef.current?.abort()
@@ -425,6 +436,7 @@ export function LlmFromScratchDemo() {
                   }
                 }}
                 disabled={isActive}
+                maxLength={MAX_MESSAGE_CHARS}
                 placeholder="Ask the model something..."
                 className="flex-1 bg-transparent border border-border-strong mono text-sm px-4 py-3 text-text placeholder:text-text-muted focus:outline-none focus:border-text disabled:opacity-40"
               />

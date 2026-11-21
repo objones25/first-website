@@ -1,3 +1,17 @@
 name = "weather-proxy"
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
+
+[vars]
+# Clerk Frontend API URL. Public: it is the `iss` claim of every session token,
+# and its keys are served at /.well-known/jwks.json.
+CLERK_ISSUER = "https://clerk.owenbeckettjones.com"
+
+# Per signed-in user (keyed on the token's `sub`), counted per Cloudflare location.
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 30
+  period = 60
