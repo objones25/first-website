@@ -41,6 +41,10 @@ const router = createBrowserRouter([
         ? [{
             path: 'projects/_template',
             lazy: () => import('./pages/ProjectTemplatePreview').then(m => ({ Component: m.default })),
+          }, {
+            // Layout sketch for an "ask the site" page; canned answers, no model.
+            path: 'ask',
+            lazy: () => import('./pages/AskSketch').then(m => ({ Component: m.default })),
           }]
         : []),
       // The skills used to be a placeholder project page; keep old links working.

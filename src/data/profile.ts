@@ -39,7 +39,7 @@ export const profile = {
         { code: 'CMPSC 291A', title: 'Information Retrieval', role: 'Student' },
         { code: 'CMPSC 291K', title: 'Robot Learning', role: 'Student' },
         { code: 'CMPSC 279', title: 'Advanced Topics in Security', role: 'Student' },
-        { code: 'MATH 34B', title: '', role: 'TA' },
+        { code: 'MATH 34B', title: 'Differential and Integral Calculus with Applications', role: 'TA' },
       ],
     },
     {
@@ -49,7 +49,7 @@ export const profile = {
         { code: 'CMPSC 225', title: 'Information Theory', role: 'Student' },
         { code: 'CMPSC 270', title: 'Operating Systems', role: 'Student' },
         { code: 'CMPSC 595N', title: 'Research Seminar', role: 'Student' },
-        { code: 'MATH 4B', title: '', role: 'TA' },
+        { code: 'MATH 4B', title: 'Differential Equations', role: 'TA' },
       ],
     },
   ] as Term[],
