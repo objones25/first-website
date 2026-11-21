@@ -2,6 +2,7 @@ import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { RootLayout } from './components/layout/RootLayout'
+import { PublicAccountSlot } from './components/layout/PublicAccountSlot'
 import NotFound from './pages/NotFound'
 import '@fontsource-variable/inter/wght.css'
 import '@fontsource-variable/jetbrains-mono/wght.css'
@@ -29,7 +30,7 @@ const AuthRoutes = {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <RootLayout />,
+    element: <RootLayout account={<PublicAccountSlot />} />,
     errorElement: <NotFound />,
     children: [
       { index: true, element: <Suspense><Home /></Suspense> },
