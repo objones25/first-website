@@ -8,15 +8,18 @@ export function SignInLink() {
   return (
     <Link
       to="/sign-in"
-      className="inline-flex min-h-11 items-center px-1 mono text-text-muted hover:text-text transition-colors duration-200"
+      className="inline-flex min-h-11 items-center px-1 mono whitespace-nowrap text-text-muted hover:text-text transition-colors duration-200"
     >
-      [ Sign In ]
+      {/* The brackets do not fit beside four links on a 360px screen. */}
+      <span aria-hidden="true" className="hidden sm:inline">[&nbsp;</span>
+      Sign In
+      <span aria-hidden="true" className="hidden sm:inline">&nbsp;]</span>
     </Link>
   )
 }
 
-// `account` is the right-hand slot. Public routes leave it empty (sign-in is
-// reached by launching a demo); the auth layout passes a Clerk-aware control.
+// `account` is the right-hand slot: PublicAccountSlot on public routes, the
+// Clerk-aware Account on the auth routes.
 export function Navbar({ account }: { account?: ReactNode }) {
   const { pathname } = useLocation()
   const scrolled = useScrolled()
@@ -36,8 +39,8 @@ export function Navbar({ account }: { account?: ReactNode }) {
           OJ
         </Link>
 
-        <div className="flex items-center gap-3 sm:gap-8">
-          <nav aria-label="Primary" className="flex items-center gap-3 sm:gap-8">
+        <div className="flex items-center gap-1 sm:gap-8">
+          <nav aria-label="Primary" className="flex items-center gap-1 sm:gap-8">
             {navLinks.map(({ label, href }) => {
               const active = pathname === href || pathname.startsWith(href + '/')
               return (
