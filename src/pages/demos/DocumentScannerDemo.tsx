@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
+import { useSessionToken } from '@/hooks/useSessionToken'
+import { readErrorMessage } from '@/lib/workerError'
 
 const BASE_URL = import.meta.env.VITE_DOCUMENT_SCANNER_URL as string
 
@@ -19,19 +21,6 @@ interface Session { id: string; charCount: number; preview: string }
 interface Message { role: 'user' | 'assistant'; text: string }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-
-function authHeaders(extra?: Record<string, string>): Record<string, string> {
-  return { ...extra }
-}
-
-async function parseErrorDetail(res: Response): Promise<string> {
-  try {
-    const data = await res.json() as Record<string, unknown>
-    return typeof data.detail === 'string' ? data.detail : res.statusText
-  } catch {
-    return res.statusText
-  }
-}
 
 // ── SSE consumer ──────────────────────────────────────────────────────────────
 
@@ -76,6 +65,19 @@ async function consumeSSE(
 // ── Demo ──────────────────────────────────────────────────────────────────────
 
 export function DocumentScannerDemo() {
+  const getToken = useSessionToken()
+  const authHeaders = async (extra?: Record<string, string>) => ({
+    ...extra,
+    Authorization: `Bearer ${await getToken()}`,
+  })
+  // Best effort: the service also expires sessions on its own.
+  const deleteSession = (id: string) => {
+    void authHeaders()
+      .then(headers => fetch(`${BASE_URL}/api/sessions/${id}`, { method: 'DELETE', headers }))
+      .catch(() => {})
+  }
+  const deleteSessionRef = useRef(deleteSession)
+  deleteSessionRef.current = deleteSession
   // Input
   const [inputMode, setInputMode] = useState<InputMode>('file')
   const [file, setFile]           = useState<File | null>(null)
@@ -107,12 +109,7 @@ export function DocumentScannerDemo() {
 
   // Delete session on unmount
   useEffect(() => () => {
-    if (sessionIdRef.current) {
-      void fetch(`${BASE_URL}/api/sessions/${sessionIdRef.current}`, {
-        method: 'DELETE',
-        headers: authHeaders(),
-      }).catch(() => {})
-    }
+    if (sessionIdRef.current) deleteSessionRef.current(sessionIdRef.current)
   }, [])
 
   // Auto-scroll during streaming
@@ -142,10 +139,10 @@ export function DocumentScannerDemo() {
     try {
       const res = await fetch(`${BASE_URL}/api/sessions`, {
         method: 'POST',
-        headers: authHeaders(),
+        headers: await authHeaders(),
         body: form,
       })
-      if (!res.ok) throw new Error(await parseErrorDetail(res))
+      if (!res.ok) throw new Error(await readErrorMessage(res))
       const data = await res.json() as { session_id: string; char_count: number; preview: string }
       setSession({ id: data.session_id, charCount: data.char_count, preview: data.preview })
     } catch (err) {
@@ -164,10 +161,10 @@ export function DocumentScannerDemo() {
     try {
       const res = await fetch(`${BASE_URL}/api/sessions/${session.id}/summary`, {
         method: 'POST',
-        headers: authHeaders({ 'Content-Type': 'application/json' }),
+        headers: await authHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ style: summaryStyle }),
       })
-      if (!res.ok) throw new Error(await parseErrorDetail(res))
+      if (!res.ok) throw new Error(await readErrorMessage(res))
       const streamError = await consumeSSE(res, token => setSummaryText(prev => prev + token))
       if (streamError) throw new Error(streamError)
     } catch (err) {
@@ -193,10 +190,10 @@ export function DocumentScannerDemo() {
     try {
       const res = await fetch(`${BASE_URL}/api/sessions/${session.id}/chat`, {
         method: 'POST',
-        headers: authHeaders({ 'Content-Type': 'application/json' }),
+        headers: await authHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ message }),
       })
-      if (!res.ok) throw new Error(await parseErrorDetail(res))
+      if (!res.ok) throw new Error(await readErrorMessage(res))
       const streamError = await consumeSSE(res, token => {
         accumulated += token
         setStreamingText(accumulated)
@@ -213,12 +210,7 @@ export function DocumentScannerDemo() {
   }
 
   function handleReset() {
-    if (session) {
-      void fetch(`${BASE_URL}/api/sessions/${session.id}`, {
-        method: 'DELETE',
-        headers: authHeaders(),
-      }).catch(() => {})
-    }
+    if (session) deleteSession(session.id)
     setSession(null)
     setSummaryText('')
     setMessages([])

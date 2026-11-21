@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useSessionToken } from '@/hooks/useSessionToken'
+import { readErrorMessage } from '@/lib/workerError'
 
 const BASE_URL = import.meta.env.VITE_WEATHER_API_URL as string
 
@@ -46,6 +48,7 @@ function formatDate(dateStr: string): string {
 }
 
 export function WeatherDemo() {
+  const getToken = useSessionToken()
   const [location, setLocation] = useState('')
   const [unitGroup, setUnitGroup] = useState<UnitGroup>('us')
   const [status, setStatus] = useState<Status>('idle')
@@ -67,12 +70,11 @@ export function WeatherDemo() {
         include: 'current,days',
       })
 
-      const res = await fetch(`${BASE_URL}/v1/weather?${params}`)
+      const res = await fetch(`${BASE_URL}/v1/weather?${params}`, {
+        headers: { Authorization: `Bearer ${await getToken()}` },
+      })
 
-      if (!res.ok) {
-        const text = await res.text()
-        throw new Error(`${res.status}: ${text}`)
-      }
+      if (!res.ok) throw new Error(`${res.status}: ${await readErrorMessage(res)}`)
 
       const data: WeatherResponse = await res.json()
       setResult(data)
