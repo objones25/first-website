@@ -1,6 +1,5 @@
 import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { Placeholder } from '@/components/Placeholder'
 import { PageTransition } from '@/components/layout/PageTransition'
 import { ClipReveal, Reveal } from '@/components/motion/Reveal'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
@@ -25,7 +24,13 @@ export default function About() {
 
         <div className="space-y-12">
           <Reveal>
-            <Placeholder label="Photo of Owen." className="mb-8 aspect-[4/3] w-full max-w-sm" />
+            <img
+              src="/profile/owen.jpg"
+              alt="Owen Jones, smiling, in glasses and a dark polo shirt, with a sunlit mountain behind him."
+              width={640}
+              height={800}
+              className="mb-8 aspect-[4/5] w-full max-w-xs border border-border object-cover"
+            />
             <p className="lead max-w-2xl">
               I'm a first-year CS master's student at UC Santa Barbara, with an applied math degree from UCLA. The largest project on this site is a PPO agent for Pokemon Red, trained over nine runs, where most of the work was finding out what each reward term actually taught the agent. I'm now building an SO-101 arm to start on imitation learning with real hardware.
             </p>
